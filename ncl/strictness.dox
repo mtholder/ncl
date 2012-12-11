@@ -1,0 +1,65 @@
+/*! \page LessStrict Making NCL less strict
+The NEXUS standard is very specific about some requirements of input file.
+In many cases these requirements are necessary for the semantics to be clear,
+but in some cases an invalid file is not ambiguous.
+By default NCL is pretty strict about the rules, but this can be frustrating for
+users who are constantly having their files rejected (fortunately, NCL's
+error messages are usually helpful; see \ref rockinErrorMessages).
+
+There are several ways to make the NexusReader more forgiving than it normally
+is.  Some of these methods involve calling functions (mentioned below) that are
+in methods of some NxsBlock subclass. To make your PublicNexusReader
+instance use blocks that have been modified you will have to get the template
+for each type of block (see PublicNexusReader::GetTreesBlockTemplate() for
+example).
+    - It is very common to encounter a file without a TREES block but no
+        TAXA block.  If you call NxsTreesBlock::SetAllowImplicitNames(true)
+        on the NxsTaxaBlock  template instance, then any NxsTreeBlocks cloned
+from this instance will generate an "implied" Taxa block when they are read (if
+there is no taxa block in memory). See \ref impliedBlocks and \ref
+taxaBlockScoping.
+    - The use of NxsReader::cullIdenticalTaxaBlocks(true) can help avoid
+        redundant NxsTaxaBlock instances. See \ref taxaBlockScoping
+    - If you are going to reuse a NxsReader, you may want to call
+        NxsReader::DemoteBlocks() before each execution/reading of a file. This
+		will give the blocks from previous files lower priority (see \ref
+		taxaBlockScoping).
+    - NxsCharactersBlock::SetAllowAugmentingOfSequenceSymbols() with the argmunte true will
+        cause NCL to accept characters matrices with symbols added on to the
+        standard symbols.  See NxsCharactersBlock::SetConvertAugmentedToMixed()
+        for a discussion of how such character blocks are dealt with after the
+		parse.
+    - Any reader derived from PublicNexusReader will raise an NxsException
+        when the parser encounters syntax that causes a warning that is
+        given a level of PROBABLY_INCORRECT_CONTENT_WARNING or higher.
+        You can make NCL issue warnings instead of errors by calling
+        reader->SetWarningToErrorThreshold(NxsReader::FATAL_WARNING). Or you can
+		make the parser generate NxsExceptions for milder warnings if you pass
+		in an argument associated with a less severe warning (see the
+		NxsReader::NxsWarnLevel
+	- MrBayes introduced the <tt>datatype=MIXED</tt> syntax to the Format
+		command of the CHARACTERS block.  This is more explicit than the older
+		NEXUS style of simply augmenting the symbols list (without saying which
+		datatype corresponds to which column).
+		Use NxsCharactersBlock::SetSupportMixedDatatype(true) to enable this features.
+
+		If you also call NxsCharactersBlock::SetConvertAugmentedToMixed(true), the NCL will attempt to separate a sequence datatype with augmented symbols list into a mixed type that has the same sequence type but also
+		has a set of characters that are datatype <tt>standard</tt>.
+		See \ref mixedDatatypes discussion.
+enum)
+
+
+<hr />
+Next see \ref Gotchas for info on common stumbling blocks
+
+<hr />
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+
+*/

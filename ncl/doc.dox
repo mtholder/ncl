@@ -1,0 +1,178 @@
+/*! \mainpage NCL v2.1 Documentation
+
+\section TOC Table of contents
+	- \ref introduction
+	- \ref v2_0_to_2_1
+		- \ref backward
+		- \ref whyDiff
+		- \ref v2_2
+		.
+	- \ref download
+		- \ref portability
+		- \ref crossplatform
+		.
+	- \ref NexusCoverage
+	- \ref basicAPI
+	- \ref simpleparse
+	- \ref nonNexus
+	- \ref simpleextract
+		- \ref accessblocks
+		- \ref queryblocks
+		    - \ref NxsTaxaBlockQueries
+			- \ref NxsCharactersBlockQueries
+			- \ref NxsTreesBlockQueries
+			- \ref NxsAssumptionsBlockQueries
+			- \ref NxsUnalignedBlockQueries
+			.
+		.
+	- \ref LessStrict
+	- \ref Gotchas
+		- \ref MisleadingNames
+		- \ref BlockTypeIDDiscussion
+		- \ref impliedBlocks
+		- \ref taxaBlockScoping
+		- \ref memoryManagement
+		- \ref setsAssumptions
+		.
+	- \ref FAQ
+	.
+
+\section introduction What is the NCL?
+The NEXUS Class Library (NCL) is an integrated collection of C++ classes
+that parses several file formats used in evolutionary biology (NEXUS, PHYLIP, relaxed PHYLIP, and FASTA).
+NCL does not diagnose the file format, but if you configure a parser to read
+several formats, then you will be able to parse multiple formats and extract the
+data from NCL's data structures using the same API regardless of the file format.
+
+This documentation is written for C++ programmers.
+
+Version 2.0 of NCL itself was published as:
+
+Lewis, P. O. 2003. NCL: a C++ class library for interpreting data files in NEXUS format. <em>Bioinformatics</em>  <b>19</b> (17): 2330-2331. <a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/19/17/2330?ijkey=80ZQtEjeuXmEU&keytype=ref">[link to online resource]</a>
+
+See <a href="http://hydrodictyon.eeb.uconn.edu/ncl/">http://hydrodictyon.eeb.uconn.edu/ncl</a> for documentation on version 2.0.
+
+The NEXUS data file format was specified in the publication cited below (<a
+href="http://sysbio.oxfordjournals.org/cgi/reprint/46/4/590.pdf">this is a link
+to pdf of that paper</a>).
+Please read this paper for further information about the format specification
+itself; the documentation for the NCL does not attempt to explain the structure
+of a NEXUS data file.
+
+Maddison, D. R., D. L. Swofford, and Wayne P. Maddison. 1997. NEXUS: an
+extensible file format for systematic information. <i>Systematic Biology</i>
+46(4): 590-621.
+
+
+
+\section v2_0_to_2_1 Versions of the library.
+\subsection backward Backward compatibility
+Despite several fundamental changes in the implementation of the library, we
+strive to keep NCL v2.1 backward compatible with version 2.0.
+A programmer that relied on version 2.0 should still work.
+If you discover that your client code works with version 2.0 of NCL, but not 2.1
+please let us know.
+
+
+\subsection whyDiff Why is version 2.1 so different from version 2.0?
+
+Version 2.1 extends the functionality significantly by allowing NCL to parse
+files that use extended forms of NEXUS.
+Both Mesquite and MrBayes rely on extensions to NEXUS.
+Particularly difficult to handle are Mesquite's support for multiple blocks of
+the same type within a file (accompanied by linking blocks by title).
+
+Version 2.0 of NCL followed a model of creating a NxsReader object and adding
+NxsBlock objects which handle parsing of particular types of NEXUS content.
+Client code would typically inherit from base classes such as
+NxsCharactersBlock, or would extract the information when a block was completely
+read.
+The NxsBlock instance would be reset (by NxsBlock::Reset call) before it was
+asked to handle another block.
+
+Unfortunately, not all NEXUS blocks are autonomous (for example commands in an
+ASSUMPTIONS block may rely on information in a CHARACTERS block).
+Combining inter-block dependencies with the need to store information from
+multiple blocks of the same type means that NCL's version 2.0 API can be quite
+cumbersome.
+To read a file with a single instance of a NxsCharactersBlock, the client code
+must carefully offload all of the information in a block before allowing parsing
+to proceed to the next block.
+Subsequent references between blocks have to be corrected so that blocks refer to the new location of the information (rather than the NxsBlock instance that originally held the data).
+
+A more natural design pattern for processing files which may have multiple
+blocks of the same type is to use a factory method.
+Users of NCL v2.1 can register NxsBlockFactory instances with a NxsReader.
+Then the reader can parse an entire file before having to pull the parsed information from the blocks.
+
+
+\subsection v2_2 Version 2.2
+The svn branch for version 2.2 is very similar to 2.1.
+It only contains changes necessary to allow NCL to be callable from other
+languages via <a href="http://www.swig.org/">SWIG</a>.
+Some of the changes needed to ensure this were not backward-compatible.
+So they were added to branch 2.2.
+
+C++ programmers should probably use 2.1 (although their code will almost
+certainly work on v2.2 as well)
+
+
+\section download Obtaining the NCL?
+The best link to use to get the latest (stable) version of NCL is from the <a
+href="http://sourceforge.net/projects/ncl/">sourceforge NCL project page.</a>
+
+If you want SVN access to the latest code, please use branches/v2.1 from the SVN checkout on Sourceforge.
+
+
+\subsection portability Portability
+The NCL has been designed to be as portable as possible for a C++ class library.
+Please let us know if you find a (reasonably modern) compiler that does not
+accept NCL.
+
+
+\subsection crossplatform Cross-platform features
+NCL does not rely on any external libraries.
+There are hooks (such as NxsToken::OutputComment) that allow client code to
+intercept messages that you may want to display as standard output (in
+commandline executables) or a graphical window (in GUIs).
+
+
+\section NexusCoverage What parts of NEXUS are supported by NCL ?
+NCL can interpret the following Blocks and commands.
+
+Note that TITLE, BLOCKID  are handle by all block types.
+LINK commands are handled where appropriate.
+
+<table>
+<tr><td>Block Type ID</td> <td>Commands</td><td>NCL Block Reader type</td></tr>
+<tr><td>ASSUMPTIONS</td> <td>CharPartition, CharSet, CodeSet, CodonPosSet, Options, TaxSet, TaxPartition, TreeSet, TreePartition, TypeSet, UserType, WtSet</td><td>NxsAssumptionsBlock</td></tr>
+<tr><td>CHARACTERS</td> <td>Dimensions, Format, TaxLabels, CharStateLabels, CharLabels, StateLabels, Matrix</td><td>NxsCharactersBlock</td></tr>
+<tr><td>CODONS</td> <td>(same as ASSUMPTIONS)</td><td>NxsAssumptionsBlock</td></tr>
+<tr><td>DATA</td> <td>(same as CHARACTERS)</td><td>NxsCharactersBlock</td></tr>
+<tr><td>DISTANCES</td> <td>Dimensions, Format, TaxLabels,  Matrix</td><td>NxsDistancesBlock</td></tr>
+<tr><td>SETS</td> <td>(same as ASSUMPTIONS)</td><td>NxsAssumptionsBlock</td></tr>
+<tr><td>TAXA</td> <td>Dimensions,  TaxLabels</td><td>NxsTaxaBlock</td></tr>
+<tr><td>TREES</td> <td>Translate,  Trees</td><td>NxsTreesBlock</td></tr>
+<tr><td>UNALIGNED</td> <td>Dimensions, Format, TaxLabels,  Matrix</td><td>NxsUnalignedBlock</td></tr>
+</table>
+
+
+<hr />
+Next see \ref basicAPI for discussion of how to get started using NCL.
+
+
+
+
+<hr />
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+
+
+
+*/

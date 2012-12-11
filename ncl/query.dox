@@ -1,0 +1,338 @@
+/*! \page simpleextract Getting information out of NCL
+	- \ref accessblocks
+	- \ref queryblocks
+		- \ref NxsTaxaBlockQueries
+		- \ref NxsCharactersBlockQueries
+		- \ref NxsTreesBlockQueries
+		- \ref NxsAssumptionsBlockQueries
+		- \ref NxsUnalignedBlockQueries
+		.
+	.
+
+\section accessblocks Getting NxsBlock Reader instances from the reader.
+The MultiFormatReader uses factories to read the NEXUS blocks that are
+encountered.
+Because we do not know how many NEXUS blocks will be in the file, we
+now have to figure out how many NxsBlock objects were created.
+One way to do this would be to call the reader's
+NxsReader::GetUsedBlocksInOrder()
+method, walk through the list of NxsBlocks that were returned,  ask
+each block what type it is (using the GetID() method \ref
+BlockTypeIDDiscussion), and the up-casting them to the appropriate type.
+
+This procedure works, but is tedious (and the casting by client code makes it
+not-type-safe).
+
+Almost all data from NEXUS files (or other phylogenetic datasets) is connected
+in some way to what NEXUS refers to as TAXA.
+Thus, instances of NCL's MultiFormatReader (and any other class that is derived from PublicNexusReader),
+also offer an interface for extracting data with reference to a set of taxa.
+In particular, client code can "ask" the reader how many TAXA blocks were read
+and then ask how many CHARACTERS, TREES, or ASSUMPTIONS blocks are associated
+with each TAXA block.
+
+The snippet below demonstrates the use of this API:
+\code
+MultiFormatReader nexusReader(-1, NxsReader::WARNINGS_TO_STDERR);
+nexusReader.ReadFilepath(argv[1], MultiFormatReader::NEXUS_FORMAT);
+
+int numTaxaBlocks = nexusReader.GetNumTaxaBlocks();
+std::cout << numTaxaBlocks << " TAXA block(s) read.\n";
+for (int i = 0; i < numTaxaBlocks; ++i)
+    {
+    NxsTaxaBlock * taxaBlock = nexusReader.GetTaxaBlock(i);
+    std::string taxaBlockTitle = taxaBlock->GetTitle();
+    std::cout << "Taxa block index " << i << " has the Title \"" <<
+taxaBlockTitle << "\"\n";
+
+    const unsigned nCharBlocks = nexusReader.GetNumCharactersBlocks(taxaBlock);
+    std::cout  <<  nCharBlocks << " CHARACTERS/DATA block(s) refer to this TAXA
+block\n";
+    for (unsigned j = 0; j < nCharBlocks; ++j)
+        {
+        const NxsCharactersBlock * charBlock =
+nexusReader.GetCharactersBlock(taxaBlock, j);
+        std::string charBlockTitle = taxaBlock->GetTitle();
+        std::cout << "Taxa block index " << j << " has the Title \"" <<
+charBlockTitle << "\"\n";
+        }
+    }
+\endcode
+
+\subsection queryblocks Getting information out of the NxsBlock objects
+Each specific class of block has its own public API for extracting the
+block-specific information see:
+    - \ref NxsTaxaBlockQueries
+    - \ref NxsCharactersBlockQueries
+    - \ref NxsTreesBlockQueries
+    - \ref NxsAssumptionsBlockQueries
+    - \ref NxsUnalignedBlockQueries
+
+
+The example file at <a href="simpleNCLClient/simpleNCLClient.cpp">simpleNCLClient.cpp</a> demonstrates
+queries to the NxsTaxaBlock and both styles of querying the NxsCharactersBlock.
+It can be compiled with <a
+href="simpleNCLClient/Makefile">Makefile</a>.
+More functions will be added to this example soon to demonstrate the trees block queries.
+
+
+\section NxsTaxaBlockQueries Getting information out of a NxsTaxaBlock
+The easiest method to use is NxsTaxaBlock::GetAllLabels(), but you can also
+call NxsTaxaBlock::GetNTax() and then ask for the label of any index in the range [0, nTax), using NxsTaxaBlock::GetTaxonLabel().
+
+If you have a taxon label and w, then you can get its index (starting at 0) using the
+NxsTaxaBlock::FindTaxon() function, but you have to catch NxsX_NoSuchTaxon exceptions to deal with labels that are not known.
+
+
+\section NxsCharactersBlockQueries Getting information out of a NxsCharactersBlock
+
+Both CHARACTERS and DATA blocks will be parsed into instances of NxsCharactersBlock.
+
+The recommended querying functions are NxsCharactersBlock::GetNCharTotal()
+to get the total number of characters.
+
+NxsCharactersBlock::GetDataType() returns a facet of the NxsCharactersBlock::DataTypesEnum indicated the broad category of datatype that is stored
+in the matrix.  Because NEXUS allows users to add symbols and equate codes, the normal datatypes can be "augmented."
+So the GetDataType gives you a sense of the <em>minimal</em> number of state codes.
+
+
+\subsection SimpleCharStateQuery The simplest queries of character states
+The old (v2.0) style queries used a call to
+NxsCharactersBlock::GetSymbols() to get the list of symbols.
+Then for each cell, the client code had to call
+NxsCharactersBlock::IsGapState(), and NxsCharactersBlock::IsMissingState() to check for gaps and missing data.
+If the cell was not a gap or missing then you would call
+NxsCharactersBlock::GetNumStates() to find the size of the state set, and then a call to NxsCharactersBlock::GetState() to get each state in the state set.
+For those cells that have multiple states, you would have to call NxsCharactersBlock::IsPolymorphic() to determine if the multiple states represented polymorphism or uncertainty.
+
+So the code to print out a matrix as NEXUS would look like this:
+\code
+/* Example of the simplest (v2.0) querying for character block content */
+void printMatrixWithoutLabels(std::ostream & out, const NxsCharactersBlock *cb)
+	{
+	const unsigned nc = cb->GetNCharTotal();
+	const unsigned nt = cb->GetNTaxTotal()
+	for (unsigned i = 0; i < nt
+	if (matrix->IsMissing(d))
+		{
+		s[0] = missing;
+		s[1] = '\0';
+		}
+	else if (matrix->IsGap(d))
+		{
+		s[0] = gap;
+		s[1] = '\0';
+		}
+	else
+		{
+		assert(symbols != NULL);
+		unsigned symbolListLen = strlen(symbols);
+
+		unsigned numStates = matrix->GetNumStates(d);
+		unsigned numCharsNeeded = numStates;
+		if (numStates > 1)
+			numCharsNeeded += 2;
+		assert(slen > numCharsNeeded);
+
+		if (numStates == 1)
+			{
+			unsigned v = matrix->GetState(d);
+			assert(v < symbolListLen);
+			s[0] = symbols[v];
+			s[1] = '\0';
+			}
+
+		else
+			{
+			// numStates must be greater than 1
+			//
+			unsigned i = 0;
+			if (matrix->IsPolymorphic(d))
+				s[i++] = '(';
+			else
+				s[i++] = '{';
+			for (unsigned k = 0; k < numStates; k++)
+				{
+				unsigned v = matrix->GetState(d, k);
+				assert(v < symbolListLen);
+				s[i++] = symbols[v];
+				s[i] = '\0';
+				}
+			if (matrix->IsPolymorphic(d))
+				s[i++] = ')';
+			else
+				s[i++] = '}';
+			s[i] = '\0';
+			}
+		}
+
+\endcode
+This API is still supported.
+However:
+	- It is possible for NEXUS file contain a matrix without symbols. Since GetState, returns the symbol, This API will not work on such matrices.
+	- the API is less effcient than the newer api (it results in a lot more function calling).
+
+\subsection newerCharQueries Efficient character queries.
+If you need to extract large amounts of data out of NCL, you often need something more efficient than the code described in the  \"\ref SimpleCharStateQuery\" section.
+This usually occurs with applications that support sequence data sets.
+
+In version 2.1 and higher of NCL, you can asked for a reference to the internal storage of the character data.
+If you need to convert the NCL storage into your own format, you can the efficiently walk down the array of state codes and get the information that you need.
+This requires that you know a little bit about how NCL stores the data.
+
+Internally the cells of the matrix are stored as integers that are referred to in the library as "state codes."
+State codes include the "fundamental states" for a type (such as 0=>"A", 1=>"C", 2=>"G", 3=>"T" for DNA), but also the ambiguity codes (4="{ACGT}" for DNA).
+
+The Missing data concept and the Gap concept have their own state codes.
+Use NXS_MISSING_CODE and NXS_GAP_STATE_CODE to refer to these states.
+But you can rely on the fact that these codes are -1 and -2 respectively.
+
+To decode these internal state codes into the symbols that occur in a file to describe a datatype, NCL stores a NxsDiscreteDatatypeMapper object.
+The NxsCharactersBlock "knows" which NxsDiscreteDatatypeMapper instance applies to each column of the matrix.
+When you do not have a "mixed" datatype, then the same NxsDiscreteDatatypeMapper instance will apply to every column.
+
+\subsection GettingMapper The role of the NxsDiscreteDatatypeMapper
+NEXUS allows users to add symbols and equates (which are like macros) to a datatypes.
+In NCL, addition of symbols to a sequence type is only supported if you have called NxsCharactersBlock::SetAllowAugmentingOfSequenceSymbols() with the argument true before parsing the file.
+This will result in the datatype becoming "standard" type if extra symbols are found (see \ref mixedDatatypes).
+
+Because datatypes in NEXUS are actually richer than a simple enumeration, you often need to deal with the a NxsDiscreteDatatypeMapper object.
+You can call NxsCharactersBlock::GetDatatypeMapperForChar() to get the mapper for a particular column.
+If the datatype is not mixed, then this function will return the same mapper object for every column.
+
+If you do want to support mixed datatype, then you can call:
+NxsCharactersBlock::GetAllDatatypeMappers() to get all of the mappers used in a matrix, and then use the result of NxsCharactersBlock::GetDatatypeMapForMixedType() to figure out what set of characters is used by each mapper (this is equivalent to asking for the mapper for each character, but it is often easier to deal with the data by walking through the characters associated with each mapper.
+
+
+If you just want to support the molecular sequence types, you still have to be aware that the user may have added new equates that generate new state codes, and that polymorphism codes can occur in the matrix.  So there can be some extra state codes to deal with.
+An equate is usually "syntactic sugar" that gives users another way to express the same content (for example, "Y" instead of "{TC}").
+By default, the molecular sequence types come with some equates to represent these ambiguity codes.
+But the user can introduce new equates that represent polymorphism: in NEXUS "(TC)" means a taxon is polymorphic for T and C, while "{TC}" means that a taxon could have either state ("partially ambiguous").
+
+Many applications want to parse only the molecular sequence datatypes and do not want to go through the trouble of supporting additional state code.
+The easiest way to tell if the characters block is going to require "special handling" is to create a default block of the same general type using the
+NxsDiscreteDatatypeMapper(NxsDatatypeEnum, bool) constructor, and then
+compare it to the NxsCharactersBlock's mapper using NxsDiscreteDatatypeMapper::IsSemanticallyEquivalent().
+If that function returns true, then you may treat the state codes from the matrix as if they were the
+unmodified datatype (the NEXUS file might contain some syntactic equates, if the mappers are syntactically equivalent
+the matrix will not contain polymorphic codes.
+\code
+			const NxsDiscreteDatatypeMapper *mapper = charBlock.GetDatatypeMapperForChar(0);
+			const bool hasGaps = charBlock.GetGapSymbol() != '\0';
+
+			NxsDiscreteDatatypeMapper defaultMapper(NxsCharactersBlock::dna, hasGaps);
+			if (mapper->IsSemanticallyEquivalent(&defaultMapper))
+				{
+				// the datatype has not been changed in a substantive way.
+				}
+			else
+				{
+				// new state codes have been introduced, so routines that do not
+				//	interrogate the mapper to check the mapper about the status of all of the
+				//	states may fail.
+				}
+\endcode
+
+\subsection GettingStateCodes Getting access to the state codes.
+You can obtain a NxsCharactersBlock::GetDiscreteMatrixRow()
+
+The example file at <a href="simpleNCLClient/simpleNCLClient.cpp">simpleNCLClient.cpp</a> demonstrates
+queries to the NxsTaxaBlock and both styles of querying the NxsCharactersBlock.
+It can be compiled with <a
+href="simpleNCLClient/Makefile">Makefile</a>
+
+\subsection OtherCharQuery useful NxsCharactersBlock queries
+NxsCharactersBlock::TaxonIndHasData() can be used to see if an entire row is present in the matrix (if false, then the taxon had no data read).
+
+Characters can be flagged is inactive (aka "excluded" or "eliminated" - unfortunately, these three terms are synonymous in NCL), by NxsCharactersBlock::ApplyExset().
+They can be reincluded by NxsCharactersBlock::ApplyIncludeset().
+To exclude/include a single character (rather than a set) use NxsCharactersBlock::ExcludeCharacter() and NxsCharactersBlock::IncludeCharacter().
+The accessors NxsCharactersBlock::GetNumActiveChar(), NxsCharactersBlock::GetExcludedIndexSet(), and NxsCharactersBlock::IsActiveChar() are useful for
+determining which columns are currently flagged as excluded.
+
+Character labels (and state labels) are supported see NxsCharactersBlock::HasCharLabels() and
+NxsCharactersBlock::GetCharLabel().
+
+The instruction on how gaps should be interpretted in analyses such as parsimony tree scoring is contained in the <tt>Options</tt> command of the ASSUMPTIONS block, but when read the block will "inform" the NxsCharactersBlock instance.
+The setting can be retrieved NxsCharactersBlock::GetGapModeSetting().
+StepMatrices can be retreived by requesting the NxsCharactersBlock's "TransformationManager" (using the NxsCharactersBlock::GetNxsTransformationManagerRef() method) and querying that object.
+
+To interpret and query for cells of continuous data matrices, use
+NxsCharactersBlock::GetStatesFormat() to figure out if the cells represent states or individuals.
+NxsCharactersBlock::GetItems() to get the vector of the items (or "keys" stored for each cell.
+Then to retreive the value for a item at a particular cell, use
+NxsCharactersBlock::GetContinuousValues().
+
+
+
+
+\section NxsTreesBlockQueries Getting information out of a NxsTreesBlock
+The recommended functions to be called are:
+	NxsTreesBlock::GetNumTrees and NxsTreesBlock::GetFullTreeDescription().
+
+The tree is validated during the parse and then stored as a NxsFullTreeDescription object which will hold the newick string.
+
+See \ref improveperformance for a discussion of the setValidationCallbacks function that can be used to improve the efficiency of the parsing of files with
+large TREES blocks.
+
+\subsection processingTrees "Processed" trees
+
+By default, in v2.1 the trees block will "process" trees so that the  newick
+	string will have numbers rather than names. The numbers in the tree string start at 1 (like other NEXUS numbering), but they are simply 1 + the taxon index. If trees have been processed then the client code does not have to
+	worry about using the translate table or even calls to the taxa block associated with the NxsTreesBlock in order to decode the taxon labels.
+
+\warning In previous versions of NCL (before v2.1), the client code would have to use the translate
+	table to convert the newick string into the taxon numbers. As of v2.1, NCL now does this translation for you.
+	This means that code must be adapted to the new API!
+	If the translation table registers numubers that are not in agreement with the taxon numbering, then the old style NxsTreesBlock::GetTreeDescription() would return untranslated aliases,
+	the v2.1 API's NxsTreesBlock::GetTreeDescription() will return a tree string that has translated the tree into taxon numbers.
+	The old-style parsing can be enabled by calling NxsTreesBlock::SetProcessAllTreesDuringParse() with false as an argument.
+
+This non-backward compatible change was made because it is actually quite tricky to do the name translation:
+	code has to check the translate table first.  If the taxon string is not found then you have to taxset names, then the taxon labels, then interpret the label as a number (that is correct, while you can use a TRANSLATE command to register short numeric aliases of taxa, NEXUS's implicit numbering means that you can use numbers for taxa even if there is no TRANSLATE table).
+The other reason is that in order to generate implicit TAXA blocks, NCL needed to interpret the tree strings.
+
+The up-side of this change is that it is much easier for new client code to deal with the multiplicity of ways of expressing a tree.  NCL will return an more normalized newick string.
+
+Also note that NxsTreesBlock::GetTranslatedTreeDescription() has not changed.
+The downside of this function, is that the client code has to do a full NEXUS parse of the string, because the newick string returned may have names with spaces and other weird characters that complicate simple parsing.
+
+\subsection treeRooting Tree rooting
+NCL uses the convention that the TREE command means a rooted tree while the UTREE command means an unrooted tree.
+However the presence of a rooting "command comment" ([&U] for unrooted or [&R] for rooted) before the tree will override this behavior.
+
+Unfortunately, if the NxsFullTreeDescription reports that it is rooted, it is currently impossible for the client code to detect whether that rooting interpretation is simply the default for the tree or whether it was assigned based on a command comment.
+
+\todo{In the future we will store a separate flag that indicates whether or not
+the rooting interpretation is based on an explicit syntax in the file.}
+
+\subsection NHXcomments NHX style comments.
+NCL has some limited support for New Hampshire extended comments (see http://www.phylosoft.org/NHX).
+If you create a NxsSimpleTree object, from a NxsFullTreeDescription, then the NxsSimpleEdge objects of the tree will have mappings of NHX keys to strings that are generated from the NHX comments in the tree string.
+See NxsSimpleEdge::GetInfo().
+
+Only the key-value NHX comment information is parsed (the bare tag and branch length syntax are not supported).
+
+
+\section NxsAssumptionsBlockQueries Getting information out of a NxsAssumptionsBlockBlock
+\todo{docs needed}
+
+
+\section NxsUnalignedBlockQueries Getting information out of a NxsUnalignedBlock
+\todo{docs needed}
+
+<hr />
+Next see \ref LessStrict for info on how to get NCL to accept more files
+
+<hr />
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+
+
+*/

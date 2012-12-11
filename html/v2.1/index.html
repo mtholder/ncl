@@ -1,0 +1,696 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>NEXUS CLASS LIBRARY: Home Page</title> <style type="text/css">
+<!--
+@import url(ncl.css);
+-->
+</style>
+</head>
+<body>
+<table border="1" width="100%">
+	<tr>
+		<td>
+			<table border="0" width="100%">
+				<tr>
+					<td align="left" class="classy">
+						NEXUS CLASS LIBRARY
+					</td>
+					<td align="right" class="classy">
+						<a href="index.html">home</a> | <a href="classes.html">classes</a> | <a href="functions.html">functions</a>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<h1><a name="top">Nexus Class Library (version 2.1)</a></h1> <h3>by Paul O. Lewis and Mark T. Holder</h3>
+<p>
+	For information on the v2.0 API see <a href="../v2.0index.html">v2.0index.html</a>. The documentation below reflects usage that will only work with version 2.1. Version 2.1 is stable.
+</p>
+<h2>Contents</h2>
+<ul>
+	<li>
+		<a href="#introduction">What is the NCL?</a>
+	</li>
+	<li>
+		<a href="#whyDiff">Why is version 2.1 so different from version 2.0?</a>
+	</li>
+	<ul>
+		<li><a href="#backward">Backward compatibility</a></li>
+		<li><a href="#v2.2">Version 2.2</a></li>
+	</ul>
+	<li><a href="COPYING.txt">License</a></li>
+	<li><a href="COPYING.txt">Lack of Warranty</a></li>
+	<li>
+		<a href="#download">Obtaining the NCL</a>
+	</li>
+	<li>
+		<a href="#characterisitics">Characteristics of the NCL</a>
+		<ul>
+			<li>
+				<a href="#portability">Portability</a>
+			</li>
+			<li>
+				<a href="#crossplatform">Cross-platform features</a>
+			</li>
+			<li>
+				<a href="#extensibility">Extensibility</a>
+			</li>
+		</ul>
+	</li>
+	<li><a href="#detailed">Detailed v2.1 documentation</a></li>
+	<!--li>
+		<a href="#limitations">Current limitations</a>
+	</li>
+	<li>
+		<a href="#reader">Building a NEXUS File Reader</a>
+		<ul>
+			<li>
+				<a href="#readermain">The Main Function</a>
+			</li>
+			<li>
+				<a href="#readernexus">Deriving From the NEXUS Class</a>
+			</li>
+			<li>
+				<a href="#readertoken">Deriving From the NxsToken Class</a>
+			</li>
+			<li>
+				<a href="#readerall">Putting It All Together</a>
+			</li>
+			<li>
+				<a href="#readerdata">A Sample Data File</a>
+			</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#rollown">Creating Your Own NEXUS Block</a>
+	</li>
+	<li>
+		<a href="#advice">General Advice</a>
+	</li>
+	<li>
+		<a href="#bugz">Reporting Bugs</a>
+	</li>
+	<li>
+		<a href="#whatyoucando">What You Can Do For Me</a>
+	</li-->
+	<li>
+		<a href="#future">Future Of The NCL Project</a>
+	</li>
+	<li>
+		<a href="#contactinfo">Contact Information</a>
+	</li>
+</ul>
+<h2><a name="introduction">What is the NCL?</a></h2>
+<p>
+	The NEXUS Class Library (NCL) is an integrated collection of C++ classes designed to parse NEXUS-formatted data files. The library has recently been extended to support several simple file-formats (PHYLIP, relaxed PHYLIP, and FASTA).
+	NCL does not diagnose the file format, but if you configure a parser to read several formats, then you will be able to parse multiple formats and extract the data from NCL's data structures using the same API.
+</p>
+<p>
+	This documentation is written for C++ programmers.
+</p>
+<p>
+	The NEXUS data file format was specified in the publication cited below (<a href="http://sysbio.oxfordjournals.org/cgi/reprint/46/4/590.pdf">this is a link to pdf of that paper</a>).
+	Please read this paper for further information about the format specification itself; the documentation for the NCL does not attempt to explain the structure of a NEXUS data file.
+</p>
+<p>
+	Maddison, D. R., D. L. Swofford, and Wayne P. Maddison. 1997. NEXUS: an extensible file format for systematic information. <i>Systematic Biology</i> 46(4): 590-621.
+</p>
+<h2><a name="whyDiff">Why is version 2.1 so different from version 2.0?</a></h2>
+	<p>
+	Version 2.1 extends the functionality significantly by allowing NCL to parse files that use extended forms of NEXUS.
+	Both Mesquite and MrBayes rely on extensions to NEXUS.
+	Particularly difficult to handle are Mesquite's support for multiple blocks of the same type within a file (accompanied by linking blocks by title).
+	</p>
+	<p>
+	Version 2.0 of NCL followed a model of creating a NxsReader object and adding NxsBlock objects which handle parsing of particular types of NEXUS content.
+	Client code would typically inherit from base classes such as NxsCharactersBlock, or would extract the information when a block was completely read.
+	The NxsBlock instance would be reset (by NxsBlock::Reset call) before it was asked to handle another block.
+	</p>
+	<p>Unfortunately, not all NEXUS blocks are autonomous (for example commands in an ASSUMPTIONS block may rely on information in a CHARACTERS block).
+	Combining inter-block dependencies with the need to store information from multiple blocks of the same type means that NCL's version 2.0 API can be quite cumbersome.
+	To read a file with a single instance of a NxsCharactersBlock, the client code must carefully offload all of the information in a block before allowing parsing to proceed to the next block; later references between blocks have to be corrected so that blocks refer to the new location of the
+	information (rather than the NxsBlock instance that originally held the data).
+	</p>
+	<p>A more natural design pattern for processing files which may have multiple blocks of the same type is to use a factory method.
+	Users of NCL v2.1 can register NxsBlock factories with a NxsReader, and parse an entire file before having to pull the parsed information from the
+	blocks.</p>
+<h3><a name="backward">Backward compatibility</a></h3>
+	<p>Despite several fundamental changes in the implementation of the library, we strive to keep NCL v2.1 backward compatible with version 2.0.
+	A programmer that relied on version 2.0 should still work.
+	If you discover that your client code works with version 2.0 of NCL, but not 2.1 please let us know.</p>
+<h3><a name="v2.2">Version 2.2</a></h3>
+	<p>The svn branch for version 2.2 is very similar to 2.1.
+	It only contains changes necessary to allow NCL to be callable from other
+	languages via <a href="http://www.swig.org/">SWIG</a>.
+	Some of the changes needed to ensure this were not backward-compatible.
+	So they were added to branch 2.2.
+	</p>
+	<p>C++ programmers should probably use 2.1 (although their code will almost
+	certainly work on v2.2 as well)</p>
+
+
+<h2><a name="download">Obtaining the NCL?</a></h2>
+<p>
+	The best link to use to get the latest (stable) version of NCL is from the <a href="http://sourceforge.net/projects/ncl/">sourceforge NCL project page.</a></p>
+<h2><a name="characterisitics">Characteristics of the NCL</a></h2> <h3><a name="portability">Portability</a></h3>
+<p>
+	The NCL has been designed to be as portable as possible for a C++ class library.
+	Please let us know if you find a (reasonably modern) compiler that does not accept NCL.
+</p>
+<h3><a name="crossplatform">Cross-platform features</a></h3>
+<p>
+	NCL does not rely on any external libraries.
+	There are hooks (such as NxsToken::OutputComment) which all messages intended for the user to be displayed in the appropriate form for your application. Thus, it is possible to create an application that does not write to standard output or to write standard input/output applications with NCL.
+</p>
+<h3><a name="extensibility">Extensibility</a></h3>
+<p>
+	The basic tools provided in the NCL allow you to create your own NEXUS blocks and use them in your program. This makes it easy to define a private block to contain commands that only your program recognizes, allowing your users to run your program in batch mode (see the section below entitled <a href="#advice"> General Advice</a> for more information on this topic).
+</p>
+<h2><a name="detailed">Detailed v2.1 documentation</a></h2>
+<p>
+Mark Holder is currently documenting v2.1 (after he changed a lot of code without updating the comments).
+
+</p>
+<p>
+The <a href="./funcdocs/index.html#basicAPI">current API documentation</a> is generated
+from doxygen, but also includes high level discussion about recommended usage patterns.
+</p>
+
+<!--h2><a name="limitations">Current limitations</a></h2>
+<p>
+	The main current limitation is that the NCL is incomplete. Some standard NEXUS blocks have been provided with this distribution, but because the NEXUS format is so extensive, even some of the standard blocks described in the paper cited above have not been implemented (or have been only incompletely implemented). Here is a summary table showing what has been implemented thus far:
+</p>
+<table width="600">
+	<tr>
+		<th align="left" valign="bottom">
+			Block
+			<br>
+			<hr>
+		<th align="left" valign="bottom">
+			Current Limitations
+			<br>
+			<hr>
+	<tr>
+		<td valign="top">
+			ASSUMPTIONS
+		<td valign="top">
+			Only TAXSETS, CHARSETS, and EXSETS have been implemented thus far.
+	<tr>
+		<td valign="top">
+			ALLELES
+		<td valign="top">
+			Cannot yet handle transposed MATRIX, and only DATAPOINT=STANDARD is implemented.
+	<tr>
+		<td valign="top">
+			CHARACTERS
+		<td valign="top">
+			Only ITEMS=STATES and STATESFORMAT=STATESPRESENT has been implemented thus far, and DATATYPE=CONTINUOUS has not been implemented.
+	<tr>
+		<td valign="top">
+			DISTANCES
+		<td valign="top">
+			No limitations, completely implemented
+	<tr>
+		<td valign="top">
+			DATA
+		<td valign="top">
+			Since the DATA block is essentially the same as a CHARACTERS block, the same limitations apply.
+	<tr>
+		<td valign="top">
+			TAXA
+		<td valign="top">
+			No limitations, completely implemented
+	<tr>
+		<td valign="top">
+			TREES
+		<td valign="top">
+			No limitations, completely implemented
+</table>
+<p>
+	While the limitations for the CHARACTERS block may seem a bit extreme, this block is nevertheless implemented to the point where almost all existing morphological and molecular data sets can be read.
+</p>
+<p>
+	The ALLELES block has not yet been used in any program to my knowledge. It is very similar to the GDADATA block used in my program GDA, but differs in requiring NEWPOPS to be specified if a TAXA block does not precede the ALLELES block (this is to make the ALLELES block more like the CHARACTERS block.
+</p>
+<p>
+	Some recent modifications of the NEXUS format implemented in <a href="http://mesquiteproject.org/mesquite/mesquite.html">Mesquite</a> (e.g. LINK statements in the CHARACTERS block) and <a href="http://morphbank.ebc.uu.se/mrbayes/">MrBayes</a> (e.g. DATATYPE=MIXED in the DATA block) are not supported in the NCL at this time.
+</p>
+<p>
+	The NCL has been designed to be portable, easy-to-use, and informative in the error messages produced. It will be apparent to anyone who looks very closely at the code that some efficiency (both in executable size and speed) has been sacrificed to meet these goals.
+</p>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="reader">Building a NEXUS File Reader</a></h2>
+<p>
+	This section illustrates how you could build a simple NEXUS file reader application capable of reading in a TAXA and a TREES block. Note that the file <span class="filename">nclsimplest.cpp</span> contains all of the code for this example. To keep things simple, we will just write output to an ofstream object (nothing graphical here).
+</p>
+<p>
+	As you work through this example, feel free to look into the NCL classes in more detail. A <a href="classes.html">class index</a> as well as a <a href="functions.html">member function index</a> is provided at the <a href="#top">top of this document</a> for quick access.
+</p>
+<h3><a name="readermain">The Main Function</a></h3> <pre>
+int main(int argc, char *argv[])
+	{
+	taxa = new NxsTaxaBlock();
+	trees = new NxsTreesBlock(taxa);
+
+	MyReader nexus(argv[1], argv[2]);
+	nexus.Add(taxa);
+	nexus.Add(trees);
+
+	MyToken token(nexus.inf, nexus.outf);
+	nexus.Execute(token);
+
+	taxa->Report(nexus.outf);
+	trees->Report(nexus.outf);
+
+	return 0;
+	}
+</pre> <h4>Creating block objects</h4>
+<p>
+	The first two lines of the main function involve the creation of objects corresponding to the two types of NEXUS blocks we want our program to recognize. NxsTaxaBlock is declared in the header file <span class="filename">nxstaxablock.h</span> and defined in the source code file <span class="filename">nxstaxablock.cpp</span>, whereas the NxsTreesBlock class is declared in <span class="filename">nxstreesblock.h</span> and defined in <span class="filename">nxstreesblock.cpp</span>. Note that the NxsTreesBlock constructor requires a reference to an object of type NxsTaxaBlock. This is because the taxa labels in a TREES block should correspond to any taxa previously defined in a TAXA block. If no TAXA block precedes the TREES block, taxon labels defined in the TREES block will be used to populate the TAXA block. In the NCL, any block that defines taxon labels stores this information in the NxsTaxaBlock object, and any block that needs such information requires a reference to the NxsTaxaBlock object in its constructor.
+</p>
+<h4>Adding the block objects to the NxsReader object</h4>
+<p>
+	The next three lines involve creating a NxsReader object and adding our two block objects to a linked list maintained by the NxsReader object. The MyNexusReader class is derived from the NxsReader class, which is declared in <span class="filename">nxsreader.h</span> and defined in <span class="filename">nxsreader.cpp</span>. Although a NxsReader object can be created and used, you will probably wish to derive a class from it (as I did in this example) and override some of the NxsReader virtual functions, such as <a href="NxsReader.html#EnteringBlock204">EnteringBlock</a> , <a href="NxsReader.html#SkippingBlock472">SkippingBlock</a> , and <a href="NxsReader.html#NexusError444">NexusError</a> (the NxsReader version of these functions does nothing, and it is important to at least report errors in some way to your program's users).
+</p>
+<p>
+	The reason the NxsReader object must maintain a list of block ojects is so that it can figure out which one is responsible for reading each block found in the data file. The block objects <span class="variablename">taxa</span> and <span class="variablename">trees</span> have each inherited an <span class="variablename">id</span> variable of type <span class="variablename">char *</span> that stores their block name (i.e., "TAXA" for the TaxaBlock and "TREES" for the TreesBlock). When the <a href="NxsReader.html#Execute237">Execute</a> member function encounters a block name, it searches its linked list of block objects until it finds one whose <span class="variablename">id</span> variable is identical to the name of the block encountered. It then calls the <a href="NxsBlock.html#Read129">Read</a> function of that block object to do the work of reading the block from the data file and storing its contents. It is possible of course that a block name will appear in a data file for which there is no corresponding block object. In this case, the <a href="NxsReader.html#Execute237">Execute</a> method calls the <a href="NxsReader.html#SkippingBlock472">SkippingBlock</a> method to report the fact that it is skipping over the contents of the unknown block.
+</p>
+<h4>Reading the data file</h4>
+<p>
+	The next two lines create a token object (MyToken is derived from the NxsToken class), and initiate the reading of the NEXUS data file using the <a href="NxsReader.html#Execute237">Execute</a> function. The input and output files are created within the MyNexusReader class. While this is not required, it facilitates handling messages generated while the data file is being read. The NxsToken class has one virtual member function ( <a href="NxsToken.html#OutputComment133">OutputComment</a> ) which enables you to control how output comments are displayed. The NxsToken version of <a href="NxsToken.html#OutputComment133">OutputComment</a> does nothing, so you must derive your own token class from NxsToken and override the <a href="NxsToken.html#OutputComment133">OutputComment</a> method in order for the output comments in the data file to be displayed. The main function of the NxsToken class is to provide a means for grabbing separate NEXUS tokens (words separated by blank spaces or punctuation) one by one from the data file. Calling the <a href="NxsToken.html#GetNextToken426">GetNextToken</a> function reads and stores the next token found in the data file, correctly handling any comments found along the way. This automatic comment handling greatly simplifies reading a NEXUS data file.
+</p>
+<h4>Reporting on block objects' contents</h4>
+<p>
+	The last two lines call the <a href="NxsBlock.html#Report149">Report</a> functions of each of the blocks. This just spits out a summary of any data contained in these objects that has been read from the data file.
+</p>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h3><a name="readernexus">Deriving From the Nexus Class</a></h3>
+<p>
+	Note that the <span class="variablename">ifstream</span> is opened in binary mode. You should always open your input file in binary mode so that the file can be read properly regardless of the platform on which it was created. For example, suppose someone created a NEXUS data file on a MacIntosh and wanted to read it with your program, which is running on a Windows XP machine. Opening the file in binary mode allows the NxsToken object you are using to recognize the newline character in the Mac file as such, even though MacIntosh computers use a different symbol (ASCII 13) to represent the newline character than computers running Windows (which use the ASCII 13, ASCII 10 combination for newlines).
+</p>
+<pre>
+class MyReader : public NxsReader
+	{
+	public:
+		ifstream inf;
+		ofstream outf;
+
+		MyReader(char *infname, char *outfname) : NxsReader()
+			{
+			inf.open(infname, ios::binary);
+			outf.open(outfname);
+			}
+
+		~MyReader()
+			{
+			inf.close();
+			outf.close();
+			}
+
+	void ExecuteStarting() {}
+	void ExecuteStopping() {}
+
+	bool EnteringBlock(NxsString blockName)
+		{
+		cout << "Reading \"" << blockName << "\" block..." << endl;
+		outf << "Reading \"" << blockName << "\" block..." << endl;
+
+		// Returning true means it is ok to delete any data associated with
+		// blocks of this type read in previously
+		//
+		return true;
+		}
+
+	void SkippingBlock(NxsString blockName)
+		{
+		cout << "Skipping unknown block (" << blockName << ")..." << endl;
+		outf << "Skipping unknown block (" << blockName << ")..." << endl;
+		}
+
+	void SkippingDisabledBlock(NxsString blockName) {}
+
+	void OutputComment(const NxsString &amp;msg)
+		{
+		outf << msg;
+		}
+
+	void NexusError(NxsString msg, file_pos pos, unsigned line, unsigned col)
+		{
+		cerr << endl;
+		cerr << "Error found at line " << line;
+		cerr << ", column " << col;
+		cerr << " (file position " << pos << "):" << endl;
+		cerr << msg << endl;
+
+		outf << endl;
+		outf << "Error found at line " << line;
+		outf << ", column " << col;
+		outf << " (file position " << pos << "):" << endl;
+		outf << msg << endl;
+
+		exit(0);
+		}
+	};
+</pre>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h3><a name="readertoken">Deriving From the NxsToken Class</a></h3>
+<p>
+	We derive our own token reader from the NxsToken class in order to display the output comments present in the data file (if any). The virtual function <a href="NxsToken.html#OutputComment133">OutputComment</a> in the base class is overridden to accomplish this.
+</p>
+<pre>
+class MyToken : public NxsToken
+	{
+	public:
+
+		MyToken(istream &amp;is, ostream &amp;os) : out(os), NxsToken(is) {}
+
+		void OutputComment(const NxsString &amp;msg)
+			{
+			cout << msg << endl;
+			out << msg << endl;
+			}
+
+	private:
+		ostream &amp;out;
+	};
+</pre>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h3><a name="readerall">Putting It All Together</a></h3>
+<p>
+	Here is the entire program. Note that in order for this to link properly, you will need to also compile the following files included with the NCL (and instruct your linker to link them into your main executable): <span class="filename">nxsblock.cpp</span>, <span class="filename">nxsexception.cpp</span>, <span class="filename">nxsreader.cpp</span>, <span class="filename">nxsstring.cpp</span>, <span class="filename">nxstaxablock.cpp</span>, <span class="filename">nxstreesblock.cpp</span> and <span class="filename">nxstoken.cpp</span>.
+</p>
+<pre>
+#include "ncl.h"
+
+NxsTaxaBlock	*taxa	= NULL;
+NxsTreesBlock	*trees	= NULL;
+
+class MyReader : public NxsReader
+	{
+	public:
+		ifstream inf;
+		ofstream outf;
+
+		MyReader(char *infname, char *outfname) : NxsReader()
+			{
+			inf.open(infname, ios::binary);
+			outf.open(outfname);
+			}
+
+		~MyReader()
+			{
+			inf.close();
+			outf.close();
+			}
+
+	void ExecuteStarting() {}
+	void ExecuteStopping() {}
+
+	bool EnteringBlock(NxsString blockName)
+		{
+		cout << "Reading \"" << blockName << "\" block..." << endl;
+		outf << "Reading \"" << blockName << "\" block..." << endl;
+
+		// Returning true means it is ok to delete any data associated with
+		// blocks of this type read in previously
+		//
+		return true;
+		}
+
+	void SkippingBlock(NxsString blockName)
+		{
+		cout << "Skipping unknown block (" << blockName << ")..." << endl;
+		outf << "Skipping unknown block (" << blockName << ")..." << endl;
+		}
+
+	void SkippingDisabledBlock(NxsString blockName) {}
+
+	void OutputComment(const NxsString &amp;msg)
+		{
+		outf << msg;
+		}
+
+	void NexusError(NxsString msg, file_pos pos, unsigned line, unsigned col)
+		{
+		cerr << endl;
+		cerr << "Error found at line " << line;
+		cerr << ", column " << col;
+		cerr << " (file position " << pos << "):" << endl;
+		cerr << msg << endl;
+
+		outf << endl;
+		outf << "Error found at line " << line;
+		outf << ", column " << col;
+		outf << " (file position " << pos << "):" << endl;
+		outf << msg << endl;
+
+		exit(0);
+		}
+	};
+
+class MyToken : public NxsToken
+	{
+	public:
+
+		MyToken(istream &amp;is, ostream &amp;os) : out(os), NxsToken(is) {}
+
+		void OutputComment(const NxsString &amp;msg)
+			{
+			cout << msg << endl;
+			out << msg << endl;
+			}
+
+	private:
+		ostream &amp;out;
+	};
+
+int main(int argc, char *argv[])
+	{
+	taxa = new NxsTaxaBlock();
+	trees = new NxsTreesBlock(taxa);
+
+	MyReader nexus(argv[1], argv[2]);
+	nexus.Add(taxa);
+	nexus.Add(trees);
+
+	MyToken token(nexus.inf, nexus.outf);
+	nexus.Execute(token);
+
+	taxa->Report(nexus.outf);
+	trees->Report(nexus.outf);
+
+	return 0;
+	}
+</pre>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h3><a name="readerdata">A Sample Data File</a></h3>
+<p>
+	Here is a sample data file that exercises a lot of the features of the NEXUS file reader we have just created. First, there are both output and regular comments scattered around. Some are between tokens, some occur at the beginning of a token, and still others begin right after a token. Some comments even have nested within them words surrounded by square brackets. There are also blocks in this data file (i.e., the paup block) that are not recognized by the NEXUS file reader we have created. The NEXUS reader handles all of these situations with very minimal effort on your part. Note that you can remove the TAXA block without ill effects because the taxon labels are specified in the TREES block.
+</p>
+<pre>
+#nexus
+
+[!Output comment before first block]
+
+begin paup; [this is an unknown block]
+	lset nst=2 basefreq=empirical tratio=estimate rates=gamma shape=estimate;
+end;
+
+[!Let's see if we can deal with [nested] comments]
+
+[!
+What happens if we do this!
+]
+
+begin [comment at beginning of token]taxa;
+	dimensions[comment at end of token] ntax=11;
+	taxlabels  [comment between tokens]
+		P._fimbriata
+		'P. robusta'
+		'P. americana'
+		'P. myriophylla'
+		'P. articulata'
+		'P. parksii'
+		'P. gracilis'
+		'P. macrophylla'
+		'P. polygama'
+		'P. basiramia'
+		'P. ciliata'
+		[!output comment in TAXLABELS command]
+	;
+end;
+
+begin trees;
+	translate
+		1  P._fimbriata,
+		2  P._robusta,
+		3  P._americana,
+		4  P._myriophylla,
+		5  P._articulata,
+		6  P._parksii,
+		7  P._polygama,
+		8  P._macrophylla,
+		9  P._gracilis,
+		10  P._basiramia,
+		11  P._ciliata
+	;
+	utree unrooted =      (1,2,((4,3,(5,6)),((7,8),(9,(10,11)))));
+	tree  rooted   =      ((1,2),((4,3,(5,6)),(7,(8,(9,(10,11))))));
+	utree u_to_r   = [&amp;R] ((1,2),((4,3,(5,6)),(7,(8,(9,(10,11))))));
+	tree  r_to_u   = [&amp;U] (1,2,((4,3,(5,6)),((7,8),(9,(10,11)))));
+end;
+</pre>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="rollown">Creating Your Own NEXUS Block</a></h2>
+<p>
+	Creating your own NEXUS block involves deriving a class from the NxsBlock base class and overriding the three virtual functions <a href="NxsBlock.html#Read129">Read</a> , <a href="NxsBlock.html#Reset142">Reset</a> , and <a href="NxsBlock.html#Report149">Report</a> . Use the files <span class="filename">emptyblock.cpp</span> and <span class="filename">emptyblock.h</span> as templates for your own source code and header files. While creating your own block class is not a complicated endeavor, here are some things to watch out for:
+</p>
+<ul>
+	<li>
+		Be sure to write the <a href="NxsBlock.html#Reset142">Reset</a> function in such a way that all heap memory is cleaned up (deleted). This means whenever you use the <span class="variablename">new</span> keyword to allocate memory for an object that will potentially persist until the <a href="NxsBlock.html#Reset142">Reset</a> method is called, you need to put code in the <a href="NxsBlock.html#Reset142">Reset</a> function to delete it. Also, it is important to delete such objects in the destructor for the class as well.
+		<br />
+	</li>
+	<li>
+		When writing the <a href="NxsBlock.html#Read129">Read</a> function, put <span class="variablename">assert</span> macros everywhere you make an assumption, however insignificant this assumption seems at the time of writing. This tremendously speeds up the task of finding bugs when one of your assumptions turns out to not always be true!
+		<br />
+	</li>
+	<li>
+		When writing the <a href="NxsBlock.html#Read129">Read</a> function, put in a lot of tests of the form: <pre>
+if (!token.Equals(";"))
+	{
+	errormsg.PrintF("Expecting ';' after TREES block name, but found %s instead.", token.GetTokenAsCStr());
+	throw NxsException(errormsg, token.GetFilePosition(), token.GetFileLine(), token.GetFileColumn());
+	}
+</pre> Such checks will give your users some hope of finding where they have made a mistake in constructing their data file. We all know how frustrating it can be to have a program exit with an uninformative error message.
+	</li>
+</ul>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="advice">General Advice</a></h2>
+<p>
+	A typical program making use of this library might have the following two general characteristics:
+</p>
+<ul>
+	<li>
+		The program is structured so that it can be compiled either as a command-line driven, console program or as a graphical application (with a Windows, MacIntosh, or XWindows Graphical User Interface, or GUI)
+		<br />
+	</li>
+	<li>
+		Handles a private NEXUS block that contains commands identical to those that can be entered on the command line, enabling the program to be run in batch mode
+	</li>
+</ul>
+<p>
+	After developing several programs like this, I have come up with the following strategy that makes efficient use of the object-oriented nature of the NCL. I will assume your non-graphical program will be called simply "Phylome" and will read a private NEXUS block named "PHYLOME". I will further assume that the GUI version will be targeted for the Windows platform, and will be colled "PhylomeWin".
+</p>
+<ul>
+	<li>
+		Create a class (call it PhylomeBase) that performs all the (non-graphical) core functionality of the program. Be careful not to place any GUI code in this class. This class should be derived (publicly) from <span class="makeconspicuous">both</span> the NxsBlock class (this class will encapsulate your program's private NEXUS block) and the NxsReader class (which encapsulates your program's NEXUS file reading capability).
+		<br />
+	</li>
+	<li>
+		In class PhylomeBase, override the NxsBlock virtual functions <a href="NxsBlock.html#Read129">Read</a> , <a href="NxsBlock.html#Reset142">Reset</a> and <a href="NxsBlock.html#Report149">Report</a> and any other handler functions needed to process the commands in the private block.
+		<br />
+	</li>
+	<li>
+		In the PhylomeBase constructor, create all the NxsBlock-derived objects needed (i.e., a NxsCharactersBlock object, a NxsTaxaBlock object, etc.) and add these to PhylomeBase using the <a href="NxsReader.html#Add44">Add</a> function. Don't forget to Add(this) too so that your program can read the private block. Note that "this" is both a NxsReader object as well as a NxsBlock object, so it is able to add itself to the list of blocks processed upon execution of a NEXUS data file.
+		<br />
+	</li>
+	<li>
+		Now create a class PhylomeWin that handles the Windows GUI interface, deriving publicly from PhylomeBase. In class PhylomeWin, override the NxsReader virtual functions <a href="NxsReader.html#EnteringBlock204">EnteringBlock</a> , <a href="NxsReader.html#SkippingBlock472">SkippingBlock</a> , and <a href="NxsReader.html#NexusError444">NexusError</a> . For instance, within <a href="NxsReader.html#NexusError444">NexusError</a> , you might put up a MessageBox telling the user about an error encountered in the data file.
+		<br />
+	</li>
+	<li>
+		For the command-driven version, create a class Phylome that is derived from PhylomeBase, overrides the NxsReader and NxsBlock virtual functions (like its GUI counterpart, PhylomeWin), and provides a means for users to enter commands (you should create a mechanism in PhylomeBase so that you can use the same machinery to process commands typed in from the keyboard as you use to process commands contained in a private block). The <span class="filename">basiccmdline.h</span> and <span class="filename">basiccmdline.cpp</span> files are provided as an example of how to create a basic console program with an interactive command line interface.
+	</li>
+</ul>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="bugz">Reporting Bugs</a></h2>
+<p>
+	Please report bugs by email directly to <a href="mailto:paul.lewis@uconn.edu">Paul O. Lewis</a>. Please include &quot;NCL bug&quot; in the subject line to ensure that my mail filter catches it. Your bug has a better chance of getting fixed if you can attach to your email a NEXUS data file that causes the problem you have noticed.
+</p>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="whatyoucando">What You Can Do For Me</a></h2>
+<p>
+	I hope this library is useful to you, and note that it is free software under the <a href="COPYING">Gnu General Public License.</a>
+</p>
+<p>
+	Although you are not obligated in any way to me as a result of using this library to create programs, there are a few things that you can do to help encourage me to continue improving this library. Please make use of any of the following means of support that you feel comfortable with:
+</p>
+<ul>
+	<li>
+		Cite the NCL! If you publish an announcement of a program of yours that includes the NCL, please acknowledge that your program includes the NCL.
+		<br />
+	</li>
+	<li>
+		Advertise the NCL! If your program produces output either on the screen or in the form of a file, mention that your program uses the NCL in your program's output.
+		<br />
+	</li>
+	<li>
+		Help me fix bugs. If you discover a bug, please let me know about it so that I can get it fixed. Scroll up to the section entitled &quot;Reporting Bugs&quot; for the (simple) instructions for reporting a bug.
+	</li>
+	<li>
+		Give me suggestions. I welcome suggestions for improving the library and making it more convenient to use. I can't guarantee that I will have time to honor all requests, but I will try my best.
+	</li>
+</ul>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p-->
+<h2><a name="future">Future Of The NCL Project</a></h2>
+<p>
+	NCL is stable and not expected to change API.
+	We continue adding enhancements (more forgiving parsing, additional formats, and improved data storage).
+	We welcome both suggestions for improvement as well as bug reports, of course.
+</p>
+<p>
+	Version 2.2 is now generated (by a script) from version 2.1. The two versions are not expected to diverge in functionality with the exception that version 2.2 enables SWIG bindings to non-C++ languages (while 2.1 preserves function signatures to avoid breaking client code written against 2.0 and 2.1).
+</p>
+<p>
+	<a href="#top">Back to Table of Contents</a>
+</p>
+<h2><a name="contactinfo">Contact Information</a></h2>
+<p>
+	Paul's and Mark's current mail and email addresses as well as my phone and fax numbers are given below:
+</p>
+<pre>
+Paul O. Lewis, Assoc. Professor
+Department of Ecology and Evolutionary Biology
+The University of Connecticut
+75 North Eagleville Road, Unit 3043
+Storrs, CT 06269-3043 U.S.A.
+
+Email: <a href="mailto:paul.lewis@uconn.edu">paul.lewis@uconn.edu</a>
+URL:   <a href="http://www.eeb.uconn.edu/people/plewis">http://www.eeb.uconn.edu/people/plewis/</a>
+</pre>
+<br />
+<pre>
+Mark T. Holder, Assist. Professor
+Department of Ecology and Evolutionary Biology
+The University of Kansas
+Lawrence, KS 66045 U.S.A.
+
+Email: <a href="mailto:mtholder@ku.edu">mtholder@ku.edu</a>
+URL:   <a href="http://phylo.bio.ku.edu/mark-holder">http://phylo.bio.ku.edu/mark-holder</a>
+</pre>
+<!--#include FILE="footer.html"-->
+</body>
+</html>

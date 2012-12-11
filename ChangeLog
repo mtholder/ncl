@@ -1,0 +1,380 @@
+ChangeLog for NCL 2.1
+
+================================================================================
+changes in svn versus previous tagged version
+================================================================================
+================================================================================
+2.1.18 (relative to 2.1.17) SVN revision 641
+================================================================================
+	- As of March 09, 2012, NCL is available under a Simplified BSD license (see
+BSDLicense.txt) in addition to the GPL license.
+
+	- improved use of std:: decorator (to improve portability).
+
+	- bug fix in data pattern compression routine when a charset is passed in - this only affects client code that this using NCL to compress data matrices.  
+	
+	- bugfixes for reading newick trees (including a still-hacky fix for dealing with numeric labels that cannot be interpreted as indices)
+
+================================================================================
+2.1.17 (relative to 2.1.16)
+================================================================================
+New features:
+	- Warning suppression (mainly on integer conversion).  Thanks to John 
+		Huelsenbeck!
+	- config.guess updated using  automake v1.11.1 in response to report of user
+		error by DZ.
+	
+
+================================================================================
+release that will be 2.1.16 (relative to 2.1.15)
+================================================================================
+New features:
+	- TaxaAssociation block now supported and treated as a "public" block
+	
+	
+================================================================================
+2.1.15 (relative to 2.1.14)   Revision: 617
+================================================================================
+bug fix: 
+	- NxsReader returns the most-recently read block read by default (as the
+		error message has always indicated) rather than the first block. This
+		only affects blocks without link commands and ambiguous 
+		references to blocks.
+	- typo fixed in error message for invalid fasta file reporting
+	
+New features enhancements:
+	- configure argument --with-reserveid added, so that the variable 
+		name id will not be used. This avoids conflict with the objective C 
+		keyword "id". thanks to John Huelsenbeck for the bug report
+	- non-recursive NxsSimpleNode::AddSelfAndDesToPreorder (for huge trees)
+	- refactored NxsSimpleNode to add RerootAtNode function
+
+================================================================================
+2.1.14 (relative to 2.1.13)   Revision: 611
+================================================================================
+
+Changes breaking backward compatibility with v2.1.13:
+    - None
+    
+    
+API changes:
+    - Moving several functions if optional tree processing from private to public
+    
+    - Changed some of the less-widely used example programs to noinst_PROGRAMS 
+        rather than bin_PROGRAMS so that we are not polluting the /usr/local/bin dir 
+         of every user
+
+New features:
+
+    - NxsTreesBlock::SetTreatAsRootedByDefault(false) can now be called so that 
+    	trees read will be treated as unrooted by default (this setting will be
+	    ignored if the tree is explicitly labeled as rooted via [&R] comment or
+	    unrooted via UTREE command or [&U] comment).
+    - NxsToken::Tokenize static function added (takes a string and returns a vector
+        of tokens.
+    - SetCoerceUnderscoresToSpaces added to MultiFormatReader
+    - GetNumLabelsCurrentlyStored added to NxsLabelToIndicesMapper to help with parsing
+        numeric trees
+    - Added optional treatIntegerLabelsAsNumbers setting to NxsTreesBlock for reading
+        numeric trees
+    - Added some functions for compressing redundant columns of a data matrix (see
+        the new example
+    - More command line flags supported by NCLConvertor, NEXUSnormalizer and gap 
+        code
+
+Bug Fixes:
+    - hasPolytomies field of NxsFullTreeDescription is now set correctly. 
+    - parsing of weight set of assumptions block
+    - configure now fails (as it should) if CXX is not working 
+
+
+
+
+================================================================================
+2.1.13 (relative to 2.1.12)   Revision: 575
+================================================================================
+
+minor API changes:
+	- nxscxxdiscretematrix ctor now takes an optional set of indices to include.
+	- It was convenient to make some of the error reporting functions more 
+		generic, so the NxsException class was given a addPositionInfo method,
+		and some of the characters block code was slightly refactored (to not
+		demand a NxsToken object for some calls).
+	- specified the facet values for the DataTypesEnum so that it will be easier 	
+		for client code written in non-C++ languages to interpret GetDataType()
+
+bug fixes:
+	- fixed strange pointer equality check that had used subtraction (and was
+		causing problems on new windows g++ - v4.2 64bit).
+	- explicitly casting return of size() to an unsigned to avoid g++ issues
+		with the NxsString << operators.
+	- You now must compile with HAVE_NCL_NXSSTRING_ENDL defined if you want the
+		funky NxsString&operator<<(NxsString &(*funcPtr)(NxsString&)) operator.
+	- include of <iterator> for vis studio 2010
+	- Changes to allow compilation in Visual Studio.
+new features:
+	- Added support for the .fin files that are posted by Goloboff et al in
+		their  Cladistics 25 (2009) 211Ð230 paper.
+	- better error message for too few taxa in characters and unaligned block
+	- bug fix: only affects writing of NEXUS from file formats that do not
+		contain tree names.  Trees were being printed without NEXUS names
+	- validateInternalNodeLabels flag added to NxsTreesBlock. True by default, 
+		but if set to false then the NxsTreesBlock will tolerate trees with
+		internal labels that correspond to integers by storing the label as a
+		string but not interpretting it as a taxon label
+	- another example added: NEXUSsubsetter is not an install product.  It reads 
+		a NEXUS file and a CharSet or TaxSet name
+
+
+
+================================================================================
+2.1.12 (relative to 2.1.09)
+================================================================================
+
+Removal of  trailing whitespace and large scale code reformatting will cause
+	diff to indicate a huge number of changes in this release but the
+	functionality has actually not changed much since 2.1.09
+
+Bug fixes:
+	- added more includes needed by g++ 4.4.01
+	- NxsReader::ClearUsedBlockList is more sensible (it clears more fields).
+	- NxsString no longer includel ncl/ncl.h it now includes ncl/nxsdefs.h
+	- memory leak had been occurring when NxsExceptions were raised from a
+		cloned block and the NxsReader was an ExceptionRaisingNxsReader
+	- nxsdistancedatum.cpp and nxsemptyblock.* removed
+	- block skipping -- now NCL will not be fooled by and end or endblock
+subcommand.
+	- now checks for continuous characters in IsGapState and IsMissing
+
+
+
+
+Library enhancements:
+	- much better documentation of v2.1 features
+	- several convenience functions added especially to assist processing of the
+		NxsCharactersBlock
+	- added a modified version of NCLInterface.h from phylobase as an example.
+		The file was written by Brian O'Meara and Derrick Zwickl
+	- added more flexible, but admittedly hacky method for controlling the level
+		of warnings that get printed out. Altering the warning level will also
+		turn off status messages.  So a bool member was added to NxsReader so
+		that client code can request that status messages still be shown.
+	- added a Free method to Scoped... containers in nxsallocatematrix.h
+	- added hot comments for autogeneration of v2.2 from v2.1 code
+
+================================================================================
+2.1.09 (relative to 2.1.06)
+================================================================================
+Bug fixes:
+	- added includes needed by g++ 4.4.01
+
+================================================================================
+2.1.08 (relative to 2.1.06)
+================================================================================
+Bug fixes:
+	- updated nexml writing to deal with changes in the schema
+	- fixed bug causing mis-indexing of taxa in trees if there is no taxa block
+		but a translate command.  This involves support for illegal nexus files.
+		I believe that the bug would have showed diagnosable pathologies if it
+		had affected any analysis (the highest number in the tree would have
+been
+		1 too high resulting in exceptions when the taxa block was queried).
+	- bug fix when trees are followed by labels that contain tokens that have to
+		be quoted
+	- fixed behavior of GetNamedStateSetOfColumn and GetObsStates so that they
+		are sensitive to the current gapmode for the char block
+	- explicit inclusion of cstdlib where needed
+
+Library enhancements:
+	- Signal handling (via NxsReader::setNCLCatchesSignals ) commit r449
+	- Lots of external format extensions and bug fixes:
+		- converter application added in examples
+		- export to AltNexus
+		- CLUSTAL's .aln reading (not well tested)
+================================================================================
+2.1.06 (relative to 2.1.05)
+================================================================================
+
+Up to svn revision 376
+
+bug fixes (visible to end-users):
+	- opening files in binary mode (failing to do so cause problems with end-of-
+		line and other special characters).
+	- character index (0-based rather than 1-based number) was being printed in
+		some contexts in error messages
+	- Apple g++-4.2 optimization bug now has a workaround
+	- Characters blocks now reject files in which the datatype is DNA, RNA, or
+protein
+		if SYMBOLS are added.
+
+
+bug fixes API:
+	- Fixed setting of NXS_HAS_ALL_TAXA_BIT
+	- no longer duplicating blocks when the same reader is used to read more
+		than one file
+	- allowing PublicNexusReader::Add to be called
+	- Some Windows-specific modifications to avoid warnings and errors compiling
+		under Visual Studio 2008 (VC9)
+	- characters block now generates an exception if there is no matrix
+	- NxsReader::BlockIsASingeltonReader problem fixed
+	- better cleaning up in the multiformat reader when there is an error in the
+		reading of a file
+	- another accessor added for NxsSimpleTree
+	- PublicNexusReader GetXXXBlock functions changed to return 0L rather than
+		raising an exception if you request a block that is out of range
+	- NCL_CONST_FUNCS macro added
+
+API additions:
+	- improvements to phylip reading -- matchchar now accepted (multiformat
+		reader only).
+	- reading a single bare newick tree (as "phyliptree" or "relaxedphyliptree"
+		in multiformat reader stuff).
+	- added cullIdenticalTaxaBlocks() function to nexusreader.  You should call
+		this before reading a file if you want all repeated taxa blocks to be
+		destroyed rather than saved
+	- support for genetic codes and translation to amino acids added
+	- GetEscapedDouble and GetEscapedInt added
+	- GetDatatypeMapForMixedType added
+	- added functionality to delete identical taxa blocks even if they are
+		implied blocks.  This only will be triggered if the client code has
+		called NxsReader::cullIdenticalTaxaBlocks(true).  This corrects an
+		issue DZ was seeing with reading multiple DATA blocks
+	- aliasing of block titles for culled blocks
+	- changed the handling of  the + character when a nxstoken instance has been
+		altered by a call to indictate hyphenNotPunctuation is in effecet (this
+		is done via the SetLabileFlagBit function). In almost all case this
+		function is called so that a number (particularly one writtend in
+		scientific notation will be read as a single token, rather than as many
+		as 4 tokens).  In rare cases, the + is used before the exponent or even
+		in front of the entire number.  So that client code does not have to
+		deal with these cases, the default behavior has been changed to using
+		the hyphenNotPunctuation to indicate that in the reading of the next
+		token neither - nor + should be treated as punctuation.  Client code
+		that wishes to use the old behavior can compile NCL with the
+		NCL_VERSION_2_STYLE_HYPHEN macro defined to 1
+
+================================================================================
+2.1.05 (relative to 2.1.04)
+================================================================================
+Added include <cstdlib> at top of nxsdistancesblock.cpp and nxstoken.cpp to
+avoid compilation errors on Fedora 9 systems.
+
+================================================================================
+2.1.04 (relative to 2.1.03)
+================================================================================
+Added inclusion of <climits> for gcc 4.3 (bug report by Brian Omeara)
+
+================================================================================
+2.1.03 (relative to 2.1.02)
+================================================================================
+minor bug fixes Jamroot file added for compilation  with bjam
+
+================================================================================
+2.1.02 (relative to 2.1.00)
+================================================================================
+minor bug fixes and const correctness
+
+================================================================================
+Since 2.1-specific changes.
+================================================================================
+Support for multiple instances of the same block type
+	* NxsBlockFactory mechanism API - see the examples/normalizer for an
+		example of usage. Full adoption of these API's is not required, but may
+		make your life easier.
+	* Reader now stores "implied blocks" -- e.g. makes a DATA block look to the
+		client code like a TAXA block and CHARACTERS block. This improves the
+		abstraction for library users.
+
+Other features added:
+	* commas tolerated in multiple state lists in the cells of a matrix {A,G}
+		the same as {AG}.  Such files are not legal, but are common.
+	* handling for TITLE and BLOCKID commands added to NxsBlock
+	* optimizations (tokenizing and data structures in taxa block) -- now 50
+		fold faster than 2.0 on the 11361 Taxon, 1360 Character file in the
+		CIPRES test files.
+	* TaxPartition and TreePartition read
+	* SETS and CODONS blocks now read. Actually read as a big, fat ASSUMPTIONS
+		block that spawns implied blocks (to deal with common practice of mixing
+		the commands in these blocks).
+	* WtSet, UserType, and TypeSet command
+	* now tolerating DATATYPE not being first in FORMAT command (to deal with
+		Clustal exports)
+	* tokenizer now skipping embedded comments (note that this changes the
+		behavior of command comment storing -- they are only returned if they
+		precede token)
+	* support for DATATYPE=MIXED added in CHARACTERS block
+	* trees block can now validates trees as they are read to improve error
+		reporting  -- this feature not used unless TreesBlock::
+		SetProcessAllTreesDuringParse(true) is called on the trees block
+		instance.
+	* some support for NHX parsing -- in the TreesDescription.
+	* support for LINK command (as introduced by Mesquite)
+	* support Mesquite-style CharSet/TaxSet syntax.
+ 	* NCL_MAJOR_VERSION and  NCL_MINOR_VERSION defines added. You can wrap any
+ 		ncl-2.1 specific code (you shouldn't need much) as follows:
+
+================================================================================
+#	if defined(NCL_MAJOR_VERSION) && (NCL_MAJOR_VERSION >= 2) &&
+(NCL_MINOR_VERSION >= 1)
+		trees->SetAllowImplicitNames(true);
+#	endif
+================================================================================
+
+
+
+bug fixes:
+	* RNA equates bug reported by DZ
+	* case of equate keys  (characters of both cases are now added for molecular
+		data) reported by DZ
+	* Tax and Charset reading now tolerate Standard keywords (they still
+		generate errors for VECTOR)
+	* fixes to the Distances block if the input order is not identical to the
+		taxa block order
+	* Some CharSet reading
+	* Lots more that I forgot to document.
+
+Behavior changes (could be called features or bugs depending on your POV):
+	* Now converts any built in CHARACTERS datatype that has symbols extensions
+		to standard datatype.
+
+
+
+================================================================================
+Since 2.0.0
+================================================================================
+12 Dec 2007 Mark Holder (mholder@users.sourceforge.net)
+	* Version 2.0.04 (https://svn.sourceforge.net/svnroot/ncl/branches/v2-stable
+revision 75)
+	* new features: Basic handling of Continuous datatype (ITEMS now
+		supported).  Brian O'Meara contribute code and suggestions to this
+		new feature.
+	* bug fixes: taxa information after a treedef (root taxa info) is now
+		accepted
+
+30 Nov 2007 Mark Holder (mholder@users.sourceforge.net)
+	* Paul's unaligned parsing block functionality added
+	* bug fixes (newtaxa is now implicit if ntax is used, other small changes
+		mainly pertaining to writing NEXUS, and testing with a round trip)
+
+
+18 Dec 2006 Mark Holder (mholder@users.sourceforge.net)
+	* Version 2.0.02 (https://svn.sourceforge.net/svnroot/ncl/branches/v2-stable
+revision 47)
+		- bug fixes to Version 2.0.01 (errors introduced in CharactersBlock
+Version 2.0.01 while suppressing errors)
+		- improvements to regression testing
+
+03 Nov 2006 Mark Holder (mholder@users.sourceforge.net)
+	* Version 2.0.01
+		- minor reorganization (examples dir)
+		- suppressing warnings
+		- reworked Makefile and configure (fixes link error from multiply
+defined objects on some Linux variants)
+
+20 May 2003 Paul Lewis (paul.lewis@uconn.edu)
+	* Version 2.0 released (first official release)
+
+================================================================================
+Latest changes
+================================================================================
+

@@ -1,0 +1,9 @@
+#NEXUS
+begin taxa;
+	dimensions ntax = 4
+	; taxlabels a[hi jeet]c 'b (' c d;
+	end;
+begin trees;
+	tree a = (1,('b (', c),d);
+end;
+

@@ -1,0 +1,101 @@
+/*! \page basicAPI The Basics of the NCL API
+The core API has not changed from version 2.0 to 2.1.
+NCL parses an std::istream by creating a NxsToken object around the stream (a
+better name for the class would be NxsTokenizer).
+Rather than using a low-level C++ istream operations, the NxsToken allows you to
+process a file by the NEXUS tokenizing rules - comments are skipped and NEXUS's
+quoting rules are obeyed.
+
+A NxsReader instance is capable of reading an entire stream (usually a file) by
+interacting with the NxsToken until EOF is reached.
+The NxsReader's job is to identify the blocks in a file, and hand off the
+procesing of each block to an appropriate block reader (or skip the block
+if no reader is found).
+
+The objects that read each block are instances of NxsBlock (perhaps a better
+name for this class would be NxsBlockReader).
+After the NxsReader chooses which block should handle a portion of NEXUS file,
+it will call the NxsBlock::Read function and pass in the NxsToken object which
+is poised to return tokens for the block that is to be read next.
+
+Client code uses NCL by:
+    \li creating a NxsReader object,
+    \li registering the NxsBlock objects that will process all of the NEXUS
+blocks that are not to be skipped,
+    \li create a NxsToken object around the istream to be read,
+    \li calling the Execute(NxsToken) method of the reader, and
+    \li retrieving the parsed information from the NxsBlocks
+In version 2.0 of the API, the client would have to retrieve the information
+from NxsBlock in hooks (such as NxsBlock::ExitingBlock) during the parse.
+
+The main extensions to this basic structure that are new to version 2.1 are
+    \li The ability to register NxsBlock factories rather than NxsBlocks (this
+enables parsing of the entire file, rather than requiring the client to harvest
+all of the information via hooks called during the parse);
+    \li public blocks have been extended to deal with the TITLE and LINK
+commands introduced by Mesquite;
+    \li other formats can be parsed by a special version of the NxsReader called
+a MultiFormatReader;
+    \li various extensions to individual blocks (such as full implementation of
+ASSUMPTIONS block, and the addition of MrBayes' "Datatype=Mixed..." subcommand
+in the Characters block's FORMAT command;
+    \li "implied" blocks are now created during some parses
+
+
+
+\section simpleparse Simplest example of reading
+The simplest (and admittedly least useful) NCL client that uses the version 2.1
+API would be the following fragment:
+
+\code
+#include "ncl/nxsmultiformat.h"
+
+int main(int argc, char * argv[])
+{
+MultiFormatReader nexusReader(-1, NxsReader::WARNINGS_TO_STDERR);
+try {
+    nexusReader.ReadFilepath(argv[1], MultiFormatReader::NEXUS_FORMAT);
+    }
+catch(...)
+    {
+    nexusReader.DeleteBlocksFromFactories();
+    throw;
+    }
+nexusReader.DeleteBlocksFromFactories();
+
+return 0;
+}
+\endcode
+
+If you were to save this file as "simpleNCLClient.cpp" and save this <a
+href="simpleNCLClient/Makefile">Makefile</a> in the same directory then you
+could build the client. You would also need to specify the location of your NCL
+installation (see notes in the Makefile about NCL_INSTALL_DIR)
+
+
+
+\section  nonNexus Reading non-NEXUS file formats
+Despite the name "Nexus Class Library" NCL will actually read other file formats.
+NCL does not diagnose file format type.
+However, if you have data in PHYLIP, relaxed FASTA, ALN format or trees in
+Newick file then you can ask the MultiFormatReader to parse these files by
+passing in the appropriate MultiFormatReader::DataFormatType or format name (see
+the MultiFormatReader::getFormatNames() method).
+
+NCL actually coerces inforamation from these sources into NxsTaxaBlock, NxsCharactersBlocks..., so the user of library does not have to change the code
+associated with querying NCL for information in order to support these formats.
+
+Support for PhyloXML and nexml are planned.
+<hr />
+Next see \ref simpleextract for information on getting parsed information out of NCL.
+
+
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+*/

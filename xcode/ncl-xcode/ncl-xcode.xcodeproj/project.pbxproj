@@ -1,0 +1,1844 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D13F68B0D18B95900A67DAB /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2D13F68C0D18B95900A67DAB /* nxspublicblocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D13F68A0D18B95900A67DAB /* nxspublicblocks.h */; };
+		2D13F6A80D18BAF600A67DAB /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2D13F6A90D18BAF600A67DAB /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2D13F6AA0D18BAF600A67DAB /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2D13F6AB0D18BAF600A67DAB /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2D13F6AC0D18BAF600A67DAB /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2D13F6B00D18BAF600A67DAB /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2D13F6B20D18BAF600A67DAB /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2D13F6B30D18BAF600A67DAB /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2D13F6B40D18BAF600A67DAB /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2D13F6B50D18BAF600A67DAB /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2D13F6B60D18BAF600A67DAB /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2D13F6B70D18BAF600A67DAB /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2D13F6B80D18BAF600A67DAB /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2D13F6B90D18BAF600A67DAB /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2D13FFAB0D88BBD4002DED1C /* basiccmdline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13FFAA0D88BBD4002DED1C /* basiccmdline.cpp */; };
+		2D1B4BE41214288E00BC42D3 /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2D1B4BE51214288E00BC42D3 /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2D1B4BE61214288E00BC42D3 /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2D1B4BE71214288E00BC42D3 /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2D1B4BE81214288E00BC42D3 /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2D1B4BEA1214288E00BC42D3 /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2D1B4BEB1214288E00BC42D3 /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2D1B4BEC1214288E00BC42D3 /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2D1B4BED1214288E00BC42D3 /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2D1B4BEE1214288E00BC42D3 /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2D1B4BEF1214288E00BC42D3 /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2D1B4BF01214288E00BC42D3 /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2D1B4BF11214288E00BC42D3 /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2D1B4BF21214288E00BC42D3 /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2D1B4BF31214288E00BC42D3 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2D1B4BF41214288E00BC42D3 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2D1B4BF71214288E00BC42D3 /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2D1B4BF81214288E00BC42D3 /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2D1B4BF91214288E00BC42D3 /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2D1B4BFA1214288E00BC42D3 /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2D1B4BFB1214288E00BC42D3 /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2D1B4BFC1214288E00BC42D3 /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2D1B4BFD1214288E00BC42D3 /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2D1B4BFE1214288E00BC42D3 /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2D1B4BFF1214288E00BC42D3 /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2D1B4C001214288E00BC42D3 /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2D1B4C011214288E00BC42D3 /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2D1B4C021214288E00BC42D3 /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2D1B4C031214288E00BC42D3 /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2D1B4C041214288E00BC42D3 /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2D1B4C051214288E00BC42D3 /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2D1B4C061214288E00BC42D3 /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2D1B4C071214288E00BC42D3 /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2D1B4C081214288E00BC42D3 /* basiccmdline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BB070D020761000CF7FB /* basiccmdline.h */; };
+		2D1B4C0A1214288E00BC42D3 /* testfilelist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D8388A00D1DABB500A4C2C2 /* testfilelist */; };
+		2D1B4C0B1214288E00BC42D3 /* origtestfiles in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2DEBA7EC0D39C91800FE91F7 /* origtestfiles */; };
+		2D1B4C16121428E900BC42D3 /* compressor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1B4C13121428E900BC42D3 /* compressor.cpp */; };
+		2D33FD1F0D47D40500CC7373 /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2D33FD200D47D40500CC7373 /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2D33FD210D47D40500CC7373 /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2D33FD220D47D40500CC7373 /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2D33FD230D47D40500CC7373 /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2D33FD260D47D40500CC7373 /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2D33FD270D47D40500CC7373 /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2D33FD280D47D40500CC7373 /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2D33FD290D47D40500CC7373 /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2D33FD2A0D47D40500CC7373 /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2D33FD2B0D47D40500CC7373 /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2D33FD2C0D47D40500CC7373 /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2D33FD2D0D47D40500CC7373 /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2D33FD2E0D47D40500CC7373 /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2D33FD320D47D40500CC7373 /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2D33FD330D47D40500CC7373 /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2D33FD340D47D40500CC7373 /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2D33FD350D47D40500CC7373 /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2D33FD360D47D40500CC7373 /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2D33FD370D47D40500CC7373 /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2D33FD380D47D40500CC7373 /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2D33FD390D47D40500CC7373 /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2D33FD3A0D47D40500CC7373 /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2D33FD3C0D47D40500CC7373 /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2D33FD3D0D47D40500CC7373 /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2D33FD3E0D47D40500CC7373 /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2D33FD3F0D47D40500CC7373 /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2D33FD400D47D40500CC7373 /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2D33FD410D47D40500CC7373 /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2D33FD420D47D40500CC7373 /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2D33FD430D47D40500CC7373 /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2D33FD440D47D40500CC7373 /* basiccmdline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BB070D020761000CF7FB /* basiccmdline.h */; };
+		2D33FD450D47D40500CC7373 /* normalizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCF0D02272B000CF7FB /* normalizer.h */; };
+		2D60BB360D021F14000CF7FB /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2D60BB370D021F14000CF7FB /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2D60BB380D021F14000CF7FB /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2D60BB390D021F14000CF7FB /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2D60BB3D0D021F14000CF7FB /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2D60BB3F0D021F14000CF7FB /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2D60BB400D021F14000CF7FB /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2D60BB410D021F14000CF7FB /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2D60BB420D021F14000CF7FB /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2D60BB430D021F14000CF7FB /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2D60BB440D021F14000CF7FB /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2D60BB450D021F14000CF7FB /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2D60BB460D021F14000CF7FB /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2D60BB810D02255C000CF7FB /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2D60BB820D02255C000CF7FB /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2D60BB830D02255C000CF7FB /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2D60BB840D02255C000CF7FB /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2D60BB850D02255C000CF7FB /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2D60BB860D02255C000CF7FB /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2D60BB870D02255C000CF7FB /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2D60BB890D02255C000CF7FB /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2D60BB8A0D02255C000CF7FB /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2D60BB8C0D02255C000CF7FB /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2D60BB8E0D02255C000CF7FB /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2D60BB8F0D02255C000CF7FB /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2D60BB900D02255C000CF7FB /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2D60BB910D02255C000CF7FB /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2D60BB920D02255C000CF7FB /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2D60BB930D02255C000CF7FB /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2D60BB940D02255C000CF7FB /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2D60BB960D02255C000CF7FB /* basiccmdline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BB070D020761000CF7FB /* basiccmdline.h */; };
+		2D60BBA30D022563000CF7FB /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2D60BBA40D022563000CF7FB /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2D60BBA50D022563000CF7FB /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2D60BBA60D022563000CF7FB /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2D60BBA70D022563000CF7FB /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2D60BBA80D022563000CF7FB /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2D60BBA90D022563000CF7FB /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2D60BBAB0D022563000CF7FB /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2D60BBAC0D022563000CF7FB /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2D60BBAE0D022563000CF7FB /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2D60BBB00D022563000CF7FB /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2D60BBB10D022563000CF7FB /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2D60BBB20D022563000CF7FB /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2D60BBB30D022563000CF7FB /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2D60BBB40D022563000CF7FB /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2D60BBB50D022563000CF7FB /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2D60BBB60D022563000CF7FB /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2D60BBB80D022563000CF7FB /* basiccmdline.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BB070D020761000CF7FB /* basiccmdline.h */; };
+		2D60BBCD0D0226D2000CF7FB /* ncltest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BBCB0D0226D2000CF7FB /* ncltest.cpp */; };
+		2D60BBCE0D0226D2000CF7FB /* ncltest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCC0D0226D2000CF7FB /* ncltest.h */; };
+		2D60BBD00D02272B000CF7FB /* normalizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCF0D02272B000CF7FB /* normalizer.h */; };
+		2D8388A10D1DABB500A4C2C2 /* testfilelist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D8388A00D1DABB500A4C2C2 /* testfilelist */; };
+		2D9B15E50D1AD2C00026CFDA /* normalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BBC20D0225B5000CF7FB /* normalizer.cpp */; };
+		2D9CCCC40EBB860C00B54222 /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2D9CCCC50EBB860C00B54222 /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2D9CCCC60EBB860C00B54222 /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2D9CCCC70EBB860C00B54222 /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2D9CCCC80EBB860C00B54222 /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2D9CCCCA0EBB860C00B54222 /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2D9CCCCB0EBB860C00B54222 /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2D9CCCCC0EBB860C00B54222 /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2D9CCCCD0EBB860C00B54222 /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2D9CCCCE0EBB860C00B54222 /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2D9CCCCF0EBB860C00B54222 /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2D9CCCD00EBB860C00B54222 /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2D9CCCD10EBB860C00B54222 /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2D9CCCD20EBB860C00B54222 /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2D9CCCD40EBB860C00B54222 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2D9CCCD50EBB860C00B54222 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2D9CCCD80EBB860C00B54222 /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2D9CCCD90EBB860C00B54222 /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2D9CCCDA0EBB860C00B54222 /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2D9CCCDB0EBB860C00B54222 /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2D9CCCDC0EBB860C00B54222 /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2D9CCCDD0EBB860C00B54222 /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2D9CCCDE0EBB860C00B54222 /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2D9CCCDF0EBB860C00B54222 /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2D9CCCE00EBB860C00B54222 /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2D9CCCE20EBB860C00B54222 /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2D9CCCE30EBB860C00B54222 /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2D9CCCE40EBB860C00B54222 /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2D9CCCE50EBB860C00B54222 /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2D9CCCE60EBB860C00B54222 /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2D9CCCE70EBB860C00B54222 /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2D9CCCE80EBB860C00B54222 /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2D9CCCE90EBB860C00B54222 /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2D9CCCEA0EBB860C00B54222 /* normalizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCF0D02272B000CF7FB /* normalizer.h */; };
+		2D9CCCF70EBB864F00B54222 /* translateNuc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CCCF60EBB864F00B54222 /* translateNuc.cpp */; };
+		2DA4082E0E8A774600E22A82 /* splitsinfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4082D0E8A774600E22A82 /* splitsinfile.cpp */; };
+		2DA408320E8A775000E22A82 /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2DA408330E8A775000E22A82 /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2DA408340E8A775000E22A82 /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2DA408350E8A775000E22A82 /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2DA408360E8A775000E22A82 /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2DA408380E8A775000E22A82 /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2DA408390E8A775000E22A82 /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2DA4083A0E8A775000E22A82 /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2DA4083B0E8A775000E22A82 /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2DA4083C0E8A775000E22A82 /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2DA4083D0E8A775000E22A82 /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2DA4083E0E8A775000E22A82 /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2DA4083F0E8A775000E22A82 /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2DA408400E8A775000E22A82 /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2DA408410E8A775000E22A82 /* splitsinfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4082D0E8A774600E22A82 /* splitsinfile.cpp */; };
+		2DA408440E8A775000E22A82 /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2DA408450E8A775000E22A82 /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2DA408460E8A775000E22A82 /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2DA408470E8A775000E22A82 /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2DA408480E8A775000E22A82 /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2DA408490E8A775000E22A82 /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2DA4084A0E8A775000E22A82 /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2DA4084B0E8A775000E22A82 /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2DA4084C0E8A775000E22A82 /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2DA4084E0E8A775000E22A82 /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2DA4084F0E8A775000E22A82 /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2DA408500E8A775000E22A82 /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2DA408510E8A775000E22A82 /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2DA408520E8A775000E22A82 /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2DA408530E8A775000E22A82 /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2DA408540E8A775000E22A82 /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2DA408550E8A775000E22A82 /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2DA408560E8A775000E22A82 /* normalizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCF0D02272B000CF7FB /* normalizer.h */; };
+		2DA4085E0E8A779B00E22A82 /* splitsinfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4082D0E8A774600E22A82 /* splitsinfile.cpp */; };
+		2DA408720E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA408730E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DA408740E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA408750E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DA408760E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA408770E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DA408780E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA408790E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DA4087A0E8A784300E22A82 /* nxscdiscretematrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA4086B0E8A784300E22A82 /* nxscdiscretematrix.h */; };
+		2DA4087B0E8A784300E22A82 /* nxscxxdiscretematrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA4086C0E8A784300E22A82 /* nxscxxdiscretematrix.h */; };
+		2DA4087C0E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA4087D0E8A784300E22A82 /* nxsutilcopy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA4086E0E8A784300E22A82 /* nxsutilcopy.h */; };
+		2DA4087E0E8A784300E22A82 /* nxsmultiformat.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA4086F0E8A784300E22A82 /* nxsmultiformat.h */; };
+		2DA4087F0E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DA408800E8A784300E22A82 /* nxsallocatematrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DA408710E8A784300E22A82 /* nxsallocatematrix.h */; };
+		2DA408810E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */; };
+		2DA408820E8A784300E22A82 /* nxsmultiformat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */; };
+		2DB112FC0D888A0300D8E350 /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2DB112FD0D888A0300D8E350 /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2DB112FE0D888A0300D8E350 /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2DB112FF0D888A0300D8E350 /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2DB113000D888A0300D8E350 /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2DB113020D888A0300D8E350 /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2DB113030D888A0300D8E350 /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2DB113040D888A0300D8E350 /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2DB113050D888A0300D8E350 /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2DB113060D888A0300D8E350 /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2DB113070D888A0300D8E350 /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2DB113080D888A0300D8E350 /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2DB113090D888A0300D8E350 /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2DB1130A0D888A0300D8E350 /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2DB1130D0D888A0300D8E350 /* ncl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA8F0D0200C5000CF7FB /* ncl.h */; };
+		2DB1130E0D888A0300D8E350 /* nxsassumptionsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */; };
+		2DB1130F0D888A0300D8E350 /* nxsblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA930D0200C5000CF7FB /* nxsblock.h */; };
+		2DB113100D888A0300D8E350 /* nxscharactersblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */; };
+		2DB113110D888A0300D8E350 /* nxsdatablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA970D0200C5000CF7FB /* nxsdatablock.h */; };
+		2DB113120D888A0300D8E350 /* nxsdefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA980D0200C5000CF7FB /* nxsdefs.h */; };
+		2DB113130D888A0300D8E350 /* nxsdiscretedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */; };
+		2DB113140D888A0300D8E350 /* nxsdistancedatum.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */; };
+		2DB113150D888A0300D8E350 /* nxsdistancesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */; };
+		2DB113170D888A0300D8E350 /* nxsexception.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA40D0200C5000CF7FB /* nxsexception.h */; };
+		2DB113180D888A0300D8E350 /* nxsreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA70D0200C5000CF7FB /* nxsreader.h */; };
+		2DB113190D888A0300D8E350 /* nxssetreader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAA90D0200C5000CF7FB /* nxssetreader.h */; };
+		2DB1131A0D888A0300D8E350 /* nxsstring.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAB0D0200C5000CF7FB /* nxsstring.h */; };
+		2DB1131B0D888A0300D8E350 /* nxstaxablock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */; };
+		2DB1131C0D888A0300D8E350 /* nxstoken.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAAF0D0200C5000CF7FB /* nxstoken.h */; };
+		2DB1131D0D888A0300D8E350 /* nxstreesblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */; };
+		2DB1131E0D888A0300D8E350 /* nxsunalignedblock.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */; };
+		2DB113200D888A0300D8E350 /* normalizer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2D60BBCF0D02272B000CF7FB /* normalizer.h */; };
+		2DB113280D888A4600D8E350 /* patristic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DB113270D888A4600D8E350 /* patristic.cpp */; };
+		2DDCD89B0D2EBB5E00AB986C /* nxspublicblocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */; };
+		2DDCD89C0D2EBB5F00AB986C /* nxsassumptionsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */; };
+		2DDCD89D0D2EBB5F00AB986C /* nxsblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA920D0200C5000CF7FB /* nxsblock.cpp */; };
+		2DDCD89E0D2EBB5F00AB986C /* nxscharactersblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */; };
+		2DDCD89F0D2EBB5F00AB986C /* nxsdatablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */; };
+		2DDCD8A10D2EBB6A00AB986C /* nxsdistancesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */; };
+		2DDCD8A20D2EBB6A00AB986C /* nxsexception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */; };
+		2DDCD8A30D2EBB6A00AB986C /* nxsreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */; };
+		2DDCD8A40D2EBB6A00AB986C /* nxssetreader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */; };
+		2DDCD8A50D2EBB6A00AB986C /* nxsstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */; };
+		2DDCD8A60D2EBB6A00AB986C /* nxstaxablock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */; };
+		2DDCD8A70D2EBB6A00AB986C /* nxstoken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */; };
+		2DDCD8A80D2EBB6A00AB986C /* nxstreesblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */; };
+		2DDCD8A90D2EBB6A00AB986C /* nxsunalignedblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */; };
+		2DEBA7ED0D39C91800FE91F7 /* origtestfiles in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2DEBA7EC0D39C91800FE91F7 /* origtestfiles */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D1B4BF61214288E00BC42D3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D1B4BF71214288E00BC42D3 /* ncl.h in CopyFiles */,
+				2D1B4BF81214288E00BC42D3 /* nxsassumptionsblock.h in CopyFiles */,
+				2D1B4BF91214288E00BC42D3 /* nxsblock.h in CopyFiles */,
+				2D1B4BFA1214288E00BC42D3 /* nxscharactersblock.h in CopyFiles */,
+				2D1B4BFB1214288E00BC42D3 /* nxsdatablock.h in CopyFiles */,
+				2D1B4BFC1214288E00BC42D3 /* nxsdefs.h in CopyFiles */,
+				2D1B4BFD1214288E00BC42D3 /* nxsdiscretedatum.h in CopyFiles */,
+				2D1B4BFE1214288E00BC42D3 /* nxsdistancedatum.h in CopyFiles */,
+				2D1B4BFF1214288E00BC42D3 /* nxsdistancesblock.h in CopyFiles */,
+				2D1B4C001214288E00BC42D3 /* nxsexception.h in CopyFiles */,
+				2D1B4C011214288E00BC42D3 /* nxsreader.h in CopyFiles */,
+				2D1B4C021214288E00BC42D3 /* nxssetreader.h in CopyFiles */,
+				2D1B4C031214288E00BC42D3 /* nxsstring.h in CopyFiles */,
+				2D1B4C041214288E00BC42D3 /* nxstaxablock.h in CopyFiles */,
+				2D1B4C051214288E00BC42D3 /* nxstoken.h in CopyFiles */,
+				2D1B4C061214288E00BC42D3 /* nxstreesblock.h in CopyFiles */,
+				2D1B4C071214288E00BC42D3 /* nxsunalignedblock.h in CopyFiles */,
+				2D1B4C081214288E00BC42D3 /* basiccmdline.h in CopyFiles */,
+				2D1B4C0A1214288E00BC42D3 /* testfilelist in CopyFiles */,
+				2D1B4C0B1214288E00BC42D3 /* origtestfiles in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2D33FD300D47D40500CC7373 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D33FD320D47D40500CC7373 /* ncl.h in CopyFiles */,
+				2D33FD330D47D40500CC7373 /* nxsassumptionsblock.h in CopyFiles */,
+				2D33FD340D47D40500CC7373 /* nxsblock.h in CopyFiles */,
+				2D33FD350D47D40500CC7373 /* nxscharactersblock.h in CopyFiles */,
+				2D33FD360D47D40500CC7373 /* nxsdatablock.h in CopyFiles */,
+				2D33FD370D47D40500CC7373 /* nxsdefs.h in CopyFiles */,
+				2D33FD380D47D40500CC7373 /* nxsdiscretedatum.h in CopyFiles */,
+				2D33FD390D47D40500CC7373 /* nxsdistancedatum.h in CopyFiles */,
+				2D33FD3A0D47D40500CC7373 /* nxsdistancesblock.h in CopyFiles */,
+				2D33FD3C0D47D40500CC7373 /* nxsexception.h in CopyFiles */,
+				2D33FD3D0D47D40500CC7373 /* nxsreader.h in CopyFiles */,
+				2D33FD3E0D47D40500CC7373 /* nxssetreader.h in CopyFiles */,
+				2D33FD3F0D47D40500CC7373 /* nxsstring.h in CopyFiles */,
+				2D33FD400D47D40500CC7373 /* nxstaxablock.h in CopyFiles */,
+				2D33FD410D47D40500CC7373 /* nxstoken.h in CopyFiles */,
+				2D33FD420D47D40500CC7373 /* nxstreesblock.h in CopyFiles */,
+				2D33FD430D47D40500CC7373 /* nxsunalignedblock.h in CopyFiles */,
+				2D33FD440D47D40500CC7373 /* basiccmdline.h in CopyFiles */,
+				2D33FD450D47D40500CC7373 /* normalizer.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2D60BB7F0D02255C000CF7FB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D60BB810D02255C000CF7FB /* ncl.h in CopyFiles */,
+				2D60BB820D02255C000CF7FB /* nxsassumptionsblock.h in CopyFiles */,
+				2D60BB830D02255C000CF7FB /* nxsblock.h in CopyFiles */,
+				2D60BB840D02255C000CF7FB /* nxscharactersblock.h in CopyFiles */,
+				2D60BB850D02255C000CF7FB /* nxsdatablock.h in CopyFiles */,
+				2D60BB860D02255C000CF7FB /* nxsdefs.h in CopyFiles */,
+				2D60BB870D02255C000CF7FB /* nxsdiscretedatum.h in CopyFiles */,
+				2D60BB890D02255C000CF7FB /* nxsdistancedatum.h in CopyFiles */,
+				2D60BB8A0D02255C000CF7FB /* nxsdistancesblock.h in CopyFiles */,
+				2D60BB8C0D02255C000CF7FB /* nxsexception.h in CopyFiles */,
+				2D60BB8E0D02255C000CF7FB /* nxsreader.h in CopyFiles */,
+				2D60BB8F0D02255C000CF7FB /* nxssetreader.h in CopyFiles */,
+				2D60BB900D02255C000CF7FB /* nxsstring.h in CopyFiles */,
+				2D60BB910D02255C000CF7FB /* nxstaxablock.h in CopyFiles */,
+				2D60BB920D02255C000CF7FB /* nxstoken.h in CopyFiles */,
+				2D60BB930D02255C000CF7FB /* nxstreesblock.h in CopyFiles */,
+				2D60BB940D02255C000CF7FB /* nxsunalignedblock.h in CopyFiles */,
+				2D60BB960D02255C000CF7FB /* basiccmdline.h in CopyFiles */,
+				2D60BBD00D02272B000CF7FB /* normalizer.h in CopyFiles */,
+				2D8388A10D1DABB500A4C2C2 /* testfilelist in CopyFiles */,
+				2DEBA7ED0D39C91800FE91F7 /* origtestfiles in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2D60BBA10D022563000CF7FB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D60BBA30D022563000CF7FB /* ncl.h in CopyFiles */,
+				2D60BBA40D022563000CF7FB /* nxsassumptionsblock.h in CopyFiles */,
+				2D60BBA50D022563000CF7FB /* nxsblock.h in CopyFiles */,
+				2D60BBA60D022563000CF7FB /* nxscharactersblock.h in CopyFiles */,
+				2D60BBA70D022563000CF7FB /* nxsdatablock.h in CopyFiles */,
+				2D60BBA80D022563000CF7FB /* nxsdefs.h in CopyFiles */,
+				2D60BBA90D022563000CF7FB /* nxsdiscretedatum.h in CopyFiles */,
+				2D60BBAB0D022563000CF7FB /* nxsdistancedatum.h in CopyFiles */,
+				2D60BBAC0D022563000CF7FB /* nxsdistancesblock.h in CopyFiles */,
+				2D60BBAE0D022563000CF7FB /* nxsexception.h in CopyFiles */,
+				2D60BBB00D022563000CF7FB /* nxsreader.h in CopyFiles */,
+				2D60BBB10D022563000CF7FB /* nxssetreader.h in CopyFiles */,
+				2D60BBB20D022563000CF7FB /* nxsstring.h in CopyFiles */,
+				2D60BBB30D022563000CF7FB /* nxstaxablock.h in CopyFiles */,
+				2D60BBB40D022563000CF7FB /* nxstoken.h in CopyFiles */,
+				2D60BBB50D022563000CF7FB /* nxstreesblock.h in CopyFiles */,
+				2D60BBB60D022563000CF7FB /* nxsunalignedblock.h in CopyFiles */,
+				2D60BBB80D022563000CF7FB /* basiccmdline.h in CopyFiles */,
+				2D60BBCE0D0226D2000CF7FB /* ncltest.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2D9CCCD70EBB860C00B54222 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2D9CCCD80EBB860C00B54222 /* ncl.h in CopyFiles */,
+				2D9CCCD90EBB860C00B54222 /* nxsassumptionsblock.h in CopyFiles */,
+				2D9CCCDA0EBB860C00B54222 /* nxsblock.h in CopyFiles */,
+				2D9CCCDB0EBB860C00B54222 /* nxscharactersblock.h in CopyFiles */,
+				2D9CCCDC0EBB860C00B54222 /* nxsdatablock.h in CopyFiles */,
+				2D9CCCDD0EBB860C00B54222 /* nxsdefs.h in CopyFiles */,
+				2D9CCCDE0EBB860C00B54222 /* nxsdiscretedatum.h in CopyFiles */,
+				2D9CCCDF0EBB860C00B54222 /* nxsdistancedatum.h in CopyFiles */,
+				2D9CCCE00EBB860C00B54222 /* nxsdistancesblock.h in CopyFiles */,
+				2D9CCCE20EBB860C00B54222 /* nxsexception.h in CopyFiles */,
+				2D9CCCE30EBB860C00B54222 /* nxsreader.h in CopyFiles */,
+				2D9CCCE40EBB860C00B54222 /* nxssetreader.h in CopyFiles */,
+				2D9CCCE50EBB860C00B54222 /* nxsstring.h in CopyFiles */,
+				2D9CCCE60EBB860C00B54222 /* nxstaxablock.h in CopyFiles */,
+				2D9CCCE70EBB860C00B54222 /* nxstoken.h in CopyFiles */,
+				2D9CCCE80EBB860C00B54222 /* nxstreesblock.h in CopyFiles */,
+				2D9CCCE90EBB860C00B54222 /* nxsunalignedblock.h in CopyFiles */,
+				2D9CCCEA0EBB860C00B54222 /* normalizer.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2DA408430E8A775000E22A82 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2DA408440E8A775000E22A82 /* ncl.h in CopyFiles */,
+				2DA408450E8A775000E22A82 /* nxsassumptionsblock.h in CopyFiles */,
+				2DA408460E8A775000E22A82 /* nxsblock.h in CopyFiles */,
+				2DA408470E8A775000E22A82 /* nxscharactersblock.h in CopyFiles */,
+				2DA408480E8A775000E22A82 /* nxsdatablock.h in CopyFiles */,
+				2DA408490E8A775000E22A82 /* nxsdefs.h in CopyFiles */,
+				2DA4084A0E8A775000E22A82 /* nxsdiscretedatum.h in CopyFiles */,
+				2DA4084B0E8A775000E22A82 /* nxsdistancedatum.h in CopyFiles */,
+				2DA4084C0E8A775000E22A82 /* nxsdistancesblock.h in CopyFiles */,
+				2DA4084E0E8A775000E22A82 /* nxsexception.h in CopyFiles */,
+				2DA4084F0E8A775000E22A82 /* nxsreader.h in CopyFiles */,
+				2DA408500E8A775000E22A82 /* nxssetreader.h in CopyFiles */,
+				2DA408510E8A775000E22A82 /* nxsstring.h in CopyFiles */,
+				2DA408520E8A775000E22A82 /* nxstaxablock.h in CopyFiles */,
+				2DA408530E8A775000E22A82 /* nxstoken.h in CopyFiles */,
+				2DA408540E8A775000E22A82 /* nxstreesblock.h in CopyFiles */,
+				2DA408550E8A775000E22A82 /* nxsunalignedblock.h in CopyFiles */,
+				2DA408560E8A775000E22A82 /* normalizer.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		2DB1130C0D888A0300D8E350 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				2DB1130D0D888A0300D8E350 /* ncl.h in CopyFiles */,
+				2DB1130E0D888A0300D8E350 /* nxsassumptionsblock.h in CopyFiles */,
+				2DB1130F0D888A0300D8E350 /* nxsblock.h in CopyFiles */,
+				2DB113100D888A0300D8E350 /* nxscharactersblock.h in CopyFiles */,
+				2DB113110D888A0300D8E350 /* nxsdatablock.h in CopyFiles */,
+				2DB113120D888A0300D8E350 /* nxsdefs.h in CopyFiles */,
+				2DB113130D888A0300D8E350 /* nxsdiscretedatum.h in CopyFiles */,
+				2DB113140D888A0300D8E350 /* nxsdistancedatum.h in CopyFiles */,
+				2DB113150D888A0300D8E350 /* nxsdistancesblock.h in CopyFiles */,
+				2DB113170D888A0300D8E350 /* nxsexception.h in CopyFiles */,
+				2DB113180D888A0300D8E350 /* nxsreader.h in CopyFiles */,
+				2DB113190D888A0300D8E350 /* nxssetreader.h in CopyFiles */,
+				2DB1131A0D888A0300D8E350 /* nxsstring.h in CopyFiles */,
+				2DB1131B0D888A0300D8E350 /* nxstaxablock.h in CopyFiles */,
+				2DB1131C0D888A0300D8E350 /* nxstoken.h in CopyFiles */,
+				2DB1131D0D888A0300D8E350 /* nxstreesblock.h in CopyFiles */,
+				2DB1131E0D888A0300D8E350 /* nxsunalignedblock.h in CopyFiles */,
+				2DB113200D888A0300D8E350 /* normalizer.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxspublicblocks.cpp; sourceTree = "<group>"; };
+		2D13F68A0D18B95900A67DAB /* nxspublicblocks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxspublicblocks.h; sourceTree = "<group>"; };
+		2D13FFAA0D88BBD4002DED1C /* basiccmdline.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = basiccmdline.cpp; sourceTree = "<group>"; };
+		2D1B4C101214288E00BC42D3 /* basiccmdline */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = basiccmdline; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D1B4C13121428E900BC42D3 /* compressor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = compressor.cpp; sourceTree = "<group>"; };
+		2D27A73E0D88BF0100031055 /* basiccmdline */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = basiccmdline; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D60BA8F0D0200C5000CF7FB /* ncl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ncl.h; sourceTree = "<group>"; };
+		2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsassumptionsblock.cpp; sourceTree = "<group>"; };
+		2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsassumptionsblock.h; sourceTree = "<group>"; };
+		2D60BA920D0200C5000CF7FB /* nxsblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsblock.cpp; sourceTree = "<group>"; };
+		2D60BA930D0200C5000CF7FB /* nxsblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsblock.h; sourceTree = "<group>"; };
+		2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxscharactersblock.cpp; sourceTree = "<group>"; };
+		2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxscharactersblock.h; sourceTree = "<group>"; };
+		2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsdatablock.cpp; sourceTree = "<group>"; };
+		2D60BA970D0200C5000CF7FB /* nxsdatablock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsdatablock.h; sourceTree = "<group>"; };
+		2D60BA980D0200C5000CF7FB /* nxsdefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsdefs.h; sourceTree = "<group>"; };
+		2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsdiscretedatum.h; sourceTree = "<group>"; };
+		2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsdistancedatum.h; sourceTree = "<group>"; };
+		2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsdistancesblock.cpp; sourceTree = "<group>"; };
+		2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsdistancesblock.h; sourceTree = "<group>"; };
+		2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsexception.cpp; sourceTree = "<group>"; };
+		2D60BAA40D0200C5000CF7FB /* nxsexception.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsexception.h; sourceTree = "<group>"; };
+		2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsreader.cpp; sourceTree = "<group>"; };
+		2D60BAA70D0200C5000CF7FB /* nxsreader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsreader.h; sourceTree = "<group>"; };
+		2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxssetreader.cpp; sourceTree = "<group>"; };
+		2D60BAA90D0200C5000CF7FB /* nxssetreader.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxssetreader.h; sourceTree = "<group>"; };
+		2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsstring.cpp; sourceTree = "<group>"; };
+		2D60BAAB0D0200C5000CF7FB /* nxsstring.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsstring.h; sourceTree = "<group>"; };
+		2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxstaxablock.cpp; sourceTree = "<group>"; };
+		2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxstaxablock.h; sourceTree = "<group>"; };
+		2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxstoken.cpp; sourceTree = "<group>"; };
+		2D60BAAF0D0200C5000CF7FB /* nxstoken.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxstoken.h; sourceTree = "<group>"; };
+		2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxstreesblock.cpp; sourceTree = "<group>"; };
+		2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxstreesblock.h; sourceTree = "<group>"; };
+		2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = nxsunalignedblock.cpp; sourceTree = "<group>"; };
+		2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = nxsunalignedblock.h; sourceTree = "<group>"; };
+		2D60BAE20D02014B000CF7FB /* liblibncl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibncl.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D60BB070D020761000CF7FB /* basiccmdline.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = basiccmdline.h; sourceTree = "<group>"; };
+		2D60BB9B0D02255C000CF7FB /* basiccmdline */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = basiccmdline; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D60BBBD0D022563000CF7FB /* basiccmdline */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = basiccmdline; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D60BBC20D0225B5000CF7FB /* normalizer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = normalizer.cpp; sourceTree = "<group>"; };
+		2D60BBCB0D0226D2000CF7FB /* ncltest.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ncltest.cpp; sourceTree = "<group>"; };
+		2D60BBCC0D0226D2000CF7FB /* ncltest.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ncltest.h; sourceTree = "<group>"; };
+		2D60BBCF0D02272B000CF7FB /* normalizer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = normalizer.h; sourceTree = "<group>"; };
+		2D8388A00D1DABB500A4C2C2 /* testfilelist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = testfilelist; sourceTree = "<group>"; };
+		2D9CCCBF0EBB85FD00B54222 /* gapcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gapcode.cpp; sourceTree = "<group>"; };
+		2D9CCCC00EBB85FD00B54222 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		2D9CCCC10EBB85FD00B54222 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		2D9CCCEF0EBB860C00B54222 /* NEXUStosplits */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NEXUStosplits; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D9CCCF40EBB864F00B54222 /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		2D9CCCF50EBB864F00B54222 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
+		2D9CCCF60EBB864F00B54222 /* translateNuc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = translateNuc.cpp; sourceTree = "<group>"; };
+		2DA4082D0E8A774600E22A82 /* splitsinfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = splitsinfile.cpp; sourceTree = "<group>"; };
+		2DA4085B0E8A775000E22A82 /* NEXUStosplits */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NEXUStosplits; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DA4086B0E8A784300E22A82 /* nxscdiscretematrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxscdiscretematrix.h; sourceTree = "<group>"; };
+		2DA4086C0E8A784300E22A82 /* nxscxxdiscretematrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxscxxdiscretematrix.h; sourceTree = "<group>"; };
+		2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nxscxxdiscretematrix.cpp; sourceTree = "<group>"; };
+		2DA4086E0E8A784300E22A82 /* nxsutilcopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxsutilcopy.h; sourceTree = "<group>"; };
+		2DA4086F0E8A784300E22A82 /* nxsmultiformat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxsmultiformat.h; sourceTree = "<group>"; };
+		2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nxsmultiformat.cpp; sourceTree = "<group>"; };
+		2DA408710E8A784300E22A82 /* nxsallocatematrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nxsallocatematrix.h; sourceTree = "<group>"; };
+		2DB113250D888A0300D8E350 /* patristicmat */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = patristicmat; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DB113270D888A4600D8E350 /* patristic.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = patristic.cpp; sourceTree = "<group>"; };
+		2DEBA7EC0D39C91800FE91F7 /* origtestfiles */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = origtestfiles; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2D1B4BF51214288E00BC42D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D33FD2F0D47D40500CC7373 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BAE00D02014B000CF7FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BB7E0D02255C000CF7FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BBA00D022563000CF7FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D9CCCD60EBB860C00B54222 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2DA408420E8A775000E22A82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2DB1130B0D888A0300D8E350 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* basiccmdline */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = basiccmdline;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2D60BB020D0206F1000CF7FB /* example */,
+				2D60BADB0D0200D1000CF7FB /* ncl */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D60BAE20D02014B000CF7FB /* liblibncl.a */,
+				2D60BB9B0D02255C000CF7FB /* basiccmdline */,
+				2D60BBBD0D022563000CF7FB /* basiccmdline */,
+				2DB113250D888A0300D8E350 /* patristicmat */,
+				2D27A73E0D88BF0100031055 /* basiccmdline */,
+				2DA4085B0E8A775000E22A82 /* NEXUStosplits */,
+				2D9CCCEF0EBB860C00B54222 /* NEXUStosplits */,
+				2D1B4C101214288E00BC42D3 /* basiccmdline */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2D1B4C12121428E900BC42D3 /* compressor */ = {
+			isa = PBXGroup;
+			children = (
+				2D1B4C13121428E900BC42D3 /* compressor.cpp */,
+			);
+			path = compressor;
+			sourceTree = "<group>";
+		};
+		2D60BADB0D0200D1000CF7FB /* ncl */ = {
+			isa = PBXGroup;
+			children = (
+				2DA4086B0E8A784300E22A82 /* nxscdiscretematrix.h */,
+				2DA4086C0E8A784300E22A82 /* nxscxxdiscretematrix.h */,
+				2DA4086D0E8A784300E22A82 /* nxscxxdiscretematrix.cpp */,
+				2DA4086E0E8A784300E22A82 /* nxsutilcopy.h */,
+				2DA4086F0E8A784300E22A82 /* nxsmultiformat.h */,
+				2DA408700E8A784300E22A82 /* nxsmultiformat.cpp */,
+				2DA408710E8A784300E22A82 /* nxsallocatematrix.h */,
+				2D13F6890D18B95900A67DAB /* nxspublicblocks.cpp */,
+				2D13F68A0D18B95900A67DAB /* nxspublicblocks.h */,
+				2D60BA8F0D0200C5000CF7FB /* ncl.h */,
+				2D60BA900D0200C5000CF7FB /* nxsassumptionsblock.cpp */,
+				2D60BA910D0200C5000CF7FB /* nxsassumptionsblock.h */,
+				2D60BA920D0200C5000CF7FB /* nxsblock.cpp */,
+				2D60BA930D0200C5000CF7FB /* nxsblock.h */,
+				2D60BA940D0200C5000CF7FB /* nxscharactersblock.cpp */,
+				2D60BA950D0200C5000CF7FB /* nxscharactersblock.h */,
+				2D60BA960D0200C5000CF7FB /* nxsdatablock.cpp */,
+				2D60BA970D0200C5000CF7FB /* nxsdatablock.h */,
+				2D60BA980D0200C5000CF7FB /* nxsdefs.h */,
+				2D60BA9A0D0200C5000CF7FB /* nxsdiscretedatum.h */,
+				2D60BA9E0D0200C5000CF7FB /* nxsdistancedatum.h */,
+				2D60BA9F0D0200C5000CF7FB /* nxsdistancesblock.cpp */,
+				2D60BAA00D0200C5000CF7FB /* nxsdistancesblock.h */,
+				2D60BAA30D0200C5000CF7FB /* nxsexception.cpp */,
+				2D60BAA40D0200C5000CF7FB /* nxsexception.h */,
+				2D60BAA60D0200C5000CF7FB /* nxsreader.cpp */,
+				2D60BAA70D0200C5000CF7FB /* nxsreader.h */,
+				2D60BAA80D0200C5000CF7FB /* nxssetreader.cpp */,
+				2D60BAA90D0200C5000CF7FB /* nxssetreader.h */,
+				2D60BAAA0D0200C5000CF7FB /* nxsstring.cpp */,
+				2D60BAAB0D0200C5000CF7FB /* nxsstring.h */,
+				2D60BAAC0D0200C5000CF7FB /* nxstaxablock.cpp */,
+				2D60BAAD0D0200C5000CF7FB /* nxstaxablock.h */,
+				2D60BAAE0D0200C5000CF7FB /* nxstoken.cpp */,
+				2D60BAAF0D0200C5000CF7FB /* nxstoken.h */,
+				2D60BAB00D0200C5000CF7FB /* nxstreesblock.cpp */,
+				2D60BAB10D0200C5000CF7FB /* nxstreesblock.h */,
+				2D60BAB20D0200C5000CF7FB /* nxsunalignedblock.cpp */,
+				2D60BAB30D0200C5000CF7FB /* nxsunalignedblock.h */,
+			);
+			name = ncl;
+			path = ../../ncl;
+			sourceTree = "<group>";
+		};
+		2D60BB020D0206F1000CF7FB /* example */ = {
+			isa = PBXGroup;
+			children = (
+				2D1B4C12121428E900BC42D3 /* compressor */,
+				2D9CCCF30EBB864F00B54222 /* translate */,
+				2D9CCCBE0EBB85FD00B54222 /* gapcode */,
+				2DA4082A0E8A774600E22A82 /* splitsinfile */,
+				2DB1132A0D888A6000D8E350 /* patristic */,
+				2D60BBC80D02269E000CF7FB /* ncltest */,
+				2D60BBBF0D022576000CF7FB /* normalizer */,
+				2D60BB0A0D020765000CF7FB /* basiccmdline */,
+			);
+			name = example;
+			path = ../../example;
+			sourceTree = "<group>";
+		};
+		2D60BB0A0D020765000CF7FB /* basiccmdline */ = {
+			isa = PBXGroup;
+			children = (
+				2D13FFAA0D88BBD4002DED1C /* basiccmdline.cpp */,
+				2D60BB070D020761000CF7FB /* basiccmdline.h */,
+			);
+			path = basiccmdline;
+			sourceTree = "<group>";
+		};
+		2D60BBBF0D022576000CF7FB /* normalizer */ = {
+			isa = PBXGroup;
+			children = (
+				2D60BBCF0D02272B000CF7FB /* normalizer.h */,
+				2D60BBC20D0225B5000CF7FB /* normalizer.cpp */,
+			);
+			path = normalizer;
+			sourceTree = "<group>";
+		};
+		2D60BBC80D02269E000CF7FB /* ncltest */ = {
+			isa = PBXGroup;
+			children = (
+				2D60BBCB0D0226D2000CF7FB /* ncltest.cpp */,
+				2D60BBCC0D0226D2000CF7FB /* ncltest.h */,
+			);
+			path = ncltest;
+			sourceTree = "<group>";
+		};
+		2D9CCCBE0EBB85FD00B54222 /* gapcode */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CCCBF0EBB85FD00B54222 /* gapcode.cpp */,
+				2D9CCCC00EBB85FD00B54222 /* Makefile.am */,
+				2D9CCCC10EBB85FD00B54222 /* Makefile.in */,
+			);
+			path = gapcode;
+			sourceTree = "<group>";
+		};
+		2D9CCCF30EBB864F00B54222 /* translate */ = {
+			isa = PBXGroup;
+			children = (
+				2D9CCCF40EBB864F00B54222 /* Makefile.am */,
+				2D9CCCF50EBB864F00B54222 /* Makefile.in */,
+				2D9CCCF60EBB864F00B54222 /* translateNuc.cpp */,
+			);
+			path = translate;
+			sourceTree = "<group>";
+		};
+		2DA4082A0E8A774600E22A82 /* splitsinfile */ = {
+			isa = PBXGroup;
+			children = (
+				2DA4082D0E8A774600E22A82 /* splitsinfile.cpp */,
+			);
+			path = splitsinfile;
+			sourceTree = "<group>";
+		};
+		2DB1132A0D888A6000D8E350 /* patristic */ = {
+			isa = PBXGroup;
+			children = (
+				2DB113270D888A4600D8E350 /* patristic.cpp */,
+			);
+			path = patristic;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				2D8388A00D1DABB500A4C2C2 /* testfilelist */,
+				2DEBA7EC0D39C91800FE91F7 /* origtestfiles */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2D60BADE0D02014B000CF7FB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D13F68C0D18B95900A67DAB /* nxspublicblocks.h in Headers */,
+				2DA4087A0E8A784300E22A82 /* nxscdiscretematrix.h in Headers */,
+				2DA4087B0E8A784300E22A82 /* nxscxxdiscretematrix.h in Headers */,
+				2DA4087D0E8A784300E22A82 /* nxsutilcopy.h in Headers */,
+				2DA4087E0E8A784300E22A82 /* nxsmultiformat.h in Headers */,
+				2DA408800E8A784300E22A82 /* nxsallocatematrix.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2D1B4BE21214288E00BC42D3 /* compressor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D1B4C0C1214288E00BC42D3 /* Build configuration list for PBXNativeTarget "compressor" */;
+			buildPhases = (
+				2D1B4BE31214288E00BC42D3 /* Sources */,
+				2D1B4BF51214288E00BC42D3 /* Frameworks */,
+				2D1B4BF61214288E00BC42D3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = compressor;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2D1B4C101214288E00BC42D3 /* basiccmdline */;
+			productType = "com.apple.product-type.tool";
+		};
+		2D33FD1D0D47D40500CC7373 /* basiccmdline */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D33FD480D47D40500CC7373 /* Build configuration list for PBXNativeTarget "basiccmdline" */;
+			buildPhases = (
+				2D33FD1E0D47D40500CC7373 /* Sources */,
+				2D33FD2F0D47D40500CC7373 /* Frameworks */,
+				2D33FD300D47D40500CC7373 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = basiccmdline;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2D27A73E0D88BF0100031055 /* basiccmdline */;
+			productType = "com.apple.product-type.tool";
+		};
+		2D60BAE10D02014B000CF7FB /* libncl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D60BAE30D020169000CF7FB /* Build configuration list for PBXNativeTarget "libncl" */;
+			buildPhases = (
+				2D60BADE0D02014B000CF7FB /* Headers */,
+				2D60BADF0D02014B000CF7FB /* Sources */,
+				2D60BAE00D02014B000CF7FB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libncl;
+			productName = libncl;
+			productReference = 2D60BAE20D02014B000CF7FB /* liblibncl.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		2D60BB7B0D02255C000CF7FB /* normalizer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D60BB970D02255C000CF7FB /* Build configuration list for PBXNativeTarget "normalizer" */;
+			buildPhases = (
+				2D60BB7C0D02255C000CF7FB /* Sources */,
+				2D60BB7E0D02255C000CF7FB /* Frameworks */,
+				2D60BB7F0D02255C000CF7FB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = normalizer;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2D60BB9B0D02255C000CF7FB /* basiccmdline */;
+			productType = "com.apple.product-type.tool";
+		};
+		2D60BB9D0D022563000CF7FB /* ncltest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D60BBB90D022563000CF7FB /* Build configuration list for PBXNativeTarget "ncltest" */;
+			buildPhases = (
+				2D60BB9E0D022563000CF7FB /* Sources */,
+				2D60BBA00D022563000CF7FB /* Frameworks */,
+				2D60BBA10D022563000CF7FB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ncltest;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2D60BBBD0D022563000CF7FB /* basiccmdline */;
+			productType = "com.apple.product-type.tool";
+		};
+		2D9CCCC20EBB860C00B54222 /* NEXUStranslate */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D9CCCEB0EBB860C00B54222 /* Build configuration list for PBXNativeTarget "NEXUStranslate" */;
+			buildPhases = (
+				2D9CCCC30EBB860C00B54222 /* Sources */,
+				2D9CCCD60EBB860C00B54222 /* Frameworks */,
+				2D9CCCD70EBB860C00B54222 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NEXUStranslate;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2D9CCCEF0EBB860C00B54222 /* NEXUStosplits */;
+			productType = "com.apple.product-type.tool";
+		};
+		2DA4082F0E8A775000E22A82 /* splitsinfile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DA408570E8A775000E22A82 /* Build configuration list for PBXNativeTarget "splitsinfile" */;
+			buildPhases = (
+				2DA408300E8A775000E22A82 /* Sources */,
+				2DA408420E8A775000E22A82 /* Frameworks */,
+				2DA408430E8A775000E22A82 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = splitsinfile;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2DA4085B0E8A775000E22A82 /* NEXUStosplits */;
+			productType = "com.apple.product-type.tool";
+		};
+		2DB112F90D888A0300D8E350 /* patristicmat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DB113210D888A0300D8E350 /* Build configuration list for PBXNativeTarget "patristicmat" */;
+			buildPhases = (
+				2DB112FA0D888A0300D8E350 /* Sources */,
+				2DB1130B0D888A0300D8E350 /* Frameworks */,
+				2DB1130C0D888A0300D8E350 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = patristicmat;
+			productInstallPath = "$(HOME)/bin";
+			productName = basiccmdline;
+			productReference = 2DB113250D888A0300D8E350 /* patristicmat */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ncl-xcode" */;
+			compatibilityVersion = "Xcode 2.4";
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* basiccmdline */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2D60BAE10D02014B000CF7FB /* libncl */,
+				2D60BB7B0D02255C000CF7FB /* normalizer */,
+				2D60BB9D0D022563000CF7FB /* ncltest */,
+				2D33FD1D0D47D40500CC7373 /* basiccmdline */,
+				2DB112F90D888A0300D8E350 /* patristicmat */,
+				2DA4082F0E8A775000E22A82 /* splitsinfile */,
+				2D9CCCC20EBB860C00B54222 /* NEXUStranslate */,
+				2D1B4BE21214288E00BC42D3 /* compressor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D1B4BE31214288E00BC42D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D1B4BE41214288E00BC42D3 /* nxspublicblocks.cpp in Sources */,
+				2D1B4BE51214288E00BC42D3 /* nxsassumptionsblock.cpp in Sources */,
+				2D1B4BE61214288E00BC42D3 /* nxsblock.cpp in Sources */,
+				2D1B4BE71214288E00BC42D3 /* nxscharactersblock.cpp in Sources */,
+				2D1B4BE81214288E00BC42D3 /* nxsdatablock.cpp in Sources */,
+				2D1B4BEA1214288E00BC42D3 /* nxsdistancesblock.cpp in Sources */,
+				2D1B4BEB1214288E00BC42D3 /* nxsexception.cpp in Sources */,
+				2D1B4BEC1214288E00BC42D3 /* nxsreader.cpp in Sources */,
+				2D1B4BED1214288E00BC42D3 /* nxssetreader.cpp in Sources */,
+				2D1B4BEE1214288E00BC42D3 /* nxsstring.cpp in Sources */,
+				2D1B4BEF1214288E00BC42D3 /* nxstaxablock.cpp in Sources */,
+				2D1B4BF01214288E00BC42D3 /* nxstoken.cpp in Sources */,
+				2D1B4BF11214288E00BC42D3 /* nxstreesblock.cpp in Sources */,
+				2D1B4BF21214288E00BC42D3 /* nxsunalignedblock.cpp in Sources */,
+				2D1B4BF31214288E00BC42D3 /* nxscxxdiscretematrix.cpp in Sources */,
+				2D1B4BF41214288E00BC42D3 /* nxsmultiformat.cpp in Sources */,
+				2D1B4C16121428E900BC42D3 /* compressor.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D33FD1E0D47D40500CC7373 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D33FD1F0D47D40500CC7373 /* nxspublicblocks.cpp in Sources */,
+				2D33FD200D47D40500CC7373 /* nxsassumptionsblock.cpp in Sources */,
+				2D33FD210D47D40500CC7373 /* nxsblock.cpp in Sources */,
+				2D33FD220D47D40500CC7373 /* nxscharactersblock.cpp in Sources */,
+				2D33FD230D47D40500CC7373 /* nxsdatablock.cpp in Sources */,
+				2D33FD260D47D40500CC7373 /* nxsdistancesblock.cpp in Sources */,
+				2D33FD270D47D40500CC7373 /* nxsexception.cpp in Sources */,
+				2D33FD280D47D40500CC7373 /* nxsreader.cpp in Sources */,
+				2D33FD290D47D40500CC7373 /* nxssetreader.cpp in Sources */,
+				2D33FD2A0D47D40500CC7373 /* nxsstring.cpp in Sources */,
+				2D33FD2B0D47D40500CC7373 /* nxstaxablock.cpp in Sources */,
+				2D33FD2C0D47D40500CC7373 /* nxstoken.cpp in Sources */,
+				2D33FD2D0D47D40500CC7373 /* nxstreesblock.cpp in Sources */,
+				2D33FD2E0D47D40500CC7373 /* nxsunalignedblock.cpp in Sources */,
+				2D13FFAB0D88BBD4002DED1C /* basiccmdline.cpp in Sources */,
+				2DA408740E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA408750E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BADF0D02014B000CF7FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D60BB360D021F14000CF7FB /* nxsassumptionsblock.cpp in Sources */,
+				2D60BB370D021F14000CF7FB /* nxsblock.cpp in Sources */,
+				2D60BB380D021F14000CF7FB /* nxscharactersblock.cpp in Sources */,
+				2D60BB390D021F14000CF7FB /* nxsdatablock.cpp in Sources */,
+				2D60BB3D0D021F14000CF7FB /* nxsdistancesblock.cpp in Sources */,
+				2D60BB3F0D021F14000CF7FB /* nxsexception.cpp in Sources */,
+				2D60BB400D021F14000CF7FB /* nxsreader.cpp in Sources */,
+				2D60BB410D021F14000CF7FB /* nxssetreader.cpp in Sources */,
+				2D60BB420D021F14000CF7FB /* nxsstring.cpp in Sources */,
+				2D60BB430D021F14000CF7FB /* nxstaxablock.cpp in Sources */,
+				2D60BB440D021F14000CF7FB /* nxstoken.cpp in Sources */,
+				2D60BB450D021F14000CF7FB /* nxstreesblock.cpp in Sources */,
+				2D60BB460D021F14000CF7FB /* nxsunalignedblock.cpp in Sources */,
+				2D13F68B0D18B95900A67DAB /* nxspublicblocks.cpp in Sources */,
+				2DA4085E0E8A779B00E22A82 /* splitsinfile.cpp in Sources */,
+				2DA4087C0E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA4087F0E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BB7C0D02255C000CF7FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D13F6A80D18BAF600A67DAB /* nxspublicblocks.cpp in Sources */,
+				2D13F6A90D18BAF600A67DAB /* nxsassumptionsblock.cpp in Sources */,
+				2D13F6AA0D18BAF600A67DAB /* nxsblock.cpp in Sources */,
+				2D13F6AB0D18BAF600A67DAB /* nxscharactersblock.cpp in Sources */,
+				2D13F6AC0D18BAF600A67DAB /* nxsdatablock.cpp in Sources */,
+				2D9B15E50D1AD2C00026CFDA /* normalizer.cpp in Sources */,
+				2D13F6B00D18BAF600A67DAB /* nxsdistancesblock.cpp in Sources */,
+				2D13F6B20D18BAF600A67DAB /* nxsexception.cpp in Sources */,
+				2D13F6B30D18BAF600A67DAB /* nxsreader.cpp in Sources */,
+				2D13F6B40D18BAF600A67DAB /* nxssetreader.cpp in Sources */,
+				2D13F6B50D18BAF600A67DAB /* nxsstring.cpp in Sources */,
+				2D13F6B60D18BAF600A67DAB /* nxstaxablock.cpp in Sources */,
+				2D13F6B70D18BAF600A67DAB /* nxstoken.cpp in Sources */,
+				2D13F6B80D18BAF600A67DAB /* nxstreesblock.cpp in Sources */,
+				2D13F6B90D18BAF600A67DAB /* nxsunalignedblock.cpp in Sources */,
+				2DA408780E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA408790E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D60BB9E0D022563000CF7FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DDCD89B0D2EBB5E00AB986C /* nxspublicblocks.cpp in Sources */,
+				2DDCD89C0D2EBB5F00AB986C /* nxsassumptionsblock.cpp in Sources */,
+				2DDCD89D0D2EBB5F00AB986C /* nxsblock.cpp in Sources */,
+				2DDCD89E0D2EBB5F00AB986C /* nxscharactersblock.cpp in Sources */,
+				2DDCD89F0D2EBB5F00AB986C /* nxsdatablock.cpp in Sources */,
+				2D60BBCD0D0226D2000CF7FB /* ncltest.cpp in Sources */,
+				2DDCD8A10D2EBB6A00AB986C /* nxsdistancesblock.cpp in Sources */,
+				2DDCD8A20D2EBB6A00AB986C /* nxsexception.cpp in Sources */,
+				2DDCD8A30D2EBB6A00AB986C /* nxsreader.cpp in Sources */,
+				2DDCD8A40D2EBB6A00AB986C /* nxssetreader.cpp in Sources */,
+				2DDCD8A50D2EBB6A00AB986C /* nxsstring.cpp in Sources */,
+				2DDCD8A60D2EBB6A00AB986C /* nxstaxablock.cpp in Sources */,
+				2DDCD8A70D2EBB6A00AB986C /* nxstoken.cpp in Sources */,
+				2DDCD8A80D2EBB6A00AB986C /* nxstreesblock.cpp in Sources */,
+				2DDCD8A90D2EBB6A00AB986C /* nxsunalignedblock.cpp in Sources */,
+				2DA408760E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA408770E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D9CCCC30EBB860C00B54222 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D9CCCC40EBB860C00B54222 /* nxspublicblocks.cpp in Sources */,
+				2D9CCCC50EBB860C00B54222 /* nxsassumptionsblock.cpp in Sources */,
+				2D9CCCC60EBB860C00B54222 /* nxsblock.cpp in Sources */,
+				2D9CCCC70EBB860C00B54222 /* nxscharactersblock.cpp in Sources */,
+				2D9CCCC80EBB860C00B54222 /* nxsdatablock.cpp in Sources */,
+				2D9CCCCA0EBB860C00B54222 /* nxsdistancesblock.cpp in Sources */,
+				2D9CCCCB0EBB860C00B54222 /* nxsexception.cpp in Sources */,
+				2D9CCCCC0EBB860C00B54222 /* nxsreader.cpp in Sources */,
+				2D9CCCCD0EBB860C00B54222 /* nxssetreader.cpp in Sources */,
+				2D9CCCCE0EBB860C00B54222 /* nxsstring.cpp in Sources */,
+				2D9CCCCF0EBB860C00B54222 /* nxstaxablock.cpp in Sources */,
+				2D9CCCD00EBB860C00B54222 /* nxstoken.cpp in Sources */,
+				2D9CCCD10EBB860C00B54222 /* nxstreesblock.cpp in Sources */,
+				2D9CCCD20EBB860C00B54222 /* nxsunalignedblock.cpp in Sources */,
+				2D9CCCD40EBB860C00B54222 /* nxscxxdiscretematrix.cpp in Sources */,
+				2D9CCCD50EBB860C00B54222 /* nxsmultiformat.cpp in Sources */,
+				2D9CCCF70EBB864F00B54222 /* translateNuc.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2DA408300E8A775000E22A82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DA408320E8A775000E22A82 /* nxspublicblocks.cpp in Sources */,
+				2DA408330E8A775000E22A82 /* nxsassumptionsblock.cpp in Sources */,
+				2DA408340E8A775000E22A82 /* nxsblock.cpp in Sources */,
+				2DA408350E8A775000E22A82 /* nxscharactersblock.cpp in Sources */,
+				2DA408360E8A775000E22A82 /* nxsdatablock.cpp in Sources */,
+				2DA408380E8A775000E22A82 /* nxsdistancesblock.cpp in Sources */,
+				2DA408390E8A775000E22A82 /* nxsexception.cpp in Sources */,
+				2DA4083A0E8A775000E22A82 /* nxsreader.cpp in Sources */,
+				2DA4083B0E8A775000E22A82 /* nxssetreader.cpp in Sources */,
+				2DA4083C0E8A775000E22A82 /* nxsstring.cpp in Sources */,
+				2DA4083D0E8A775000E22A82 /* nxstaxablock.cpp in Sources */,
+				2DA4083E0E8A775000E22A82 /* nxstoken.cpp in Sources */,
+				2DA4083F0E8A775000E22A82 /* nxstreesblock.cpp in Sources */,
+				2DA408400E8A775000E22A82 /* nxsunalignedblock.cpp in Sources */,
+				2DA408410E8A775000E22A82 /* splitsinfile.cpp in Sources */,
+				2DA408810E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA408820E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2DB112FA0D888A0300D8E350 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2DB113280D888A4600D8E350 /* patristic.cpp in Sources */,
+				2DB112FC0D888A0300D8E350 /* nxspublicblocks.cpp in Sources */,
+				2DB112FD0D888A0300D8E350 /* nxsassumptionsblock.cpp in Sources */,
+				2DB112FE0D888A0300D8E350 /* nxsblock.cpp in Sources */,
+				2DB112FF0D888A0300D8E350 /* nxscharactersblock.cpp in Sources */,
+				2DB113000D888A0300D8E350 /* nxsdatablock.cpp in Sources */,
+				2DB113020D888A0300D8E350 /* nxsdistancesblock.cpp in Sources */,
+				2DB113030D888A0300D8E350 /* nxsexception.cpp in Sources */,
+				2DB113040D888A0300D8E350 /* nxsreader.cpp in Sources */,
+				2DB113050D888A0300D8E350 /* nxssetreader.cpp in Sources */,
+				2DB113060D888A0300D8E350 /* nxsstring.cpp in Sources */,
+				2DB113070D888A0300D8E350 /* nxstaxablock.cpp in Sources */,
+				2DB113080D888A0300D8E350 /* nxstoken.cpp in Sources */,
+				2DB113090D888A0300D8E350 /* nxstreesblock.cpp in Sources */,
+				2DB1130A0D888A0300D8E350 /* nxsunalignedblock.cpp in Sources */,
+				2DA4082E0E8A774600E22A82 /* splitsinfile.cpp in Sources */,
+				2DA408720E8A784300E22A82 /* nxscxxdiscretematrix.cpp in Sources */,
+				2DA408730E8A784300E22A82 /* nxsmultiformat.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB923708733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+		2D1B4C0D1214288E00BC42D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../..;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2D1B4C0E1214288E00BC42D3 /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D1B4C0F1214288E00BC42D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2D33FD490D47D40500CC7373 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2D33FD4A0D47D40500CC7373 /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D33FD4B0D47D40500CC7373 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2D60BAE40D020169000CF7FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../..;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = libncl;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2D60BAE50D020169000CF7FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = libncl;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		2D60BAEA0D02017D000CF7FB /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = ncl;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D60BAEB0D02017D000CF7FB /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = "Debug-pedantic";
+		};
+		2D60BB980D02255C000CF7FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2D60BB990D02255C000CF7FB /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D60BB9A0D02255C000CF7FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2D60BBBA0D022563000CF7FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		2D60BBBB0D022563000CF7FB /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = ncltest;
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D60BBBC0D022563000CF7FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2D9CCCEC0EBB860C00B54222 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../..;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = NEXUStosplits;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2D9CCCED0EBB860C00B54222 /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2D9CCCEE0EBB860C00B54222 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2DA408580E8A775000E22A82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = ../..;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = NEXUStosplits;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2DA408590E8A775000E22A82 /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2DA4085A0E8A775000E22A82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+		2DB113220D888A0300D8E350 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = patristicmat;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		2DB113230D888A0300D8E350 /* Debug-pedantic */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				INSTALL_PATH = "$(HOME)/bin";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = normalizer;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wreturn-type",
+					"-Wunused",
+					"-Wredundant-decls",
+					"-Wcast-align",
+					"-Wcomment",
+					"-Wextra",
+				);
+				ZERO_LINK = NO;
+			};
+			name = "Debug-pedantic";
+		};
+		2DB113240D888A0300D8E350 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				PRODUCT_NAME = basiccmdline;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ncl-xcode" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				2D60BAEB0D02017D000CF7FB /* Debug-pedantic */,
+				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D1B4C0C1214288E00BC42D3 /* Build configuration list for PBXNativeTarget "compressor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D1B4C0D1214288E00BC42D3 /* Debug */,
+				2D1B4C0E1214288E00BC42D3 /* Debug-pedantic */,
+				2D1B4C0F1214288E00BC42D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D33FD480D47D40500CC7373 /* Build configuration list for PBXNativeTarget "basiccmdline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D33FD490D47D40500CC7373 /* Debug */,
+				2D33FD4A0D47D40500CC7373 /* Debug-pedantic */,
+				2D33FD4B0D47D40500CC7373 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D60BAE30D020169000CF7FB /* Build configuration list for PBXNativeTarget "libncl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D60BAE40D020169000CF7FB /* Debug */,
+				2D60BAEA0D02017D000CF7FB /* Debug-pedantic */,
+				2D60BAE50D020169000CF7FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D60BB970D02255C000CF7FB /* Build configuration list for PBXNativeTarget "normalizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D60BB980D02255C000CF7FB /* Debug */,
+				2D60BB990D02255C000CF7FB /* Debug-pedantic */,
+				2D60BB9A0D02255C000CF7FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D60BBB90D022563000CF7FB /* Build configuration list for PBXNativeTarget "ncltest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D60BBBA0D022563000CF7FB /* Debug */,
+				2D60BBBB0D022563000CF7FB /* Debug-pedantic */,
+				2D60BBBC0D022563000CF7FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D9CCCEB0EBB860C00B54222 /* Build configuration list for PBXNativeTarget "NEXUStranslate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D9CCCEC0EBB860C00B54222 /* Debug */,
+				2D9CCCED0EBB860C00B54222 /* Debug-pedantic */,
+				2D9CCCEE0EBB860C00B54222 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DA408570E8A775000E22A82 /* Build configuration list for PBXNativeTarget "splitsinfile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DA408580E8A775000E22A82 /* Debug */,
+				2DA408590E8A775000E22A82 /* Debug-pedantic */,
+				2DA4085A0E8A775000E22A82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DB113210D888A0300D8E350 /* Build configuration list for PBXNativeTarget "patristicmat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2DB113220D888A0300D8E350 /* Debug */,
+				2DB113230D888A0300D8E350 /* Debug-pedantic */,
+				2DB113240D888A0300D8E350 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

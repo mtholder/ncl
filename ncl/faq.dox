@@ -1,0 +1,125 @@
+/*! \page FAQ NCL FAQ
+\section FAQ Frequently asked questions
+	- \ref performance
+	- \ref rockinErrorMessages
+	- \ref crypticErrorMessages
+	- \ref whyNxsString
+	- \ref whyNxsStringArg
+	- \ref whyNoNamespaces
+	- \ref whyDumpStdNamespace
+	- \ref whyNotConst
+	- \ref whatisNCL_COULD_BE_CONST
+	- \ref mixedDatypeSupport
+	.
+
+\section performance Is NCL efficient (time and memory) enough to handle large datasets?
+The short answer is "Yes."
+
+Of course, the running time depends on exactly how big the dataset is.  NCL's character matrix parsing speed is about as fast as PAUP*'s parsing (and we NCL writers are very proud of that), and its tree reading is slower that PAUP's but not terribly slow.
+
+v2.1 and later are much more efficient than previous versions. On a 2.6GHz i386 MacBook (with 4GB of RAM), Mark Holder obtained the following benchmark results for parsing a file (with comparisons to previous versions of NCL and PAUP* for reference):
+	\li 4.4 seconds for a file with 262,144 taxa (about 90x faster than previous
+		NCL versions.  NCL v2.1 parses taxa-only files faster than PAUP on this machine)
+	\li 3.3 seconds for a file with 16 taxa and just over 1 million DNA sites
+		(about 40x faster than earlier versions, and slightly faster than PAUP).
+	\li 12.8 seconds for a file with 4,096 taxa and 16,384 characters (once
+		again about 40x faster than earlier versions, and slightly faster than PAUP).
+	\li 7.9 seconds and 17.8 seconds for a files with 512 taxa and 4,096 trees.
+		The first file had no branch lengths, and the second did have branch lengths (roughly 10-20x speedup compared to previous NCL versions, but 5-10x slower than PAUP*).
+
+
+
+\section rockinErrorMessages Why are the error messages that  NCL generates because of invalid files so crystal-clear and helpful?
+Because NCL rocks!
+
+Seriously, we do try hard to make the error messages helpful and have them
+accurately describe where the error occurs.
+This is definitely a strength of the library, and we strive to maintain it.
+Please let us know if you find a file that generates cryptic/unhelpful error
+messages (Also see \ref crypticErrorMessages)
+
+
+\section crypticErrorMessages Why do the error messages that  NCL generates because of invalid files have the wrong column number?
+So despite our generally rockin' error messages, there are some warts.
+It is tough to get accurate column numbers for errors.
+We try to  support reporting of column numbers of errors because extremely long
+lines are common in TREES and CHARACTERS blocks.
+Let us know if you find misleading column numbers (check tab characters, first;
+NCL counts characters since the last newline.  A tabstops are assumed to be set
+to 4, but this is admittedly arbitrary.
+
+
+\section whyNxsString Why is there a special NxsString class?
+Short answer: convenient appending to strings (including overloads of the "put
+to" operator).
+
+It is usually considered unsafe to derive from a class (such as std::string)
+that lacks a virtual destructor.
+NxsString does not have any additional data members that std::string does not,
+so we have gotten away with it.
+It is too late to reverse the decision to bundle a new string class.
+It is probably best to avoid using it when you don't have to.
+
+
+\section whyNxsStringArg Why do some methods take/return a NxsString while others take a std::string ?
+At one point we were going to abandon the use of NxsString, so newer functions
+take and return std::string objects.
+But we <b>really</b> don't want to break old code, so we are not going to
+complete the migration away from NxsString just for the sake of consistency of
+the API.
+
+Sorry about that, we realize that it makes the library harder to use for newer
+users.
+
+
+\section whyNoNamespaces Why don't you use namespaces instead of the Nxs prefix?
+
+No good reason - history and backwards compatibility
+
+
+\section whyDumpStdNamespace Why does NCL include use the "using namespace std;" statement? I don't want all definitions from std in my namespace!
+
+It is only the convenience header ncl.h that does this.
+Either do not include this file (and simply include the headers of the parts of
+ncl that you do use), or define a preprocessor macro NCL_AVOID_USING_STD to keep
+the contents of the std namespace from being "dumped" into your code's
+namespace.
+
+
+\section whyNotConst Why aren't all of the functions/variables that could be declared as "const" actually declared to be "const"?
+
+No good reason - history and backwards compatibility
+
+\section whatisNCL_COULD_BE_CONST What is NCL_COULD_BE_CONST all about?
+We were trying to declare functions that should be const, but that would break
+old code.
+So if you compile NCL without any special preprocessor directives, then
+NCL_COULD_BE_CONST will be converted to an empty string.
+But if you compile with the NCL_CONST_FUNCS preprocessor flag defined(-DNCL_CONST_FUNCS for most compilers), then NCL_COULD_BE_CONST will be replaced with the word const.
+
+In short if you want const-correctness checking, make sure that NCL_CONST_FUNCS is defined when you build NCL (the --with-constfuncs argument to configure will do this ), and that NCL_CONST_FUNCS is defined when you build your application.
+
+If you are not obsessive compulsive, don't worry about out it.
+
+Yes, we know that some more functions should be decorated with NCL_COULD_BE_CONST to improve const checking (and yes, it bugs us).
+
+
+
+\section mixedDatypeSupport Does NCL support MrBayes' datatype=mixed extension?
+
+Yes.  See \ref mixedDatatypes discussion.
+
+
+<hr />
+Next see \ref Gotchas for other common questions
+
+<hr />
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+*/

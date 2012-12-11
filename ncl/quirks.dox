@@ -1,0 +1,342 @@
+/*! \page  Gotchas Quirks and Gotchas
+
+	- \ref MisleadingNames
+	- \ref BlockTypeIDDiscussion
+	- \ref impliedBlocks
+	- \ref taxaBlockScoping
+	- \ref memoryManagement
+	- \ref setsAssumptions
+	.
+
+
+\section MisleadingNames Potentially Confusing Names.
+A few of the names of classes in NCL may cause some confusion:
+    - NxsBlock is really a "NEXUS block parser." Instances of this class
+        are responsible for reading a block in a NEXUS, file.  After
+        parsing the file content, the instance should hold contents of the
+        block in memory. So <b>after</b> the parse the NxsBlock object
+        naturally maps to the block in a NEXUS file.
+    - NxsToken should be NxsTokenizer. It wraps a istream and return tokens.
+    - NxsAssumptionsBlock - Instances of this block type actually read
+        commands in the ASSUMPTIONS, SETS, and CODONS blocks.  It is common
+        for commands such as CharSets to occur in several different blocks.
+        Because most clients want to treat the information identically
+regardless of block type, NCL actually uses the same class to
+        process any of these commands that occur in any of these blocks.
+        This terminology is potentially confusing, but it does make it easier
+for client code to obtain references to all of the associated metadata (rather
+than having to query specifically for each of the three block types, you can
+query for the NxsAssumptionsBlock only.
+Note the discussion of \ref BlockTypeIDDiscussion for confusion over the "ID."
+
+
+\section BlockTypeIDDiscussion Block Type IDs or Block IDs
+NEXUS files are composed of modules called blocks.
+Blocks begin with <tt>BEGIN blockname;</tt> and end with an <tt>END;</tt>
+command.
+The <tt>blockname</tt> indicates what type of information is in the block;
+common block names are TAXA, CHARACTERS, and TREES.
+In NCL, these block names have always been referred to as the ID of the block (
+NxsBlock::id data member, and NxsBlock::GetID() method).
+Perhaps a better name for this concept would be BlockType or BlockTypeID.
+
+These block names are important for NCL, because the NxsReader uses the
+Block ID to figure out whether a NxsBlock instance can read the next section of
+a NEXUS file (specifically in NxsReader::Execute, when the reader encounters the
+beginning of the block, it calls NxsBlock::CanReadBlockType() passing in the
+NEXUS tokenizer that is set to the Block name token; however the base class
+implementation of CanReadBlockType simply returns true if NxsBlock::id matches
+the block name token).
+
+Be aware that Mesquite added a BLOCKID command to nexus.
+This command allows assigns a unique string to a block in a file.
+This BlockID string from the BLOCKID command is <b>NOT</b> the id that is
+referred to throughout the NCL documentation.
+NCL handles and stores the BlockID from the BLOCKID command (see
+NxsBlock::GetBlockIDCommandString() method).
+
+Mesquite also introduced a TITLE command for a block.
+The TITLE command is handled by NCL (see NxsBlock::GetTitle() method).
+Block Titles are not necessarily unique.
+Unlike the BlockIDs, they are shown to user's as identifiers for the blocks in
+Mesquite's GUI.
+
+In summary: NEXUS is composed of blocks have different types.
+In the NCL API (and documentation)  these block types correspond to the ID of
+the NxsBlock instance.
+To deal with Mesquite extensions to NEXUS, any block can have a TITLE and a
+BlockID, but these fields are distinct from the ID that NCL refers to in its
+documentation.
+
+
+\section impliedBlocks "Implied" blocks
+    It is not unusual to see files that refer to taxa without having an explicit
+TAXA block.
+    For example, it is very common to encounter a file that just has a TREES
+block; technically such a file is not valid NEXUS, but if NCL is configured
+correctly (see the NxsTreesBlock::SetAllowImplicitNames() method) it will
+tolerate these files and generate a TAXA block on-the-fly.
+    NCL v2.1 will create implied taxa block objects during a parse.
+    From the client code's perspective it will seem as if the file contained an
+explicit TAXA block.
+    This makes it easy to write client code, because one does not have to add
+special cases for files with DATA blocks or files with just TREES blocks.
+
+See \ref taxaBlockScoping for a more detaile discussion.
+
+
+\section taxaBlockScoping "Scoping" of TAXA blocks
+Because Taxa are central to most phylogenetic data, it is crucial that the
+parser can identify the TAXA that are being referred to when parsing
+taxa-dependent context.
+
+Unfortunately, the NEXUS specification is silent on the issue of how to deal
+with multiple instances of blocks of the same type.
+Mesquite introduced a LINK/TITLE pair of commands so that a file such as this
+one:
+\code
+	begin taxa;
+		TITLE some_title;
+	...
+	end;
+	begin characters;
+		TITLE 'a char block title';
+		LINK Taxa = some_title ;
+	...
+\endcode
+is explicit about which set of taxa are used in the characters block.
+
+NCL is often having to infer which TAXA block to use.  In general, if it finds
+two possibilities (and there are not LINK commands to disambiguate which block
+to use) then NCL will raise an exception.
+
+Unfortunately:
+	-# files with explicit TITLE/LINK commands are rare,
+	-# many files are technically illegal because they have a TREES block but no
+		TAXA block.  Because the taxon names are embedded in the tree
+		description or the TRANSLATE command, it is feasible to infer an implied
+		TAXA block for such files.
+	-# Reading multiple files with the same NxsReader can mean that there are
+		multiple TAXA blocks in the memory accessible to  the NxsReader. So the
+		parser will generate a NxsException when it encounters a taxa-dependent
+block (despite the fact that each file would have only one TAXA block if
+		it were processed separately).
+
+Files without TAXA blocks (problem #2 above) can be dealt with by calling the
+NxsTreesBlock::SetAllowImplicitNames() method on the NxsTreesBlock that will
+parse the TREES block (or the block that is the template in the NxsReader's
+clone factory).
+Doing this can just exacerbate problem #3, because now a parse will generate
+even <b>more</b> Taxa blocks.
+
+You can call NxsReader::cullIdenticalTaxaBlocks(true) before parse so that NCL
+will store only one block when it finds duplicate TAXA blocks (implicit taxa
+blocks generated by parsing a TREES block will often be identical to a TAXA
+block mentioned in a separate file, so this function really can cut down on the
+number of NxsTaxaBlock instances that you have to deal with after the parse is
+done).
+Note that NEXUS has an ordering to the taxa (and characters and trees), so two
+TAXA blocks with the same labels, but in different orders are NOT considered to
+be the identical!
+
+With NCL 2.1.11 and above you can call NxsReader::DemoteBlocks before each file
+is read.
+This will set the "priority" of previously read TAXA blocks to a lower level.
+So if the next file read has a TAXA block and taxa-dependent block, but no LINK
+statements, NCL will not be confused.
+It will assume that the TAXA block in the file is to be used (you can still get
+errors if the file contains multiple TAXA blocks, but no LINK statements).
+
+
+Generally the most robust strategy, involves the following calls:
+\code
+	MultiFormatReader nexusReader(-1, NxsReader::WARNINGS_TO_STDERR);
+	...
+	NxsTreesBlock * treesB = nexusReader.GetTreesBlockTemplate();
+	treesB->SetAllowImplicitNames(true);
+	...
+	nexusReader.cullIdenticalTaxaBlocks(true);
+	...
+
+	char * filename = "test.nex";
+	nexusReader.DemoteBlocks();
+	nexusReader.ReadFilepath(argv[argn], MultiFormatReader::NEXUS_FORMAT);
+	...
+\endcode
+
+But it is important to recognize that after reading file(s) it is possible that
+you will have to deal with multiple NxsTaxaBlock instances that all contain the
+same taxa, but in a different order.
+Currently NCL does not support reordering of the references to taxa, so you will
+have to disentangle the data if you want to support resolving similar taxa
+blocks and their corresponding linked data.
+The taxa-dependent blocks can tell you what NxsTaxaBlock instance they used
+during the parse, so you can tell which blocks refer to the same taxa (see also
+PublicNexusReader::GetNumCharactersBlocks() and functions like it which take a
+NxsTaxaBlock pointer and return only  NxsCharactersBlocks that refer to that set
+of taxa).
+
+
+
+\section memoryManagement Managing Memory
+Almost all objects in NCL clean up all of the memory that they allocate, so do not present problems.
+
+The only exception to this are the NxsBlock instances that are handled by the NxsReader.
+By default the NxsReader will not delete any of the NxsBlocks that it handles.
+\n <b>You are responsible for deleting all of the NxsBlocks, that the NxsReader can return to you!</b>
+
+
+The only cases in which the NxsReader trigger deletion of NxsBlocks are:
+	-# If the client calls NxsReader::DeleteBlocksFromFactories(), then the blocks that were created using a NxsBlockFactory will be deleted.
+	-# If you have called NxsReader::cullIdenticalTaxaBlocks(true), then the NxsReader will delete a new Taxa block if it is identical to a previous NxsTaxaBlock
+	-# If there is an error from a NxsBlock from a factory during the parse (or the block is disabled), then the NxsReader will inform the factory through (NxsBlockFactory::BlockError() or NxsBlockFactory::BlockSkipped() methods).
+		In these cases the factory will delete the block, and the NxsReader will not store them.
+
+Note that in cases 2 and 3, the NxsReader will not store the block, so the memory management rules
+for blocks are actually easy to follow. Once again that rule is:
+\n <b>You are responsible for deleting all of the NxsBlocks, that the can NxsReader return to you!</b>
+
+Note that if you need to delete a block even if you are not interested in its content.
+Even if do not ask for the NxsAssumptionsBlock instances, the MultiFormatReader may still have created NxsBlock instances to store the content of blocks, so these NxsBlock instances must be deleted.
+
+NxsReader::DeleteBlocksFromFactories() is a convenient way to clean-up after a parse.
+If you want to save some of the blocks, you can "deregister" them from the NxsReader before the NxsReader::DeleteBlocksFromFactories() call.
+The NxsReader::RemoveBlockFromUsedBlockList method is the one to use to make the NxsReader forget about a block.
+
+If you know beforehand that you are not going to be interested in a particular public block, then you can configure the MultiFormatReader to skip blocks (see the documentation on the PublicNexusReader::PublicNexusReader constructor).
+
+The only caveat is that if you register a "singelton" block (using NxsReader::Add) and the block is used multiple times in the file, then NxsReader::GetUsedBlocksInOrder() method may return the same pointer multiple times.
+So make sure that you either do not use NxsReader::Add or you guard against double deletion of any blocks that are added in this mechanism.
+
+If you do use NxsReader::Add, then the common usage is to maintain a list of those blocks that you have added.  Then you can delete them, and call
+NxsReader::DeleteBlocksFromFactories() to delete all other blocks (without worrying about double-deletion problems).
+
+
+\section setsAssumptions NxsAssumptionsBlock reads several types of blocks
+Commands like CharSet frequently occur in ASSUMPTIONS blocks (rather than the SETS block).
+Codon-related commands are also found in ASSUMPTIONS blocks.
+
+To avoid code duplication and forcing the client code to specifically ask for all of the various flavors of meta-data blocks, NCL uses NxsAssumptionsBlocks to
+read SETS, ASSUMPTIONS, and CODONS blocks.
+
+You can use NxsAssumptionsBlock::GetIDOfBlockTypeIDFromParse to find out what the block in the file was called.
+But usually you want to deal with the commands in the same way, regardless of what block they occur in, so you rarely need this call.
+
+
+\section mixedDatatypes Dealing with Datatype=Mixed
+
+Combined data sets are most cleanly expressed as multiple separate blocks such that each block consists of data of a homogeneous type.
+Unfortunately, the NEXUS standard was silent on how to accommodate multiple blocks of the same type (The TITLE/LINK mechanism [see \ref taxaBlockScoping] was not introduced until several years after the standard, and some popular software will only accept a single character block).
+
+An unsatisfactory solution that has been supported for a long time is to augment the list of legal symbols in the CHARACTERS or DATA block.
+Doing this makes it possible to parse a mixed matrix, but the software cannot necessarily figure out the datatype for each character (eg. the common symbols for DNA are a subset of the amino acid codes, so you can't tell if a column of A's is alanine or adenine).
+
+MrBayes introduced the <tt>datatype=MIXED</tt> syntax to the Format command of the CHARACTERS block.
+This is more explicit than the older NEXUS style of simply augmenting the symbols list (without saying which datatype corresponds to which column).
+The syntax for this is:\n
+\code
+FORMAT Datatype=MIXED(RNA: 1-516, RNA: 517-1398, Protein: 1399-1692, Standard: 1693-1742)  Gap=-;
+\endcode
+
+
+\subsection enableparsemixed Enabling parsing of Mixed datatypes
+By default NCL will reject this mixed datatype syntax, but you can enable parsing of this syntax by calling NxsCharactersBlock::SetSupportMixedDatatype(true) on the NxsCharactersBlock and NxsDataBlocks (or the "templates" for these blocks) before the parse.
+
+NCL will also reject the (legal) NEXUS syntax:
+\code
+FORMAT Datatype=DNA symbols="01"  Gap=-;
+\endcode
+To enable augmenting the symbols list of for the sequence types, call
+NxsCharactersBlock::SetAllowAugmentingOfSequenceSymbols() with the argument true.
+This will allow the Characters block to accept the syntax, but the NxsDiscreteDatatypeMapper associated with the matrix will think of itself as a standard datatype.
+This reflects the uncertainty inherent in this ambiguous syntax.
+Whenever you find that
+NxsCharactersBlock::GetOriginalDataType() != NxsCharactersBlock::GetDataType()
+\n this means that NCL had to convert a datatype during the parse.
+
+If you also call NxsCharactersBlock::SetConvertAugmentedToMixed(true), the NCL will <b>attempt</b> to separate a sequence datatype with augmented symbols list into a mixed type that has the same sequence type but also has a set of characters that are datatype <tt>standard</tt>.
+Note that this will only work if the matrix is a mixture of sequence data and numeric symbols.
+
+If the conversion to mixed cannot be safely done, the matrix will be preserved, but it will be NxsCharactersBlock::standard type matrix.
+
+\subsection accessingMixed Accessing data from Mixed datatypes NxsCharactersBlock
+If you have enabled parsing of mixed datatypes, then you have to be prepared to
+deal with NxsCharactersBlock::GetDataType() returning NxsCharactersBlock::mixed.
+Internally the characters block stores each row of the matrix as a vector of
+integers (the type is NxsDiscreteStateCell which is usually an <tt>int</tt> see \ref improveperformance).
+Each column of the matrix is associated with a NxsDiscreteDatatypeMapper.
+There is one mapper for each type of data in a NxsCharactersBlock.
+When you have non-mixed there is only one mapper, but with mixed datatypes there will be multiple.
+
+You can get the NxsDiscreteDatatypeMapper for a character by calling
+NxsCharactersBlock::GetDatatypeMapperForChar().
+
+If want to process all of the columns that share a mapper as a group, then you
+can call NxsCharactersBlock::GetDatatypeMapForMixedType().
+This will return a std::map<DataTypesEnum, NxsUnsignedSet>.
+This map will be empty if the datatype is not mixed.
+For mixed datatypes, you can use the map to find the indices of the columns in that matrix that are of the same type (and should thus share the same GetDatatypeMapperForChar).
+
+
+If you have enable symbols list augmenting, then you should be prepared to deal
+with characters blocks that report NxsCharactersBlock::mixed from NxsCharactersBlock::GetDataType(), but report a molecular sequence type from NxsCharactersBlock::GetOriginalDataType().
+This is not too hard, but is tedious.
+By looking at the symbols list returned from the NxsDiscreteDatatypeMapper, you can figure out the order of symbols in the augmented type and you can interpret any cell of the matrix correctly.
+Note that this type of matrix can occur even if you call SetConvertAugmentedToMixed(true), because some matrices defy automatic conversion.
+In such cases, the safest course is usually to use code like this:
+\code
+	... (after the parsing).
+	NxsTaxaBlock * taxa = reader.GetTaxaBlock(0)
+	NxsCharactersBlock * charsBlock = reader.GetCharactersBlock(taxa, 0)
+	if (charsBlock->GetDataType() == NxsCharactersBlock::mixed)
+		{
+		}
+	else {
+		if (charsBlock->GetOriginalDataType() != charsBlock->GetDataType())
+			throw NxsException("Sorry the symbols list of a sequence datatype has been augmented with extra symbols, and now I cannot diagnose the datatype.  Please edit the file to separate the different types of data into separace CHARACTERS blocks or to use the:\n FORMAT DATATYPE = MIXED(...)\nsyntax.");
+		if (charsBlock->GetDataType() == NxsCharactersBlock::dna)
+			{
+			...code here to deal with DNA data...
+			}
+		else if (charsBlock->GetDataType() == NxsCharactersBlock::rna)
+			{
+			...code here to deal with RNA data...
+			}
+		else ...
+		}
+\endcode
+
+\section improveperformance Improving Performance
+To speed up parsing of CHARACTERS blocks (and reduce memory usage):\n
+If you compile NCL with the preprocessor flag NCL_SMALL_STATE_CELL, then the typdef NxsDiscreteStateCell will be a <tt>signed char</tt> instead of <tt>int</tt>.
+This can improve performance some (at the cost of making it possible to overflow the number state codes that can be handled).
+
+To speed up processing of TREES blocks see NxsTreesBlock::setValidationCallbacks().
+
+\section indexingObjects Indexing objects
+Like everything else in C/C++, NCL uses indexing that starts at 0.
+
+The NEXUS file format starts numbering at 1.
+NCL has the correct behavior as it parses a file, but if you query for an object by passing in the index of the object you should use 0-based numbering.
+If you query for an object with a string, and the string is a string representation of an integer, then the NEXUS (1-based rules) will be used.
+
+So, <tt>NxsTaxaBlock::GetTaxonLabel(0)</tt> will return the label for the first taxon in the matrix (the taxon that can also be referred to in a file by the string "1").
+
+NCL uses the (admittedly <em>ad hoc</em>) convention that functions that use the word Number refer to 1-based numbering, and those that use index refer to 0-based numbering scheme.
+
+
+
+<hr />
+Next see \ref FAQ for other common questions
+
+<hr />
+Brief Directory:\n
+	- \ref introduction
+	- \ref basicAPI
+	- \ref simpleextract
+	- \ref LessStrict
+	- \ref Gotchas
+	- \ref FAQ
+	.
+
+*/

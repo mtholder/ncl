@@ -1,0 +1,19 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Taxa;
+    DIMENSIONS NTax = 3;
+    TAXLABELS taxon_1 'taxon '' & 2' taxon_3;
+END;
+BEGIN TAXA;
+    TITLE Taxa2;
+    DIMENSIONS NTax = 3;
+    TAXLABELS t1 t2 t3;
+END;
+BEGIN TAXAASSOCIATION;
+    TITLE rename;
+    TAXA Taxa , Taxa2;
+    ASSOCIATES
+        taxon_1 / t1 ,
+        'taxon '' & 2' / t1 ,
+        taxon_3 / t3 ;
+END;
