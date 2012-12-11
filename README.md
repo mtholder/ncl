@@ -16,7 +16,8 @@ applications.
 As of March 09, 2012, NCL is available under a Simplified BSD license (see
 BSDLicense.txt) in addition to the GPL license.
 
-*ACKNOWLEDGEMENTS*
+ACKNOWLEDGEMENTS
+================
 
 Many of the files used for testing were provided by Arlin Stoltzfus (see
 http://www.molevol.org/camel/projects/nexus/ for more information), the Mesquite
