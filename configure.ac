@@ -39,10 +39,11 @@ CXXFLAGS="$ARG_CXX_FLAGS"
 AX_CXXFLAGS
 
 AC_MSG_CHECKING([whether C++ compiler works])
+AC_LANG(C++)
 AC_LANG_PUSH(C++)
-AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <vector>
-]], [[]]), [compiler_works='yes'], [compiler_works='no'])
+]], [[]])], [compiler_works='yes'], [compiler_works='no'])
 AC_MSG_RESULT([$compiler_works])
 AC_LANG_POP()
 if test x$compiler_works = xno
