@@ -50,7 +50,7 @@
 #include "ncl/nxsmultiformat.h"
 #include "ncl/nxsstring.h"
 
-const unsigned MAX_BUFFER_SIZE = 0x80000;
+const unsigned long MAX_BUFFER_SIZE = 0x80000;
 
 
 
@@ -107,14 +107,17 @@ class FileToCharBuffer
 {
 		char prevChar;
 		std::istream & inf;
-		unsigned remaining;
-		unsigned pos;
+		unsigned long remaining;
+		unsigned long pos;
 	public:
-		unsigned totalSize;
+		unsigned long totalSize;
 	protected:
-		unsigned lineNumber;
-		unsigned prevNewlinePos;
+		unsigned long lineNumber;
+		unsigned long prevNewlinePos;
 	public:
+		unsigned long inbuffer;
+		char * buffer;
+
 		/* reads at most MAX_BUFFER_SIZE characters from inf into the buffer that is
 		returned. The caller must delete the buffer.  On exit `len` will store the
 		length of the buffer.
@@ -126,7 +129,7 @@ class FileToCharBuffer
 		Returns false if no characters are read.
 		If true is returned then `maxLen` will indicate the number of characters read.
 		*/
-		bool refillBuffer(unsigned offset);
+		bool refillBuffer(unsigned long offset);
 		char current() const
 			{
 			return buffer[pos];
@@ -172,23 +175,21 @@ class FileToCharBuffer
 			{
 			delete [] buffer;
 			}
-		unsigned position() const
+		unsigned long position() const
 			{
 			return totalSize +  pos - remaining - inbuffer;
 			}
-		unsigned line() const
+		unsigned long line() const
 			{
 			return lineNumber;
 			}
-		unsigned column() const
+		unsigned long column() const
 			{
-			unsigned p = position();
+			unsigned long p = position();
 			if (p < prevNewlinePos)
 				return 0;
 			return p - prevNewlinePos;
 			}
-		char * buffer;
-		unsigned inbuffer;
 
 };
 
@@ -240,12 +241,13 @@ FileToCharBuffer::FileToCharBuffer(std::istream & instream)
 		return;
 		}
 	inf.seekg(s);
-	totalSize = static_cast<unsigned>(e - s);
+	totalSize = static_cast<unsigned long>(e - s);
 	inbuffer = std::min(MAX_BUFFER_SIZE, totalSize);
 	remaining = totalSize - inbuffer;
 	buffer = new char [inbuffer];
 	inf.read(buffer, inbuffer);
 	const char c = current();
+
 	if (c == 13)
 		{
 		++lineNumber;
@@ -259,7 +261,7 @@ FileToCharBuffer::FileToCharBuffer(std::istream & instream)
 		}
 	}
 
-bool FileToCharBuffer::refillBuffer(unsigned offset)
+bool FileToCharBuffer::refillBuffer(unsigned long offset)
 	{
 	if (remaining  == 0)
 		return false;
