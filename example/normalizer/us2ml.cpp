@@ -746,10 +746,17 @@ void writeCharacters(ostream & os, const NxsCharactersBlock *cb , const std::vec
 		}
 }
 
-std::string writeSimpleNode(ostream & os, const NxsSimpleNode &nd, const TaxaBlockPtrIndPair & taxa, unsigned nodeIndex, NexmlIDStrorer &memo, AttributeDataVec*oatts)
+std::string writeSimpleNode(ostream & os,
+							const NxsSimpleNode &nd,
+							const TaxaBlockPtrIndPair & taxa,
+							unsigned nodeIndex,
+							NexmlIDStrorer &memo,
+							AttributeDataVec*oatts,
+							const std::string & treeIdentifier)
 {
 	AttributeDataVec v;
-	std::string prefix("n");
+	std::string prefix = treeIdentifier;
+	prefix.append(1, 'n');
 	unsigned otuInd = nd.GetTaxonIndex();
 	std::string otuID;
 	std::string label;
@@ -764,12 +771,17 @@ std::string writeSimpleNode(ostream & os, const NxsSimpleNode &nd, const TaxaBlo
 	return identifier;
 }
 
-std::string writeSimpleEdge(ostream & os, const NxsSimpleNode *nd, std::map<const NxsSimpleNode *, std::string>  & ndToIdMap, bool edgesAsIntegers)
+std::string writeSimpleEdge(ostream & os,
+							const NxsSimpleNode *nd,
+							std::map<const NxsSimpleNode *, std::string>  & ndToIdMap,
+							bool edgesAsIntegers,
+							const std::string & treeIdentifier)
 {
 	const NxsSimpleEdge edge = nd->GetEdgeToParent();
 	bool defEdgeLen = edge.EdgeLenIsDefaultValue();
 	assert(edge.GetChild() == nd);
-	std::string eid(1, 'e');
+	std::string eid = treeIdentifier;
+	eid.append(1, 'e');
 	const std::string & nid = ndToIdMap[nd];
 	eid.append(nid);
 	NxsString lenstring;
@@ -824,12 +836,12 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 			string rv(ftd.IsRooted() ? "true" : "false");
 			rootAtts.push_back(AttributeData("root", rv));
 			const NxsSimpleNode * nd = *ndIt;
-			nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, &rootAtts);
+			nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, &rootAtts, identifier);
 			++ndIt;
 			for (; ndIt != preorder.end(); ++ndIt)
 				{
 				nd = *ndIt;
-				nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, NULL);
+				nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, NULL, identifier);
 				}
 			}
 		ndIt = preorder.begin();
@@ -858,7 +870,7 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 			for (; ndIt != preorder.end(); ++ndIt)
 				{
 				nd = *ndIt;
-				writeSimpleEdge(os, nd, nodeToIDMap, edgesAsIntegers);
+				writeSimpleEdge(os, nd, nodeToIDMap, edgesAsIntegers, identifier);
 				}
 			}
 		}
