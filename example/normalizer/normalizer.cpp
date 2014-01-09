@@ -238,7 +238,10 @@ void writeAsNexus(PublicNexusReader & nexusReader, ostream & os)
 void processContent(PublicNexusReader & nexusReader, ostream *os, ProcessActionsEnum currentAction)
 	{
 	BlockReaderList blocks = nexusReader.GetUsedBlocksInOrder();
-
+	if (blocks.size() == 0) {
+		cerr << "Error:\n No understandable content was found.\n";
+		exit(1);
+	}
 	if (currentAction == REPORT_BLOCKS)
 		reportNexusStats(nexusReader, os);
 	else if (OUTPUT_NORMALIZED_NEXUS == currentAction && os)
