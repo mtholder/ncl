@@ -8,5 +8,5 @@ set -x
 aclocal -I config || exit
 #libtoolize --copy --force || exit;
 autoheader || exit
-automake || exit
+automake --add-missing || exit
 autoconf
