@@ -47,12 +47,13 @@
 #include "ncl/nxsblock.h"
 #include "ncl/nxspublicblocks.h"
 #include "ncl/nxsmultiformat.h"
+#include "normalizer.h"
 #include <cassert>
 using namespace std;
 //#include "ncl/nxscxxdiscretematrix.h"
 
 #if defined(TO_NEXML_CONVERTER) && TO_NEXML_CONVERTER
-	void	writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag);
+	void	writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConventions & guidTag);
 #endif
 
 bool gQuietMode = false;
@@ -71,7 +72,7 @@ std::ostream * gCommonOstream = 0L;
 	ExportFormatEnum gExportFormat = NEXML_EXPORT_FORMAT;
 	std::string gExportPrefix("out");
 	ExportFormatEnum readExportFormatName(const std::string &);
-	void exportData(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, long interleavLen, std::string prefix, std::ostream *, const std::string & guidTag);
+	void exportData(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, long interleavLen, std::string prefix, std::ostream *, TranslatingConventions &);
 
 
 	ExportFormatEnum readExportFormatName(const std::string & s)
@@ -103,7 +104,6 @@ std::ostream * gCommonOstream = 0L;
 
 bool gAltNexus = false;
 
-void writeAsNexus(PublicNexusReader & nexusReader, ostream & os);
 
 long gStrictLevel = 2;
 bool gUnderscoresToSpaces = false;
@@ -113,7 +113,8 @@ long gInterleaveLen = -1;
 bool blocksReadInValidation = false;
 bool gSuppressingNameTranslationFile = false;
 bool gAllowNumericInterpretationOfTaxLabels = true;
-std::string gGUIDTag;
+TranslatingConventions gTranslatingConventions;
+
 enum ProcessActionsEnum
 	{
 	REPORT_BLOCKS,
@@ -252,7 +253,7 @@ void processContent(PublicNexusReader & nexusReader, ostream *os, ProcessActions
 	else if (OUTPUT_NEXML == currentAction && os)
 		{
 #		if defined(TO_NEXML_CONVERTER) && TO_NEXML_CONVERTER
-			writeAsNexml(nexusReader, *os, gGUIDTag);
+			writeAsNexml(nexusReader, *os, gTranslatingConventions);
 #		else
 			cerr << "Error nexml conversion not implemented\n";
 			exit(1);
@@ -272,72 +273,72 @@ void processContent(PublicNexusReader & nexusReader, ostream *os, ProcessActions
 			std::string fullExportPrefix;
 			MultiFormatReader::DataFormatType f = MultiFormatReader::NEXUS_FORMAT;
 			if (gExportFormat == NEXUS_EXPORT_FORMAT)
-				exportData(nexusReader, MultiFormatReader::NEXUS_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, MultiFormatReader::NEXUS_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gTranslatingConventions);
 			else if (gExportFormat == NEXML_EXPORT_FORMAT)
-				exportData(nexusReader, MultiFormatReader::NEXML_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, MultiFormatReader::NEXML_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gTranslatingConventions);
 			else if (gExportFormat == PHYLIP_EXPORT_FORMAT) {
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".dna");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::PHYLIP_DNA_FORMAT : MultiFormatReader::INTERLEAVED_PHYLIP_DNA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".rna");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::PHYLIP_RNA_FORMAT : MultiFormatReader::INTERLEAVED_PHYLIP_RNA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".aa");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::PHYLIP_AA_FORMAT : MultiFormatReader::INTERLEAVED_PHYLIP_AA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				//fullExportPrefix = gExportPrefix;
 				//fullExportPrefix.append(".discrete");
 				//f = (gInterleaveLen < 0 ? MultiFormatReader::PHYLIP_DISC_FORMAT : MultiFormatReader::INTERLEAVED_PHYLIP_DISC_FORMAT);
-				//exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				//exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
-				exportData(nexusReader, MultiFormatReader::PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, MultiFormatReader::PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 			}
 			else if (gExportFormat == RELAXED_PHYLIP_EXPORT_FORMAT) {
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".dna");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::RELAXED_PHYLIP_DNA_FORMAT : MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_DNA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".rna");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::RELAXED_PHYLIP_RNA_FORMAT : MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_RNA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".aa");
 				f = (gInterleaveLen < 0 ? MultiFormatReader::RELAXED_PHYLIP_AA_FORMAT : MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_AA_FORMAT);
-				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				//fullExportPrefix = gExportPrefix;
 				//fullExportPrefix.append(".discrete");
 				//f = (gInterleaveLen < 0 ? MultiFormatReader::RELAXED_PHYLIP_DISC_FORMAT : MultiFormatReader::INTERLEAVED_RELAXED_PHYLIP_DISC_FORMAT);
-				//exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				//exportData(nexusReader, f, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
-				exportData(nexusReader, MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 			}
 			else if (gExportFormat == FASTA_EXPORT_FORMAT) {
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".dna");
-				exportData(nexusReader,  MultiFormatReader::FASTA_DNA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader,  MultiFormatReader::FASTA_DNA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".rna");
-				exportData(nexusReader,  MultiFormatReader::FASTA_RNA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader,  MultiFormatReader::FASTA_RNA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".aa");
-				exportData(nexusReader,  MultiFormatReader::FASTA_AA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader,  MultiFormatReader::FASTA_AA_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 
 				fullExportPrefix = gExportPrefix;
-				exportData(nexusReader, MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gGUIDTag);
+				exportData(nexusReader, MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT, gInterleaveLen, fullExportPrefix, gCommonOstream, gTranslatingConventions);
 			}
 			else {
 				cerr << "Unsupported export format requested.\n";
@@ -558,17 +559,25 @@ void printHelp(ostream & out)
 		{
 		out << "            "<< *n << "\n";
 		}
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -g     Global ids (otu1, otu2 ...) in NeXML rather than IDs\n";
+	out << "             which are composed by appending contained element to\n";
+	out << "             their parents. Instead of g0n0 for the first tree in the first TREES block\n";
+	out << "             and g1n0 for the first tree in the second trees block, with the\n";
+	out << "             -g option these would be tree0, tree1... (sequentially numbered regardless\n";
+	out << "             of the block.";
+#endif
 	out << "    -h help. on the command line shows this help message\n\n";
 #if !defined(JUST_VALIDATE_NEXUS) && !defined(JUST_REPORT_NEXUS) && !defined(TO_NEXML_CONVERTER)
 	out << "    -i<number> specifies the length of the interleaved pages to create\n";
 #endif
 #if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -j     Suppress the creation of a NameTranslationFile\n";
+#endif
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
 	out << "    -o<fn> specifies the output prefix.  An appropriate suffix and extension are added\n";
 #endif
 	out << "    -q quiet. suppress NCL status messages while reading files\n\n";
-#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
-	out << "    -j     Suppress the creation of a NameTranslationFile\n";
-#endif
 	out << "    -l<path> reads a file and treats each line of the file as a path to NEXUS file\n\n";
 	out << "    -s<non-negative integer> controls the NEXUS strictness level.\n";
 	out << "        the default level is equivalent to -s2 invoking the program with \n";
@@ -686,6 +695,9 @@ int do_main(int argc, char *argv[])
 				return 2;
 				}
 		}
+		else if (filepath[1] == 'g') {
+			gTranslatingConventions.globalIncrementingIDs = true;
+		}
 		else if (filepath[1] == 'o') {
 			if (slen > 2)
 				{
@@ -787,10 +799,10 @@ int do_main(int argc, char *argv[])
 			if (slen > 2)
 				{
 				std::string guidTag(filepath + 2, slen - 2);
-				gGUIDTag = guidTag;
-				if (gGUIDTag.empty())
+				gTranslatingConventions.idPrefix = guidTag;
+				if (gTranslatingConventions.idPrefix.empty())
 					{
-					cerr << "Expecting an GUID prefix after -t\n" << endl;
+					cerr << "Expecting an ID prefix after -t\n" << endl;
 					printHelp(cerr);
 					return 2;
 					}

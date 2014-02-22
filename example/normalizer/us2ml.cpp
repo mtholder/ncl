@@ -22,6 +22,7 @@
 #include "ncl/ncl.h"
 #include "ncl/nxsblock.h"
 #include "ncl/nxspublicblocks.h"
+#include "normalizer.h"
 #if defined HAVE_CONFIG
 #	include "config.h"
 #endif
@@ -30,14 +31,25 @@
 #endif
 using namespace std;
 
-void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag);
+void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConventions & );
 
 
 class NexmlIDStrorer;
 
 typedef std::pair<const NxsDiscreteDatatypeMapper *, std::vector<std::string> > MapperStateLabelVec;
 template <typename T>
-std::string getOrGenId(std::pair<T, unsigned> & p, std::map<T, std::string> & toId, std::map<std::string, T> & toObj, const std::string & pref);
+std::string getOrGenId(std::pair<T, unsigned> & p,
+					   std::map<T, std::string> & toId,
+					   std::map<std::string, T> & toObj,
+					   const std::string & pref,
+					   unsigned offset = 0);
+template <typename T>
+std::string getOrGenerateGlobalID(T container, 
+								  std::map< std::pair<T, unsigned>, std::string> & toId,
+								  std::map<std::string, std::pair<T, unsigned> > & toObj, 
+								  const std::string & pref, 
+								  unsigned indInContainer,
+								  unsigned & currIndexForType);
 
 typedef std::pair<const NxsTaxaBlock *, unsigned> TaxaBlockPtrIndPair;
 typedef std::pair<const NxsCharactersBlock *, unsigned> CharBlockPtrIndPair;
@@ -66,7 +78,11 @@ std::string generateID(std::string prefix, unsigned n)
 
 
 template <typename T>
-std::string getOrGenId(std::pair<T, unsigned> & p, std::map<T, std::string> & toId, std::map<std::string, T> & toObj, const std::string & pref)
+std::string getOrGenId(std::pair<T, unsigned> & p,
+					   std::map<T, std::string> & toId,
+					   std::map<std::string, T> & toObj,
+					   const std::string & pref,
+					   unsigned offset)
 {
 	typedef typename std::map<T, std::string>::const_iterator ToIDIterator;
 	T & t = p.first;
@@ -80,6 +96,7 @@ std::string getOrGenId(std::pair<T, unsigned> & p, std::map<T, std::string> & to
 			exit(3);
 			}
 		std::string identifier;
+		index += offset;
 		do
 			{
 			identifier = generateID(pref, index++);
@@ -92,50 +109,120 @@ std::string getOrGenId(std::pair<T, unsigned> & p, std::map<T, std::string> & to
 	return f->second;
 }
 
+template <typename T>
+std::string getOrGenerateGlobalID(T container, 
+								  std::map< std::pair<T, unsigned>, std::string> & toId,
+								  std::map<std::string, std::pair<T, unsigned> > & toObj, 
+								  const std::string & pref, 
+								  unsigned indInContainer,
+								  unsigned & currIndexForType) {
+	typedef typename std::map< std::pair<T, unsigned>, std::string>::const_iterator ToIDIterator;
+	std::pair<T, unsigned> theKey(container, indInContainer);
+	ToIDIterator f = toId.find(theKey);
+	if (f == toId.end())
+		{
+		std::string identifier;
+		do
+			{
+			identifier = generateID(pref, currIndexForType++);
+			}
+		while (toObj.find(identifier) != toObj.end());
+		toId[theKey] = identifier;
+		toObj[identifier] = theKey;
+		return identifier;
+		}
+	return f->second;
+}
 
 class NexmlIDStrorer
 	{
-	public:
-		NexmlIDStrorer(const std::string & gpref): prefix(gpref) {}
+	std::string otusPrefix;
+	std::string charsPrefix;
+	std::string treesPrefix;
+	std::string otuPrefix;
+	std::string charPrefix;
+	std::string statePrefix;
+	std::string statesPrefix;
+	std::string stateSetPrefix;
+	std::string treePrefix;
+	std::string nodePrefix;
+	std::string edgePrefix;
+	std::string rowPrefix;
 
+	public:
+		NexmlIDStrorer(TranslatingConventions & transConv)
+			:translationCfg(transConv),
+			prefix(transConv.idPrefix) {
+			this->otusPrefix = this->prefix + (transConv.globalIncrementingIDs ? "otus" : "t");
+			this->charsPrefix = this->prefix + (transConv.globalIncrementingIDs ? "chars" : "c");
+			this->treesPrefix = this->prefix + (transConv.globalIncrementingIDs ? "trees" : "g");
+			this->otuPrefix = this->prefix + "otu";
+			this->charPrefix = this->prefix + "char";
+			this->statePrefix = this->prefix + "state";
+			this->statesPrefix = this->prefix + "states";
+			this->stateSetPrefix = this->prefix + "st";
+			this->treePrefix = this->prefix + "tree";
+			this->nodePrefix = this->prefix + "node";
+			this->edgePrefix = this->prefix + "edge";
+			this->rowPrefix = this->prefix + "row";
+		}
+		std::string getNodeId(const NxsSimpleNode *nd,
+									const std::string & treeIdentifier,
+									unsigned nodeIndex);
+		std::string getEdgeId(const NxsSimpleEdge *edge,
+									const NxsSimpleNode *nd,
+									const std::string & nid,
+									const std::string & treeIdentifier);
 		std::string getID(TaxaBlockPtrIndPair taxa)
 			{
-			const std::string pref = this->prefix + "t";
-			return getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, pref);
+			return getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, otusPrefix, translationCfg.currentOTUsIndex);
 			}
 		std::string getID(CharBlockPtrIndPair chars)
 			{
-			const std::string pref = this->prefix + "c";
-			return getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDChar, idToCharsBChar, pref);
+			return getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDChar, idToCharsBChar, charsPrefix, translationCfg.currentCharsIndex);
 			}
 		std::string getID(TreesBlockPtrIndPair trees)
 			{
-			const std::string pref = this->prefix + "g";
-			return getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, pref);
+			return getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, treesPrefix, translationCfg.currentTreesIndex);
 			}
 		std::string getID(TaxaBlockPtrIndPair taxa, unsigned taxonInd)
 			{
-			const std::string pref = this->prefix + "t";
-			std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, pref);
+			if (translationCfg.globalIncrementingIDs)
+				{
+				return getOrGenerateGlobalID(taxa.first, taxonToID, idToTaxon, otuPrefix, taxonInd, translationCfg.currentOTUIndex);
+				}
+			std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, otusPrefix);
 			p.append(1, 'n');
 			return generateID(p, taxonInd);
 			}
 		std::string getCharID(CharBlockPtrIndPair chars, unsigned charInd)
 			{
+			// if (false && translationCfg.globalIncrementingIDs)
+			// 	{
+			// 	return getOrGenerateGlobalID(chars, charsBToIDChar, idToCharsBChar, charPrefix, charInd, translationCfg.currentCharIndex);
+			// 	}
 			const std::string pref = this->prefix + "c";
 			std::string p =  getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDChar, idToCharsBChar, pref);
 			p.append(1, 'n');
 			return generateID(p, charInd);
 			}
-		std::string getID(CharBlockPtrIndPair chars, unsigned charInd)
+		std::string getID(CharBlockPtrIndPair chars, unsigned rowInd)
 			{
+			// if (false && translationCfg.globalIncrementingIDs)
+			// 	{
+			// 	return getOrGenerateGlobalID(chars, charsBToIDChar, idToCharsBChar, rowPrefix, rowInd, translationCfg.currentRowIndex);
+			// 	}
 			const std::string pref = this->prefix + "r";
 			std::string p =  getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDRow, idToCharsBRow, pref);
 			p.append(1, 'n');
-			return generateID(p, charInd);
+			return generateID(p, rowInd);
 			}
 		std::string getID(TreesBlockPtrIndPair trees, unsigned treeInd)
 			{
+			if (translationCfg.globalIncrementingIDs)
+				{
+				return getOrGenerateGlobalID(trees.first, treeToID, idToTree, treePrefix, treeInd, translationCfg.currentTreeIndex);
+				}
 			const std::string pref = this->prefix + "g";
 			std::string p =  getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, pref);
 			p.append(1, 'n');
@@ -143,6 +230,10 @@ class NexmlIDStrorer
 			}
 		std::string getID(MapperStateLabelVecIndPair m, unsigned sIndex)
 			{
+			// if (false && translationCfg.globalIncrementingIDs)
+			// 	{
+			// 	return getOrGenerateGlobalID(m, mapperToID, idToMapper, statesPrefix, sIndex, translationCfg.currentStateSetIndex);
+			// 	}
 			const std::string pref = this->prefix + "s";
 			std::string p =  getOrGenId<MapperStateLabelVec>(m, mapperToID, idToMapper, pref);
 			p.append(1, 'n');
@@ -151,6 +242,19 @@ class NexmlIDStrorer
 
 
 	protected:
+		typedef std::pair<const NxsTaxaBlock *, unsigned> TaxonAddress;
+		typedef std::pair<const NxsTreesBlock *, unsigned> TreeAddress;
+		typedef std::pair<const NxsSimpleNode *, unsigned> NodeAddress;
+		typedef std::pair<const NxsSimpleEdge *, unsigned> EdgeAddress;
+		std::map<TaxonAddress, std::string> taxonToID;
+		std::map<TreeAddress, std::string> treeToID;
+		std::map<NodeAddress, std::string> nodeToID;
+		std::map<EdgeAddress, std::string> edgeToID;
+		std::map<std::string, TaxonAddress> idToTaxon;
+		std::map<std::string, TreeAddress> idToTree;
+		std::map<std::string, NodeAddress> idToNode;
+		std::map<std::string, EdgeAddress> idToEdge;
+
 		std::map<const NxsTaxaBlock *, std::string> taxaBToID;
 		std::map<std::string, const NxsTaxaBlock *> idToTaxaB;
 		std::map<const NxsCharactersBlock *, std::string> charsBToIDChar;
@@ -161,12 +265,9 @@ class NexmlIDStrorer
 		std::map<std::string, const NxsTreesBlock *> idToTreesB;
 		std::map<MapperStateLabelVec, std::string> mapperToID;
 		std::map<std::string, MapperStateLabelVec> idToMapper;
+		TranslatingConventions & translationCfg;
 		const std::string prefix;
 	};
-
-
-
-
 
 inline void writeAttribute(ostream & out, const AttributeData & aIt)
 	{
@@ -324,12 +425,12 @@ class CharactersElement: public OTUSLinkedElement
 };
 
 
-void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag)
+void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConventions & transConv)
 {
 	os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     os << "<nex:nexml xmlns:nex=\"http://www.nexml.org/2009\" xmlns=\"http://www.nexml.org/2009\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:prism=\"http://prismstandard.org/namespaces/1.2/basic/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" xmlns:tb=\"http://purl.org/phylo/treebase/2.0/terms#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" about=\"#S100\" generator=\"opentree.2nexml\" version=\"0.9\" >\n";
     const unsigned nTaxaBlocks = nexusReader.GetNumTaxaBlocks();
-	NexmlIDStrorer memo(guidTag);
+	NexmlIDStrorer memo(transConv);
 	unsigned nCharBlocksRead = 0;
 	unsigned nTreeBlocksRead = 0;
 
@@ -748,6 +849,17 @@ void writeCharacters(ostream & os, const NxsCharactersBlock *cb , const std::vec
 		}
 }
 
+std::string NexmlIDStrorer::getNodeId(const NxsSimpleNode *nd,
+									  const std::string & treeIdentifier,
+									  unsigned nodeIndex) {
+	if (this->translationCfg.globalIncrementingIDs) {
+		return getOrGenerateGlobalID(nd, nodeToID, idToNode, nodePrefix, 0, translationCfg.currentNodeIndex);
+	}
+	std::string prefix = treeIdentifier;
+	prefix.append(1, 'n');
+	std::string identifier = generateID(prefix, nodeIndex);
+	return identifier;
+}
 std::string writeSimpleNode(ostream & os,
 							const NxsSimpleNode &nd,
 							const TaxaBlockPtrIndPair & taxa,
@@ -757,12 +869,9 @@ std::string writeSimpleNode(ostream & os,
 							const std::string & treeIdentifier)
 {
 	AttributeDataVec v;
-	std::string prefix = treeIdentifier;
-	prefix.append(1, 'n');
-	unsigned otuInd = nd.GetTaxonIndex();
-	std::string otuID;
 	std::string label;
-	std::string identifier = generateID(prefix, nodeIndex);
+	const std::string identifier = memo.getNodeId(&nd, treeIdentifier, nodeIndex);
+	unsigned otuInd = nd.GetTaxonIndex();
 	if (otuInd != UINT_MAX)
 		v.push_back(AttributeData("otu", memo.getID(taxa, otuInd)));
 	else
@@ -773,19 +882,32 @@ std::string writeSimpleNode(ostream & os,
 	return identifier;
 }
 
+std::string NexmlIDStrorer::getEdgeId(const NxsSimpleEdge *edge,
+									  const NxsSimpleNode *nd,
+									  const std::string  & nid,
+									  const std::string & treeIdentifier) {
+	if (this->translationCfg.globalIncrementingIDs) {
+		return getOrGenerateGlobalID(edge, edgeToID, idToEdge, edgePrefix, 0, translationCfg.currentEdgeIndex);
+	}
+	std::string eid = treeIdentifier;
+	eid.append(1, 'e');
+	eid.append(nid);
+	return eid;
+}
+
 std::string writeSimpleEdge(ostream & os,
 							const NxsSimpleNode *nd,
 							std::map<const NxsSimpleNode *, std::string>  & ndToIdMap,
+							NexmlIDStrorer &memo,
 							bool edgesAsIntegers,
 							const std::string & treeIdentifier)
 {
-	const NxsSimpleEdge edge = nd->GetEdgeToParent();
+	const NxsSimpleEdge & edge = nd->GetEdgeToParentRef();
 	bool defEdgeLen = edge.EdgeLenIsDefaultValue();
 	assert(edge.GetChild() == nd);
-	std::string eid = treeIdentifier;
-	eid.append(1, 'e');
 	const std::string & nid = ndToIdMap[nd];
-	eid.append(nid);
+	std::string eid = memo.getEdgeId(&edge, nd, nid, treeIdentifier);
+	
 	NxsString lenstring;
 	AttributeDataVec v;
 	if (edgesAsIntegers)
@@ -872,7 +994,7 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 			for (; ndIt != preorder.end(); ++ndIt)
 				{
 				nd = *ndIt;
-				writeSimpleEdge(os, nd, nodeToIDMap, edgesAsIntegers, identifier);
+				writeSimpleEdge(os, nd, nodeToIDMap, memo, edgesAsIntegers, identifier);
 				}
 			}
 		}
