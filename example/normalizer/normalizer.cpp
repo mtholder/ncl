@@ -532,30 +532,21 @@ void printHelp(ostream & out)
 # 	endif
 	out << "\nThe most common usage is simply:\n    " << gExeName << " <path to NEXUS file>\n";
 	out << "\nCommand-line flags:\n\n";
-	out << "    -h on the command line shows this help message\n\n";
-	out << "    -q suppress NCL status messages while reading files\n\n";
-	out << "    -l<path> reads a file and treats each line of the file as a path to NEXUS file\n\n";
-	out << "    -a output AltNexus (no translation table in trees)\n\n";
-	out << "    -x do NOT validate internal labels in trees as taxa labels\n\n";
-	out << "    -X do NOT treat numbers in trees as taxon numbers, treat them as arbitrary\n        labels (should not be used with NEXUS files).\n\n";
-	out << "    -s<non-negative integer> controls the NEXUS strictness level.\n";
-	out << "        the default level is equivalent to -s2 invoking the program with \n";
-	out << "        -s3 or a higher number will convert some warnings into fatal errors.\n";
-	out << "        Running with -s1 will cause the parser to accept dangerous constructs,\n";
-	out << "        and running with -s0 will cause the parser make every attempt to finish\n";
-	out << "        parsing the file (warning about very serious errors).\n\n";
-	out << "        Note that when -s0 strictness level is used, and the parser fails to\n";
-	out << "        finish, it will often be the result of an earlier error than the \n";
-	out << "        error that is reported in the last message.\n";
-#	if defined(JUST_VALIDATE_NEXUS) && JUST_VALIDATE_NEXUS
-		//pass
-#	elif defined(JUST_REPORT_NEXUS) && JUST_REPORT_NEXUS
-		//pass
-#	elif defined(TO_NEXML_CONVERTER) && TO_NEXML_CONVERTER
-		//pass
-#	else
-		out << "    -i<number> specifies the length of the interleaved pages to create\n";
-#	endif
+#if !defined(JUST_VALIDATE_NEXUS) && !defined(JUST_REPORT_NEXUS) && !defined(TO_NEXML_CONVERTER)
+	out << "    -a AltNexus output (no translation table in trees)\n\n";
+#endif
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -d<fn> specifies the single output destination. Or you can use -d- to indicate that\n";
+	out << "             output should be directed to standard output.Warning use of this option may result\n";
+	out << "             in an invalid output due to concatenation of separate \"blocks\" of information\n";
+	out << "             into a single file!  \n";
+	out << "    -e<format> specifies the output file format expected:\n";
+	out << "            -enexus  \"normalized\" NEXUS output\n";
+	out << "            -efasta  Character data in fasta (could result in multiple output files)\n";
+	out << "            -ephylip  Trees and character data in phylip (could result in multiple output files)\n";
+	out << "            -erelaxedphylip  Trees and character data in relaxed phylip (could result in multiple output files)\n";
+	out << "            -enexml  nexml output (this is also the default)\n";
+#endif
 	out << "    -f<format> specifies the input file format expected:\n";
 	out << "            -fnexus     NEXUS (this is also the default)\n";
 	out << "            -faafasta   Amino acid data in fasta\n";
@@ -567,32 +558,45 @@ void printHelp(ostream & out)
 		{
 		out << "            "<< *n << "\n";
 		}
-#	if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
-		out << "    -e<format> specifies the output file format expected:\n";
-		out << "            -enexus  \"normalized\" NEXUS output\n";
-		out << "            -efasta  Character data in fasta (could result in multiple output files)\n";
-		out << "            -ephylip  Trees and character data in phylip (could result in multiple output files)\n";
-		out << "            -erelaxedphylip  Trees and character data in relaxed phylip (could result in multiple output files)\n";
-		out << "            -enexml  nexml output (this is also the default)\n";
-		out << "    -o<fn> specifies the output prefix.  An appropriate suffix and extension are added\n";
-		out << "    -d<fn> specifies the single output destination. Or you can use -d- to indicate that\n";
-		out << "             output should be directed to standard output.Warning use of this option may result\n";
-		out << "             in an invalid output due to concatenation of separate \"blocks\" of information\n";
-		out << "             into a single file!  \n";
-		out << "    -t<tag>     tag used as a prefix for nexmlids.\n";
-		out << "    -u     converts underscores to spaces in formats other than NEXUS.\n";
-		out << "    -y<filename> translate to \"safe\" taxon names and store the new names as a NEXUS.\n";
-		out << "             file called <filename> with a TaxaAssociation block. The first taxa block\n";
-		out << "             in the association block will hold the original names, and the second will\n";
-		out << "             hold the \"safe\" names\n";
-		out << "    -Y<filename> behaves like -y, except with -Y a translation file will be produced even";
-		out << "             if the original names were already \"safe\"\n";
-		out << "    -z<filename> use the NEXUS-formatted file called <filename> with a TaxaAssociation block\n";
-		out << "             to restore original names.  Assumes that the first taxa block in the TaxaAssociation\n";
-		out << "             block holds the original name and the second is the current name. This function\n";
-		out << "             is useful for \"undoing\" the effects of the -y option.\n";
-		out << "    -j     Suppress the creation of a NameTranslationFile\n";
-#	endif
+	out << "    -h help. on the command line shows this help message\n\n";
+#if !defined(JUST_VALIDATE_NEXUS) && !defined(JUST_REPORT_NEXUS) && !defined(TO_NEXML_CONVERTER)
+	out << "    -i<number> specifies the length of the interleaved pages to create\n";
+#endif
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -o<fn> specifies the output prefix.  An appropriate suffix and extension are added\n";
+#endif
+	out << "    -q quiet. suppress NCL status messages while reading files\n\n";
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -j     Suppress the creation of a NameTranslationFile\n";
+#endif
+	out << "    -l<path> reads a file and treats each line of the file as a path to NEXUS file\n\n";
+	out << "    -s<non-negative integer> controls the NEXUS strictness level.\n";
+	out << "        the default level is equivalent to -s2 invoking the program with \n";
+	out << "        -s3 or a higher number will convert some warnings into fatal errors.\n";
+	out << "        Running with -s1 will cause the parser to accept dangerous constructs,\n";
+	out << "        and running with -s0 will cause the parser make every attempt to finish\n";
+	out << "        parsing the file (warning about very serious errors).\n\n";
+	out << "        Note that when -s0 strictness level is used, and the parser fails to\n";
+	out << "        finish, it will often be the result of an earlier error than the \n";
+	out << "        error that is reported in the last message.\n";
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -t<tag>     tag used as a prefix for nexmlids.\n";
+	out << "    -u     converts underscores to spaces in formats other than NEXUS.\n";
+#endif
+	out << "    -x do NOT validate internal labels in trees as taxa labels\n\n";
+	out << "    -X do NOT treat numbers in trees as taxon numbers, treat them as arbitrary\n        labels (should not be used with NEXUS files).\n\n";
+#if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
+	out << "    -y<filename> translate to \"safe\" taxon names and store the new names as a NEXUS.\n";
+	out << "             file called <filename> with a TaxaAssociation block. The first taxa block\n";
+	out << "             in the association block will hold the original names, and the second will\n";
+	out << "             hold the \"safe\" names\n";
+	out << "    -Y<filename> behaves like -y, except with -Y a translation file will be produced even";
+	out << "             if the original names were already \"safe\"\n";
+	out << "    -z<filename> use the NEXUS-formatted file called <filename> with a TaxaAssociation block\n";
+	out << "             to restore original names.  Assumes that the first taxa block in the TaxaAssociation\n";
+	out << "             block holds the original name and the second is the current name. This function\n";
+	out << "             is useful for \"undoing\" the effects of the -y option.\n";
+#endif
 	}
 
 int do_main(int argc, char *argv[])
