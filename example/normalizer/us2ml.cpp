@@ -30,7 +30,7 @@
 #endif
 using namespace std;
 
-void writeAsNexml(PublicNexusReader & nexusReader, ostream & os);
+void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag);
 
 
 class NexmlIDStrorer;
@@ -44,7 +44,7 @@ typedef std::pair<const NxsCharactersBlock *, unsigned> CharBlockPtrIndPair;
 typedef std::pair<const NxsTreesBlock *, unsigned> TreesBlockPtrIndPair;
 typedef std::pair<MapperStateLabelVec, unsigned> MapperStateLabelVecIndPair;
 
-void writeOTUS(ostream & os, const NxsTaxaBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned );
+void writeOTUS(ostream & os, const NxsTaxaBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
 void writeCharacters(ostream & os, const NxsCharactersBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
 void writeTrees(ostream & os, const NxsTreesBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
 
@@ -96,53 +96,54 @@ std::string getOrGenId(std::pair<T, unsigned> & p, std::map<T, std::string> & to
 class NexmlIDStrorer
 	{
 	public:
+		NexmlIDStrorer(const std::string & gpref): prefix(gpref) {}
 
 		std::string getID(TaxaBlockPtrIndPair taxa)
 			{
-			const std::string pref("t");
+			const std::string pref = this->prefix + "t";
 			return getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, pref);
 			}
 		std::string getID(CharBlockPtrIndPair chars)
 			{
-			const std::string pref("c");
+			const std::string pref = this->prefix + "c";
 			return getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDChar, idToCharsBChar, pref);
 			}
 		std::string getID(TreesBlockPtrIndPair trees)
 			{
-			const std::string pref("g");
+			const std::string pref = this->prefix + "g";
 			return getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, pref);
 			}
 		std::string getID(TaxaBlockPtrIndPair taxa, unsigned taxonInd)
 			{
-			const std::string pref("t");
+			const std::string pref = this->prefix + "t";
 			std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, pref);
 			p.append(1, 'n');
 			return generateID(p, taxonInd);
 			}
 		std::string getCharID(CharBlockPtrIndPair chars, unsigned charInd)
 			{
-			const std::string pref("c");
+			const std::string pref = this->prefix + "c";
 			std::string p =  getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDChar, idToCharsBChar, pref);
 			p.append(1, 'n');
 			return generateID(p, charInd);
 			}
 		std::string getID(CharBlockPtrIndPair chars, unsigned charInd)
 			{
-			const std::string pref("r");
+			const std::string pref = this->prefix + "r";
 			std::string p =  getOrGenId<const NxsCharactersBlock *>(chars, charsBToIDRow, idToCharsBRow, pref);
 			p.append(1, 'n');
 			return generateID(p, charInd);
 			}
 		std::string getID(TreesBlockPtrIndPair trees, unsigned treeInd)
 			{
-			const std::string pref("g");
+			const std::string pref = this->prefix + "g";
 			std::string p =  getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, pref);
 			p.append(1, 'n');
 			return generateID(p, treeInd);
 			}
 		std::string getID(MapperStateLabelVecIndPair m, unsigned sIndex)
 			{
-			const std::string pref("s");
+			const std::string pref = this->prefix + "s";
 			std::string p =  getOrGenId<MapperStateLabelVec>(m, mapperToID, idToMapper, pref);
 			p.append(1, 'n');
 			return generateID(p, sIndex);
@@ -160,6 +161,7 @@ class NexmlIDStrorer
 		std::map<std::string, const NxsTreesBlock *> idToTreesB;
 		std::map<MapperStateLabelVec, std::string> mapperToID;
 		std::map<std::string, MapperStateLabelVec> idToMapper;
+		const std::string prefix;
 	};
 
 
@@ -322,12 +324,12 @@ class CharactersElement: public OTUSLinkedElement
 };
 
 
-void writeAsNexml(PublicNexusReader & nexusReader, ostream & os)
+void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag)
 {
 	os << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     os << "<nex:nexml xmlns:nex=\"http://www.nexml.org/2009\" xmlns=\"http://www.nexml.org/2009\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:prism=\"http://prismstandard.org/namespaces/1.2/basic/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" xmlns:tb=\"http://purl.org/phylo/treebase/2.0/terms#\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" about=\"#S100\" generator=\"opentree.2nexml\" version=\"0.9\" >\n";
     const unsigned nTaxaBlocks = nexusReader.GetNumTaxaBlocks();
-	NexmlIDStrorer memo;
+	NexmlIDStrorer memo(guidTag);
 	unsigned nCharBlocksRead = 0;
 	unsigned nTreeBlocksRead = 0;
 

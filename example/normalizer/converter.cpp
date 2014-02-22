@@ -51,13 +51,13 @@
 #include "ncl/nxsmultiformat.h"
 using namespace std;
 
-void writeAsNexml(PublicNexusReader & nexusReader, ostream & os);
+void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, const std::string & guidTag);
 void writeAsNexus(PublicNexusReader & nexusReader, ostream & os);
 extern bool gQuietMode;
 
 
 
-void exportData(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, long interleaveLen, std::string prefix, std::ostream * fp);
+void exportData(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, long interleaveLen, std::string prefix, std::ostream * fp, const std::string & guidTag);
 void exportCharacters(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, long interleaveLen, std::string prefix, std::ostream * fp);
 void exportTrees(PublicNexusReader & nexusReader, MultiFormatReader::DataFormatType f, std::string prefix, std::ostream * fp);
 const char * getFileExtension( MultiFormatReader::DataFormatType f);
@@ -847,7 +847,8 @@ void exportData(
   MultiFormatReader::DataFormatType f,
   long interleaveLen,
   std::string prefix,
-  std::ostream * fp)
+  std::ostream * fp,
+  const std::string & guidTag)
 {
     std::ostream * fpToUse = fp;
 	std::string fullName = prefix;
@@ -902,7 +903,7 @@ void exportData(
 		std::ofstream nexOut(fullName.c_str());
 		if (!gQuietMode)
 		    std::cerr << "Writing " << fullName << '\n';
-		writeAsNexml(nexusReader, nexOut);
+		writeAsNexml(nexusReader, nexOut, guidTag);
 		nexOut.close();
 	}
 	else {
