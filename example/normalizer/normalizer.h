@@ -25,7 +25,6 @@ class TranslatingConventions {
 			}
 	std::string idPrefix;
 	bool globalIncrementingIDs;
-	unsigned currentOTU;
 	unsigned currentOTUIndex;
 	unsigned currentOTUsIndex;
 	unsigned currentCharsIndex;
