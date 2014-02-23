@@ -576,6 +576,12 @@ void printHelp(ostream & out)
 #endif
 #if defined(NCL_CONVERTER_APP) && NCL_CONVERTER_APP
 	out << "    -o<fn> specifies the output prefix.  An appropriate suffix and extension are added\n";
+	out << "    -pe# the index of the first edge in global Id NeXML output mode\n";
+	out << "    -pn# the index of the first node in global Id NeXML output mode\n";
+	out << "    -po# the index of the first otu in global Id NeXML output mode\n";
+	out << "    -pO# the index of the first otus in global Id NeXML output mode\n";
+	out << "    -pt# the index of the first tree in global Id NeXML output mode\n";
+	out << "    -pT# the index of the first trees in global Id NeXML output mode\n";
 #endif
 	out << "    -q quiet. suppress NCL status messages while reading files\n\n";
 	out << "    -l<path> reads a file and treats each line of the file as a path to NEXUS file\n\n";
@@ -691,6 +697,33 @@ int do_main(int argc, char *argv[])
 			if (f == MultiFormatReader::UNSUPPORTED_FORMAT)
 				{
 				cerr << "Expecting a format after -e\n" << endl;
+				printHelp(cerr);
+				return 2;
+				}
+		}
+		else if (filepath[1] == 'p') {
+			long x = -1;
+			if ((slen <= 3) || (!NxsString::to_long(filepath + 3, &x)) || x < 0)
+				{
+				cerr << "Expecting a positive integer after -p* flag (where * is a placeholder).\n" << endl;
+				printHelp(cerr);
+				return 2;
+				}
+			char code = filepath[2];
+			if (code == 'e')
+				gTranslatingConventions.currentEdgeIndex = (unsigned)x;
+			else if (code == 'n')
+				gTranslatingConventions.currentNodeIndex = (unsigned)x;
+			else if (code == 'o')
+				gTranslatingConventions.currentOTUIndex = (unsigned)x;
+			else if (code == 'O')
+				gTranslatingConventions.currentOTUsIndex = (unsigned)x;
+			else if (code == 't')
+				gTranslatingConventions.currentTreeIndex = (unsigned)x;
+			else if (code == 'T')
+				gTranslatingConventions.currentTreesIndex = (unsigned)x;
+			else {
+				cerr << "Expecting e, n, o, O, t, or T after -p.\n" << endl;
 				printHelp(cerr);
 				return 2;
 				}
@@ -831,7 +864,6 @@ int do_main(int argc, char *argv[])
 				}
 			}
 		}
-
 #	if defined(MULTIFILE_NEXUS_READER) && MULTIFILE_NEXUS_READER
 		gNexusReader = instantiateReader();
 		gNexusReader->cullIdenticalTaxaBlocks(true);
