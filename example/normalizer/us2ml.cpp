@@ -118,9 +118,11 @@ std::string getOrGenerateGlobalID(T container,
 								  unsigned & currIndexForType) {
 	typedef typename std::map< std::pair<T, unsigned>, std::string>::const_iterator ToIDIterator;
 	std::pair<T, unsigned> theKey(container, indInContainer);
+	//std::cerr << "**Key = " << container << ", " << indInContainer << "  ";
 	ToIDIterator f = toId.find(theKey);
 	if (f == toId.end())
 		{
+			//std::cerr << "key not found\n";
 		std::string identifier;
 		do
 			{
@@ -131,6 +133,9 @@ std::string getOrGenerateGlobalID(T container,
 		toObj[identifier] = theKey;
 		return identifier;
 		}
+	else {
+		//std::cerr << "key  found\n";
+	}
 	return f->second;
 }
 
@@ -239,8 +244,12 @@ class NexmlIDStrorer
 			p.append(1, 'n');
 			return generateID(p, sIndex);
 			}
-
-
+		void clearNodeEdgeMemo() {
+			idToNode.clear();
+			idToEdge.clear();
+			nodeToID.clear();
+			edgeToID.clear();
+		}
 	protected:
 		typedef std::pair<const NxsTaxaBlock *, unsigned> TaxonAddress;
 		typedef std::pair<const NxsTreesBlock *, unsigned> TreeAddress;
@@ -853,7 +862,9 @@ std::string NexmlIDStrorer::getNodeId(const NxsSimpleNode *nd,
 									  const std::string & treeIdentifier,
 									  unsigned nodeIndex) {
 	if (this->translationCfg.globalIncrementingIDs) {
-		return getOrGenerateGlobalID(nd, nodeToID, idToNode, nodePrefix, 0, translationCfg.currentNodeIndex);
+		string xid = getOrGenerateGlobalID(nd, nodeToID, idToNode, nodePrefix, 0, translationCfg.currentNodeIndex);
+		//std::cerr << "getNodeId(" << nd << ", " << treeIdentifier << ", " << nodeIndex << ") ==> " << xid << '\n';
+		return xid;
 	}
 	std::string prefix = treeIdentifier;
 	prefix.append(1, 'n');
@@ -953,7 +964,9 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 		std::vector<const NxsSimpleNode *> preorder = tree.GetPreorderTraversal();
 		std::vector<const NxsSimpleNode *>::const_iterator ndIt = preorder.begin();
 		std::map<const NxsSimpleNode *, std::string> nodeToIDMap;
+		memo.clearNodeEdgeMemo();
 		unsigned nodeIndex = 0;
+		//std::cerr << "Tree identifier is " << identifier << '\n';
 		if (ndIt != preorder.end())
 			{
 			AttributeDataVec rootAtts;
