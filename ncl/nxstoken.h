@@ -452,6 +452,7 @@ class NxsToken
 		void			GetCurlyBracketedToken();
 		void			GetDoubleQuotedToken();
 		void			GetQuoted();
+		void			GetQuotedWithInternalSingleQuotesDoubled();
 		void			GetParentheticalToken();
 		bool			IsPunctuation(char ch);
 		bool			IsWhitespace(char ch);

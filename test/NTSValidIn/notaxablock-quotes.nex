@@ -1,0 +1,4 @@
+#NEXUS
+Begin Trees;
+ Tree a = [&U] (temporariaDMH84R1,'luteiventris'' WA MVZ225749',(boyliiMVZ148929,'luteiventris MT MVZ191016')) ;
+End;
