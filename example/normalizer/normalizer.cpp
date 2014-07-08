@@ -383,6 +383,9 @@ MultiFormatReader * instantiateReader()
 		treesB->SetAllowImplicitNames(true);
 	treesB->SetWriteFromNodeEdgeDataStructure(gTreesViaInMemoryStruct);
 	treesB->setValidateInternalNodeLabels(gValidateInternals);
+	if (!gValidateInternals) {
+		gTranslatingConventions.treatNodeLabelsAsStrings = true;
+	}
 	treesB->setAllowNumericInterpretationOfTaxLabels(gAllowNumericInterpretationOfTaxLabels);
 	if (gAltNexus)
 		treesB->setWriteTranslateTable(false);

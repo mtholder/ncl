@@ -346,12 +346,15 @@ class NxsSimpleNode
 class NxsSimpleTree
 	{
 	public:
-		NxsSimpleTree(const NxsFullTreeDescription &ftd, const int defaultIntEdgeLen, const double defaultDblEdgeLen)
+		NxsSimpleTree(const NxsFullTreeDescription &ftd,
+					  const int defaultIntEdgeLen,
+					  const double defaultDblEdgeLen,
+					  bool treatInternalNodeLabelsAsStrings=false)
 			:defIntEdgeLen(defaultIntEdgeLen),
 			defDblEdgeLen(defaultDblEdgeLen),
 			realEdgeLens(false)
 			{
-			Initialize(ftd);
+			Initialize(ftd, treatInternalNodeLabelsAsStrings);
 			}
 		NxsSimpleTree(const int defaultIntEdgeLen, const double defaultDblEdgeLen)
 			:defIntEdgeLen(defaultIntEdgeLen),
@@ -362,7 +365,7 @@ class NxsSimpleTree
 			{
 			Clear();
 			}
-		void Initialize(const NxsFullTreeDescription &);
+		void Initialize(const NxsFullTreeDescription &, bool treatInternalNodeLabelsAsStrings=false);
 
 
 		std::vector<const NxsSimpleNode *> GetPreorderTraversal() const;
@@ -592,6 +595,7 @@ class NxsFullTreeDescription
 		    {
 		    this->requireNewickNameTokenizing = v;
 		    }
+		
 	private:
 		std::string newick; /*with 1-based numbers corresponding to (1 + Taxa block's index of taxon)*/
 		std::string name;
@@ -599,7 +603,6 @@ class NxsFullTreeDescription
 		int minIntEdgeLen; /* if EdgeLengthsAreAllIntegers returns true then this will hold shortest edge length in the tree (useful as means of checking for constraints by programs that prohibit 0 or negative branch lengths)*/
 		double minDblEdgeLen; /* if EdgeLengthsAreAllIntegers returns false then this will hold shortest edge length in the tree (useful as means of checking for constraints by programs that prohibit 0 or negative branch lengths)*/
 		bool requireNewickNameTokenizing;  /* False by default. If true, then newick rather than NEXUS tokenizing rules should be used for the taxa names */
-
 	friend class NxsTreesBlock;
 	};
 class NxsTreesBlock;

@@ -50,7 +50,10 @@ std::string getOrGenerateGlobalID(T container,
 								  const std::string & pref, 
 								  unsigned indInContainer,
 								  unsigned & currIndexForType);
-
+template <typename T>
+std::string getGlobalIDNoGen(T container, 
+								  std::map< std::pair<T, unsigned>, std::string> & toId,
+								  unsigned indInContainer);
 typedef std::pair<const NxsTaxaBlock *, unsigned> TaxaBlockPtrIndPair;
 typedef std::pair<const NxsCharactersBlock *, unsigned> CharBlockPtrIndPair;
 typedef std::pair<const NxsTreesBlock *, unsigned> TreesBlockPtrIndPair;
@@ -58,11 +61,15 @@ typedef std::pair<MapperStateLabelVec, unsigned> MapperStateLabelVecIndPair;
 
 void writeOTUS(ostream & os, const NxsTaxaBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
 void writeCharacters(ostream & os, const NxsCharactersBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
-void writeTrees(ostream & os, const NxsTreesBlock *, const std::vector<const NxsAssumptionsBlock *> & assumps, NexmlIDStrorer &, unsigned);
+void writeTrees(ostream & os,
+				const NxsTreesBlock *,
+				const std::vector<const NxsAssumptionsBlock *> & assumps,
+				NexmlIDStrorer &, unsigned, 
+				bool treatNodeLabelsAsStrings);
 
 typedef std::pair<std::string, std::string> AttributeData;
 typedef std::vector<AttributeData> AttributeDataVec;
-
+typedef std::map<const NxsSimpleNode *, std::map<std::string, std::string> > Node2MetaMap;
 void writeAttribute(std::ostream & out, const AttributeData & aIt);
 
 
@@ -76,6 +83,17 @@ std::string generateID(std::string prefix, unsigned n)
 	return prefix;
 	}
 
+template <typename T>
+std::string getIdNoGen(std::pair<T, unsigned> & p,
+					   std::map<T, std::string> & toId)
+{
+	typedef typename std::map<T, std::string>::const_iterator ToIDIterator;
+	T & t = p.first;
+	ToIDIterator f = toId.find(t);
+	if (f == toId.end())
+		return std::string();
+	return f->second;
+}
 
 template <typename T>
 std::string getOrGenId(std::pair<T, unsigned> & p,
@@ -139,6 +157,19 @@ std::string getOrGenerateGlobalID(T container,
 	return f->second;
 }
 
+template <typename T>
+std::string getGlobalIDNoGen(T container, 
+							  std::map< std::pair<T, unsigned>, std::string> & toId,
+							  unsigned indInContainer) {
+	typedef typename std::map< std::pair<T, unsigned>, std::string>::const_iterator ToIDIterator;
+	std::pair<T, unsigned> theKey(container, indInContainer);
+	//std::cerr << "**Key = " << container << ", " << indInContainer << "  ";
+	ToIDIterator f = toId.find(theKey);
+	if (f == toId.end())
+		return std::string();
+	return f->second;
+}
+
 class NexmlIDStrorer
 	{
 	std::string otusPrefix;
@@ -189,6 +220,24 @@ class NexmlIDStrorer
 		std::string getID(TreesBlockPtrIndPair trees)
 			{
 			return getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, treesPrefix, translationCfg.currentTreesIndex);
+			}
+		std::string getTaxID(TaxaBlockPtrIndPair taxa, unsigned taxonInd, bool allowGen)
+			{
+			if (allowGen)
+				{
+				if (translationCfg.globalIncrementingIDs)
+					{
+					return getOrGenerateGlobalID(taxa.first, taxonToID, idToTaxon, otuPrefix, taxonInd, translationCfg.currentOTUIndex);
+					}
+				std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, otusPrefix);
+				p.append(1, 'n');
+				return generateID(p, taxonInd);
+				}
+			if (translationCfg.globalIncrementingIDs)
+				{
+				return getGlobalIDNoGen(taxa.first, taxonToID, taxonInd);
+				}
+			return getIdNoGen<const NxsTaxaBlock *>(taxa, taxaBToID);
 			}
 		std::string getID(TaxaBlockPtrIndPair taxa, unsigned taxonInd)
 			{
@@ -364,7 +413,13 @@ std::string getNexmlCharCellsType(NxsCharactersBlock::DataTypesEnum dt)
 class IDLabelledElement: public XMLElement
 {
 	public:
-		IDLabelledElement(const char *elN, std::string identifier, std::string titleStr, ostream &outstream, bool contains, const char *indent, const AttributeDataVec *ovec=NULL)
+		IDLabelledElement(const char *elN, 
+						  std::string identifier,
+						  std::string titleStr,
+						  ostream &outstream,
+						  bool contains,
+						  const char *indent,
+						  const AttributeDataVec *ovec=NULL)
 			:XMLElement(elN, outstream, contains, indent)
 			{
 			AttributeDataVec v;
@@ -474,7 +529,7 @@ void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConv
 			for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(cb); ++j)
 				assumps.push_back(nexusReader.GetAssumptionsBlock(cb, j));
 
-			writeTrees(os, cb, assumps, memo, nTreeBlocksRead++);
+			writeTrees(os, cb, assumps, memo, nTreeBlocksRead++, transConv.treatNodeLabelsAsStrings);
 			}
 		}
 
@@ -877,16 +932,28 @@ std::string writeSimpleNode(ostream & os,
 							unsigned nodeIndex,
 							NexmlIDStrorer &memo,
 							AttributeDataVec*oatts,
-							const std::string & treeIdentifier)
+							const std::string & treeIdentifier,
+							Node2MetaMap * n2mm)
 {
 	AttributeDataVec v;
 	std::string label;
 	const std::string identifier = memo.getNodeId(&nd, treeIdentifier, nodeIndex);
+	//std::cerr << "identifier = " << identifier << '\n';
 	unsigned otuInd = nd.GetTaxonIndex();
-	if (otuInd != UINT_MAX)
-		v.push_back(AttributeData("otu", memo.getID(taxa, otuInd)));
-	else
+	if (otuInd != UINT_MAX) {
+		std::string otuID = memo.getTaxID(taxa, otuInd, false);
+		//std::cerr << "   otuInd = " << otuInd << "   otuID = " << otuID << '\n';
+		if (!otuID.empty()) {
+			v.push_back(AttributeData("otu", otuID));
+		} else if (n2mm != 0L) {
+			(*n2mm)[&nd]["unknown-label"] = identifier;
+		}
+	}
+	else 
+		{
 		label = nd.GetName();
+		//std::cerr << "label = " << label << '\n';
+		}
 	if (oatts)
 		v.insert(v.end(), oatts->begin(), oatts->end());
 	IDLabelledElement nodeEl ("node", identifier, label, os, false, "      ", &v);
@@ -911,7 +978,8 @@ std::string writeSimpleEdge(ostream & os,
 							std::map<const NxsSimpleNode *, std::string>  & ndToIdMap,
 							NexmlIDStrorer &memo,
 							bool edgesAsIntegers,
-							const std::string & treeIdentifier)
+							const std::string & treeIdentifier, 
+							const Node2MetaMap  & ndToMetaMap)
 {
 	const NxsSimpleEdge & edge = nd->GetEdgeToParentRef();
 	bool defEdgeLen = edge.EdgeLenIsDefaultValue();
@@ -932,10 +1000,25 @@ std::string writeSimpleEdge(ostream & os,
 	assert(par);
 	assert(ndToIdMap.find(par) != ndToIdMap.end());
 	v.push_back(AttributeData("source", ndToIdMap[par]));
+	Node2MetaMap::const_iterator nmm = ndToMetaMap.find(nd);
+	if (nmm != ndToMetaMap.end()) 
+		{
+		const std::map<std::string, std::string> & mm = nmm->second;
+		std::map<std::string, std::string>::const_iterator mit = mm.begin();
+		for (; mit != mm.end(); ++mit)
+			{
+			//meta here
+			}
+		}
 	IDLabelledElement edgeEl("edge", eid, std::string(), os, false, "      ", &v);
 	return eid;
 }
-void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const NxsAssumptionsBlock *> & , NexmlIDStrorer &memo, unsigned index)
+
+void writeTrees(ostream & os, const NxsTreesBlock *tb,
+				const std::vector<const NxsAssumptionsBlock *> & ,
+				NexmlIDStrorer &memo,
+				unsigned index,
+				bool treatNodeLabelsAsStrings)
 {
 	if (!tb)
 		return;
@@ -960,12 +1043,13 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 		std::string identifier = memo.getID(treesbp, treen);
 		AttributeDataVec treeAtts(1, AttributeData("xsi:type", std::string(treeType)));
 		IDLabelledElement treeEl("tree", identifier, ftd.GetName(), os, true, "    ", &treeAtts);
-		NxsSimpleTree tree(ftd, INT_MAX, DBL_MAX);
+		NxsSimpleTree tree(ftd, INT_MAX, DBL_MAX, treatNodeLabelsAsStrings);
 		std::vector<const NxsSimpleNode *> preorder = tree.GetPreorderTraversal();
 		std::vector<const NxsSimpleNode *>::const_iterator ndIt = preorder.begin();
 		std::map<const NxsSimpleNode *, std::string> nodeToIDMap;
 		memo.clearNodeEdgeMemo();
 		unsigned nodeIndex = 0;
+		Node2MetaMap n2mm;
 		//std::cerr << "Tree identifier is " << identifier << '\n';
 		if (ndIt != preorder.end())
 			{
@@ -973,12 +1057,26 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 			string rv(ftd.IsRooted() ? "true" : "false");
 			rootAtts.push_back(AttributeData("root", rv));
 			const NxsSimpleNode * nd = *ndIt;
-			nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, &rootAtts, identifier);
+			nodeToIDMap[nd] = writeSimpleNode(os,
+				                              *nd,
+				                              tbp,
+				                              nodeIndex++,
+				                              memo,
+				                              &rootAtts,
+				                              identifier,
+				                              &n2mm);
 			++ndIt;
 			for (; ndIt != preorder.end(); ++ndIt)
 				{
 				nd = *ndIt;
-				nodeToIDMap[nd] = writeSimpleNode(os, *nd, tbp, nodeIndex++, memo, NULL, identifier);
+				nodeToIDMap[nd] = writeSimpleNode(os,
+												  *nd,
+												  tbp,
+												  nodeIndex++,
+												  memo,
+												  NULL,
+												  identifier,
+												  &n2mm);
 				}
 			}
 		ndIt = preorder.begin();
@@ -1007,7 +1105,7 @@ void writeTrees(ostream & os, const NxsTreesBlock *tb, const std::vector<const N
 			for (; ndIt != preorder.end(); ++ndIt)
 				{
 				nd = *ndIt;
-				writeSimpleEdge(os, nd, nodeToIDMap, memo, edgesAsIntegers, identifier);
+				writeSimpleEdge(os, nd, nodeToIDMap, memo, edgesAsIntegers, identifier, n2mm);
 				}
 			}
 		}

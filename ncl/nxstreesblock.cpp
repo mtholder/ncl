@@ -613,7 +613,7 @@ void NxsSimpleEdge::DealWithNexusComments(const std::vector<NxsComment> & ecs, b
 		}
 	}
 
-void NxsSimpleTree::Initialize(const NxsFullTreeDescription & td)
+void NxsSimpleTree::Initialize(const NxsFullTreeDescription & td, bool treatInternalNodeLabelsAsStrings)
 	{
 	if (!td.IsProcessed())
 		throw NxsNCLAPIException("A tree description must be processed by ProcessTree before calling NxsSimpleTree::NxsSimpleTree");
@@ -717,7 +717,12 @@ void NxsSimpleTree::Initialize(const NxsFullTreeDescription & td)
 			}
 		if (!handled)
 			{
-			bool wasReadAsNumber = NxsString::to_long(t, &currTaxNumber);
+			//std::cerr << "!handled t = " << t << "\n";
+
+			bool wasReadAsNumber = false;
+			if (currNd->IsTip() ||  !treatInternalNodeLabelsAsStrings) {
+				wasReadAsNumber = NxsString::to_long(t, &currTaxNumber);
+			}
 			if (wasReadAsNumber)
 				{
 				if (currTaxNumber < 1)
@@ -1536,6 +1541,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 					{
 					if (validateInternalNodeLabels)
 						{
+						//std::cerr << "validateInternalNodeLabels = true " << taxaLabelPtr << "\n";
 						std::map<std::string, unsigned>::const_iterator tt = capNameToInd.find(ucl);
 						unsigned ind = (tt == capNameToInd.end() ? UINT_MAX : tt->second);
 						if (taxaEncountered.find(ind) != taxaEncountered.end())
@@ -1567,6 +1573,7 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 						hasInternalLabels = true;
 						hasInternalLabelsNotInTaxa = true;
 						toAppend += NxsString::GetEscaped(*taxaLabelPtr);
+						//std::cerr << "validateInternalNodeLabels = false " << toAppend << "\n";
 						}
 					}
 				else
