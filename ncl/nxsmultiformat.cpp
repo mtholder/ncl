@@ -452,9 +452,10 @@ void  MultiFormatReader::readPhylipData(
 			goto funcExit;
 		}
 
-	for (unsigned i = 0; i < n_taxa; ++i)
+	unsigned currentTaxon;
+	for (currentTaxon = 0; currentTaxon < n_taxa; ++currentTaxon)
 		{
-		std::string n = readPhylipName(ftcb, i, relaxedNames);
+		std::string n = readPhylipName(ftcb, currentTaxon, relaxedNames);
         taxaNames.push_back(n);
 		NCL_ASSERT(mIt != matList.end());
 		NxsDiscreteStateRow & row = *mIt++;
@@ -479,7 +480,7 @@ void  MultiFormatReader::readPhylipData(
 							{
 							if (c == '.')
 								{
-								if (i == 0)
+								if (currentTaxon == 0)
 									{
 									err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
 									throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -524,9 +525,9 @@ void  MultiFormatReader::readPhylipData(
 			}
 		}
 	funcExit:
-		if (matList.size() != n_taxa)
+		if (currentTaxon + 1 != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned) matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << currentTaxon + 1;
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
@@ -559,16 +560,17 @@ void  MultiFormatReader::readInterleavedPhylipData(
 		if (!ftcb.advance())
 			goto funcExit;
 		}
+	unsigned currentTaxon;
 	while (startCharIndex < n_char)
 		{
-		for (unsigned i = 0; i < n_taxa; ++i)
+		for (currentTaxon = 0; currentTaxon < n_taxa; ++currentTaxon)
 			{
 			if (startCharIndex == 0)
 				{
-				std::string n = readPhylipName(ftcb, i, relaxedNames);
+				std::string n = readPhylipName(ftcb, currentTaxon, relaxedNames);
 				taxaNames.push_back(n);
 				}
-			if (i == 0)
+			if (currentTaxon == 0)
 				mIt = matList.begin();
 			NCL_ASSERT(mIt != matList.end());
 			NxsDiscreteStateRow & row = *mIt++;
@@ -580,7 +582,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 					{
 					if (j >= endCharIndex)
 						{
-						if (i == 0)
+						if (currentTaxon == 0)
 							{
 							err << "Too many characters were found for the taxon " << *(taxaNames.begin());
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -588,7 +590,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 						else
 							{
 							std::list<std::string>::const_iterator nIt = taxaNames.begin();
-							for (unsigned q = 0; q < i ; ++q)
+							for (unsigned q = 0; q < currentTaxon ; ++q)
 								++nIt;
 							err << "Illegal character \"" << c << "\" found, after all of the data for this interleave page has been read for the taxon " << *nIt;
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -597,7 +599,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 					if (isdigit(c))// I don't know why PHYLIP allows digits in the midst of the sequence, but it seems to.
 						{
 						std::list<std::string>::const_iterator nIt = taxaNames.begin();
-						for (unsigned q = 0; q < i ; ++q)
+						for (unsigned q = 0; q < currentTaxon ; ++q)
 							++nIt;
 						err << "Number encountered (and ignored) within sequence for taxon " << *nIt;
 						NexusWarn(err, NxsReader::PROBABLY_INCORRECT_CONTENT_WARNING, ftcb.position(), ftcb.line(), ftcb.column());
@@ -610,7 +612,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 							{
 							if (c == '.')
 								{
-								if (i == 0)
+								if (currentTaxon == 0)
 									{
 									err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
 									throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -621,7 +623,7 @@ void  MultiFormatReader::readInterleavedPhylipData(
 							else
 								{
 								std::list<std::string>::const_iterator nIt = taxaNames.begin();
-								for (unsigned q = 0; q < i ; ++q)
+								for (unsigned q = 0; q < currentTaxon ; ++q)
 									++nIt;
 								err << "Illegal state code \"" << c << "\" found when reading site " << j + 1 << " for taxon " << *nIt;
 								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -634,12 +636,12 @@ void  MultiFormatReader::readInterleavedPhylipData(
 					}
 				else if (c == '\r' || c == '\n')
 					{
-					if (i == 0)
+					if (currentTaxon == 0)
 						endCharIndex = j;
 					else if (j != endCharIndex)
 						{
 						std::list<std::string>::const_iterator nIt = taxaNames.begin();
-						for (unsigned q = 0; q < i ; ++q)
+						for (unsigned q = 0; q < currentTaxon ; ++q)
 							++nIt;
 						err << "Expecting " << endCharIndex -  startCharIndex << "characters  in this interleave page (based on the number of characters in the first taxon), but only found " << j - startCharIndex << " for taxon " << *nIt;
 						throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
@@ -659,9 +661,9 @@ void  MultiFormatReader::readInterleavedPhylipData(
 		endCharIndex = n_char;
 		}
 	funcExit:
-		if (matList.size() != n_taxa)
+		if (currentTaxon + 1 != n_taxa)
 			{
-			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << (unsigned) matList.size();
+			err << "Unexpected end of file.\nExpecting data for " << n_taxa << " taxa, but only found data for " << currentTaxon + 1;
 			throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 			}
 		const NxsDiscreteStateRow & lastRow = *matList.rbegin();
