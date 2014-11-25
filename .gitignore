@@ -16,3 +16,4 @@ example/subsetter/Makefile.in
 example/translate/Makefile.in
 ncl/Makefile.in
 test/Makefile.in
+config/compile
