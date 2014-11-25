@@ -8,5 +8,6 @@ SUBDIRS = compressor \
 	gapcode \
 	splitsinfile \
 	translate \
-	phylobaseinterface
+	phylobaseinterface \
+	polytomy-count
 
