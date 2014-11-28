@@ -48,6 +48,8 @@
 #include "ncl/nxspublicblocks.h"
 #include "ncl/nxsmultiformat.h"
 #include <cassert>
+#include <fstream>
+#include <iostream>
 #include "ncl/nxsdefs.h"
 #include "ncl/nxstreesblock.h"
 
@@ -61,13 +63,15 @@ void processContent(PublicNexusReader & nexusReader, ostream *out);
 enum Commands {
 	POLYTOMY_COUNT = 1,
 	TIP_LABEL_LIST = 2,
-	NODE_LABEL_LIST = 3
+	NODE_LABEL_LIST = 3,
+	PYDICT = 4
 };
 enum Commands gCommand = POLYTOMY_COUNT;
 
 bool polytomyCountHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 bool tipLabelsListHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 bool nodeLabelsListHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
+bool pydictHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock &taxa);
 
 
@@ -134,6 +138,101 @@ bool tipLabelsListHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *t
 	return false;
 }
 
+long extractOTTIDFromName(const std::string &n) {
+	//std::cerr << "n = " << n << std::endl;
+	const unsigned labelLen = n.length();
+	if (labelLen < 3) {
+		std::cerr << "label \""<< n << "\" found that does not end in ott##### pattern\n";
+		throw exception();
+	}
+	unsigned i = labelLen - 1;
+	for (;;) {
+		if (n[i] == ' ' || n[i] == '_') {
+			break;
+		}
+		if (i == 0) {
+			std::cerr << "label \""<< n << "\" found that does not end in ott##### pattern\n";
+			throw exception();
+		}
+		--i;
+	}
+	if (labelLen - i < 4 || n[i + 1] != 'o' || n[i + 2] != 't' || n[i + 3] != 't') {
+		std::cerr << "label \""<< n << "\" found that does not end in ott##### pattern\n";
+		throw exception();
+	}
+	long x = 0;
+	std::string num = n.substr(i + 4);
+	if (!NxsString::to_long(num.c_str(), &x)) {
+		std::cerr << "label \""<< n << "\" found that does not end in ott##### pattern\n";
+		throw exception();
+	}
+	return x;
+}
+
+bool pydictHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
+{
+	const NxsTaxaBlock * taxa  = dynamic_cast<const NxsTaxaBlock *>(treesB->GetTaxaBlockPtr(NULL));
+	if (!taxa) {
+		std::cerr << "could not get the out label collection!\n";
+		throw new exception();
+	}
+	static unsigned long gTreeCount = 0;
+	gTreeCount++;
+	if (gVerbose)
+		std::cerr << "Read tree " <<  gTreeCount<< '\n';
+	std::vector<unsigned> outDegreeCounts;
+	NxsSimpleTree nst(ftd, 0.0, 0, true);
+	nst.RerootAt(0);
+	long unNamedID = -1;
+	std::map<const NxsSimpleNode *, long> ndToIDForPyDict;
+	std::cout << "id2parent_id = {\n";
+	std::vector<const NxsSimpleNode *> nodes =  nst.GetPreorderTraversal();
+	const std::string fn = "IDTabNameNewlineFileForPyDict.tsv";
+	std::cerr << "The file \"" << fn << "\" will be overwritten with a tab-delimited content of two columns: the ID<TAB>Name\nfor each named node" << std::endl;
+	std::ofstream namesFile;
+	namesFile.open(fn.c_str(), std::ofstream::out|std::ios::binary);
+	try {
+			for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+			const NxsSimpleNode * nd = *nIt;
+			long ottID = -1;
+			if (nd->IsTip()) {
+				const unsigned ind = nd->GetTaxonIndex();
+				const std::string & n = taxa->GetTaxonLabel(ind);
+				ottID = extractOTTIDFromName(n);
+				namesFile << ottID << '\t' << n << '\n';
+			} else {
+				const std::string & n = nd->GetName();
+				if (! n.empty()) {
+					ottID = extractOTTIDFromName(n);
+					namesFile << ottID << '\t' << n << '\n';
+				} else {
+					ottID = --unNamedID;
+				}
+			}
+			ndToIDForPyDict[nd] = ottID;
+			const NxsSimpleNode * par = 0L;
+			const NxsSimpleEdge & edge = nd->GetEdgeToParentRef();
+			par = nd->GetParent();
+			if (par == 0) {
+				std::cout << ottID <<": None,\n";
+			} else {
+				std::map<const NxsSimpleNode *, long>::const_iterator pIt = ndToIDForPyDict.find(par);
+				if (pIt == ndToIDForPyDict.end()) {
+					std::cerr << "parent node not found!\n";
+					throw exception();
+				}
+				const long & pId = pIt->second;
+				std::cout << ottID <<": " << pId <<" ,\n";
+			}
+		}
+		std::cout << "}\n";
+	} catch (...) {
+		namesFile.close();
+		throw;
+	}
+	namesFile.close();
+	return false;
+}
 
 void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock &taxa)
 {
@@ -144,7 +243,7 @@ void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock 
 			if ((*nIt)->IsTip()) {
 				const unsigned ind = (*nIt)->GetTaxonIndex();
 				const std::string & n = taxa.GetTaxonLabel(ind);
-				std::cout << n << std::endl;
+				std::cout << n << '\n';
 			}
 		}
 	} else {
@@ -155,7 +254,7 @@ void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock 
 				const std::string & n = taxa.GetTaxonLabel(ind);
 				std::cout << n << std::endl;
 			} else {
-				std::cout << (*nIt)->GetName() << std::endl;
+				std::cout << (*nIt)->GetName() << '\n';
 			}
 		}
 	}
@@ -211,6 +310,8 @@ void processFilepath(
 			treesB->setValidationCallbacks(tipLabelsListHook, 0L);
 		else if (gCommand == NODE_LABEL_LIST)
 			treesB->setValidationCallbacks(nodeLabelsListHook, 0L);
+		else if (gCommand == PYDICT)
+			treesB->setValidationCallbacks(pydictHook, 0L);
 		if (gStrictLevel < 2)
 			{
 			NxsStoreTokensBlockReader *storerB =  nexusReader.GetUnknownBlockTemplate();
@@ -277,8 +378,9 @@ void printHelp(ostream & out)
 	out << "    -v verbose output\n\n";
 	out << "    -c<command> to specify an action. <command> should be:\n";
 	out << "        poly  for a polytomy count\n";
-	out << "        tips  for a tip labels (one per line)\n";
-	out << "        labels  for a all labels (one per line)\n";
+	out << "        tips  for tip labels (one per line)\n";
+	out << "        labels  for all labels (one per line)\n";
+	out << "        pydict  for a python dict of ID-> parent ID using OTT IDs when present and arbitrary (unstable) IDs for unnamed nodes.\n";
 	out << "    -s<non-negative integer> controls the NEXUS strictness level.\n";
 	out << "        the default level is equivalent to -s2 invoking the program with \n";
 	out << "        -s3 or a higher number will convert some warnings into fatal errors.\n";
@@ -365,6 +467,8 @@ int main(int argc, char *argv[])
 				gCommand = TIP_LABEL_LIST;
 			} else if (commandName == "labels") {
 				gCommand = NODE_LABEL_LIST;
+			} else if (commandName == "pydict") {
+				gCommand = PYDICT;
 			}
 			else
 				{
