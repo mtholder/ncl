@@ -187,6 +187,7 @@ AC_CONFIG_FILES([					\
 	example/basiccmdline/Makefile	\
 	example/compressor/Makefile	\
 	example/gapcode/Makefile		\
+	example/ot-tree-inspect/Makefile \
 	example/nclsimplest/Makefile	\
 	example/ncltest/Makefile		\
 	example/normalizer/Makefile		\

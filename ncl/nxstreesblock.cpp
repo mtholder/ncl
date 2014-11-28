@@ -812,6 +812,7 @@ NxsTreesBlock::NxsTreesBlock(
 	defaultTreeInd = UINT_MAX;
 	writeTranslateTable = true;
 	allowImplicitNames = false;
+	warnAboutMissingTaxaBlock = true;
 	useNewickTokenizingDuringParse = false;
 	treatIntegerLabelsAsNumbers = false;
 	processAllTreesDuringParse = true;
@@ -1133,7 +1134,7 @@ void NxsTreesBlock::ConstructDefaultTranslateTable(NxsToken &token, const char *
 		{
 		if (allowImplicitNames)
 			{
-			if (nexusReader)
+			if (nexusReader && this->warnAboutMissingTaxaBlock)
 				nexusReader->NexusWarnToken("A TAXA block should be read before the TREES block (but no TAXA block was found).  Taxa will be inferred from their usage in the TREES block.", NxsReader::AMBIGUOUS_CONTENT_WARNING , token);
 			constructingTaxaBlock = true;
 			newtaxa = true;

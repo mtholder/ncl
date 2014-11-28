@@ -231,6 +231,15 @@ class NxsSimpleNode
 				}
 			return children;
 			}
+		unsigned GetOutDegree() const {
+			unsigned n = 0;
+			NxsSimpleNode * currNode = GetFirstChild();
+			while(currNode) {
+				n += 1;
+				currNode = currNode->GetNextSib();
+			}
+			return n;
+		}
 		// present for every leaf. UINT_MAX for internals labeled with taxlabels
 		unsigned GetTaxonIndex() const
 			{
@@ -244,7 +253,7 @@ class NxsSimpleNode
 			}
 
 		// non-empty only for internals that are labelled with names that are NOT taxLabels
-		std::string GetName() const
+		const std::string & GetName() const
 			{
 			return name;
 			}
@@ -479,7 +488,6 @@ class NxsFullTreeDescription
 			This makes it easier for to parse.
 		*/
 		std::vector<std::string> GetTreeTokens() const;
-
 		/** returns a newick string.
 			If the NxsFullTreeDescription is processed, then the string will have
 				1-based numbers corresponding to (1 + Taxa block's index of taxon)
@@ -634,7 +642,10 @@ class NxsTreesBlock
 			{
 			return NxsLabelToIndicesMapper::GetIndicesFromSets(label, toFill, treeSets);
 			}
-
+		void WarnAboutMissingTaxaBlock(bool v) {
+			this->warnAboutMissingTaxaBlock = v;
+		}
+		
 		/*! \returns the index of the default tree (the last tree in the TREES block with a * before its name)
 				if no default tree was specified than the first index (0) will be returned
 		*/
@@ -809,6 +820,7 @@ class NxsTreesBlock
 		*/
 		virtual void CopyTreesBlockContents(const NxsTreesBlock &other)
 			{
+			warnAboutMissingTaxaBlock = other.warnAboutMissingTaxaBlock;
 			allowImplicitNames = other.allowImplicitNames;
 			useNewickTokenizingDuringParse = other.useNewickTokenizingDuringParse;
 			treatIntegerLabelsAsNumbers = other.treatIntegerLabelsAsNumbers;
@@ -958,7 +970,7 @@ class NxsTreesBlock
 
 		void WriteTreesCommand(std::ostream & out) const;
 		void ConstructDefaultTranslateTable(NxsToken &token, const char * cmd);
-
+		bool warnAboutMissingTaxaBlock;
 		bool allowImplicitNames; /** false by default, true causes the trees block to create a taxa block from the labels found in the trees. */
 		bool useNewickTokenizingDuringParse; /** false by default */
 		bool treatIntegerLabelsAsNumbers; // if true and allowImplicitNames is true, then new taxon labels that are integers will be treated as the taxon number (rather than arbitrary labels)

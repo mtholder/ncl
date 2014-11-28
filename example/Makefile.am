@@ -9,5 +9,6 @@ SUBDIRS = compressor \
 	splitsinfile \
 	translate \
 	phylobaseinterface \
-	polytomy-count
+	polytomy-count \
+	ot-tree-inspect
 

@@ -58,13 +58,20 @@ bool gVerbose = false;
 static long gBurnin = 0;
 void processContent(PublicNexusReader & nexusReader, ostream *out);
 
+enum Commands {
+	POLYTOMY_COUNT = 1,
+	TIP_LABEL_LIST = 2,
+	NODE_LABEL_LIST = 3
+};
+enum Commands gCommand = POLYTOMY_COUNT;
+
+bool polytomyCountHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
+bool tipLabelsListHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
+bool nodeLabelsListHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
+void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock &taxa);
 
 
-
-bool newTreeHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
-
-
-bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
+bool polytomyCountHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 {
 	static unsigned long gTreeCount = 0;
 	gTreeCount++;
@@ -91,6 +98,68 @@ bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 	}
 	std::cout << std::endl;
 	return false;
+}
+bool nodeLabelsListHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
+{
+	const NxsTaxaBlock * taxa  = dynamic_cast<const NxsTaxaBlock *>(treesB->GetTaxaBlockPtr(NULL));
+	if (!taxa) {
+		std::cerr << "could not get the out label collection!\n";
+		throw new exception();
+	}
+	static unsigned long gTreeCount = 0;
+	gTreeCount++;
+	if (gVerbose)
+		std::cerr << "Read tree " <<  gTreeCount<< '\n';
+	std::vector<unsigned> outDegreeCounts;
+	NxsSimpleTree nst(ftd, 0.0, 0, true);
+	nst.RerootAt(0);
+	listNodeLabels(nst, false, *taxa);
+	return false;
+}
+bool tipLabelsListHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
+{
+	const NxsTaxaBlock * taxa  = dynamic_cast<const NxsTaxaBlock *>(treesB->GetTaxaBlockPtr(NULL));
+	if (!taxa) {
+		std::cerr << "could not get the out label collection!\n";
+		throw new exception();
+	}
+	static unsigned long gTreeCount = 0;
+	gTreeCount++;
+	if (gVerbose)
+		std::cerr << "Read tree " <<  gTreeCount<< '\n';
+	std::vector<unsigned> outDegreeCounts;
+	NxsSimpleTree nst(ftd, 0.0, 0, true);
+	nst.RerootAt(0);
+	listNodeLabels(nst, true, *taxa);
+	return false;
+}
+
+
+void listNodeLabels(const NxsSimpleTree &nst, bool tipsOnly, const NxsTaxaBlock &taxa)
+{
+	std::vector<const NxsSimpleNode *> nodes =  nst.GetPreorderTraversal();
+	if (tipsOnly) {
+	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
+			 nIt != nodes.end(); ++nIt) {
+			if ((*nIt)->IsTip()) {
+				const unsigned ind = (*nIt)->GetTaxonIndex();
+				const std::string & n = taxa.GetTaxonLabel(ind);
+				std::cout << n << std::endl;
+			}
+		}
+	} else {
+		for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
+			 nIt != nodes.end(); ++nIt) {
+			if ((*nIt)->IsTip()) {
+				const unsigned ind = (*nIt)->GetTaxonIndex();
+				const std::string & n = taxa.GetTaxonLabel(ind);
+				std::cout << n << std::endl;
+			} else {
+				std::cout << (*nIt)->GetName() << std::endl;
+			}
+		}
+	}
+	std::cout << std::endl;
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Takes NxsReader that has successfully read a file, and processes the
@@ -119,6 +188,7 @@ void processFilepath(
 	try
 		{
 		MultiFormatReader nexusReader(-1, NxsReader::WARNINGS_TO_STDERR);
+		nexusReader.SetWarningOutputLevel(NxsReader::AMBIGUOUS_CONTENT_WARNING);
 		if (gStrictLevel != 2)
 			nexusReader.SetWarningToErrorThreshold((int)NxsReader::FATAL_WARNING + 1 - (int) gStrictLevel);
 		NxsCharactersBlock * charsB = nexusReader.GetCharactersBlockTemplate();
@@ -135,14 +205,18 @@ void processFilepath(
 		assert(treesB);
 		if (gStrictLevel < 2)
 			treesB->SetAllowImplicitNames(true);
-		treesB->setValidationCallbacks(newTreeHook, 0L);
+		if (gCommand == POLYTOMY_COUNT)
+			treesB->setValidationCallbacks(polytomyCountHook, 0L);
+		else if (gCommand == TIP_LABEL_LIST)
+			treesB->setValidationCallbacks(tipLabelsListHook, 0L);
+		else if (gCommand == NODE_LABEL_LIST)
+			treesB->setValidationCallbacks(nodeLabelsListHook, 0L);
 		if (gStrictLevel < 2)
 			{
 			NxsStoreTokensBlockReader *storerB =  nexusReader.GetUnknownBlockTemplate();
 			assert(storerB);
 			storerB->SetTolerateEOFInBlock(true);
 			}
-		cerr << "Executing" <<endl;
 		try {
 			nexusReader.ReadFilepath(filename, fmt);
 			processContent(nexusReader, out);
@@ -165,7 +239,6 @@ void processFilepath(
 
 void readFilepathAsNEXUS(const char *filename, MultiFormatReader::DataFormatType fmt)
 	{
-	cerr << "[Reading " << filename << "	 ]" << endl;
 	try {
 		ostream * outStream = 0L;
 		outStream = &cout;
@@ -197,11 +270,15 @@ void readFilesListedIsFile(const char *masterFilepath, MultiFormatReader::DataFo
 
 void printHelp(ostream & out)
 	{
-	out << "NEXUStosplits takes reads a file and writes trees for each split that occurs in any tree in the file.\n";
+	out << "otTreeInspect.\n";
 	out << "\nThe most common usage is simply:\n    NEXUStosplits <path to NEXUS file>\n";
 	out << "\nCommand-line flags:\n\n";
 	out << "    -h on the command line shows this help message\n\n";
 	out << "    -v verbose output\n\n";
+	out << "    -c<command> to specify an action. <command> should be:\n";
+	out << "        poly  for a polytomy count\n";
+	out << "        tips  for a tip labels (one per line)\n";
+	out << "        labels  for a all labels (one per line)\n";
 	out << "    -s<non-negative integer> controls the NEXUS strictness level.\n";
 	out << "        the default level is equivalent to -s2 invoking the program with \n";
 	out << "        -s3 or a higher number will convert some warnings into fatal errors.\n";
@@ -219,7 +296,7 @@ void printHelp(ostream & out)
 		out << "    -i<format> specifies the input file format expected:\n";
 #	endif
 	out << "    -f<format> specifies the input file format expected:\n";
-	out << "            -fnexus     NEXUS (this is also the default)\n";
+	out << "            -frelaxedphyliptree     newick tree (this is also the default)\n";
 	out << "            -faafasta   Amino acid data in fasta\n";
 	out << "            -fdnafasta  DNA data in fasta\n";
 	out << "            -frnafasta  RNA data in fasta\n";
@@ -233,7 +310,7 @@ void printHelp(ostream & out)
 
 int main(int argc, char *argv[])
 	{
-	MultiFormatReader::DataFormatType f(MultiFormatReader::NEXUS_FORMAT);
+	MultiFormatReader::DataFormatType f(MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT);
 
 	bool readfile = false;
 	bool el = false;
@@ -244,7 +321,10 @@ int main(int argc, char *argv[])
 		const char * filepath = argv[i];
 		const unsigned slen = strlen(filepath);
 		if (strlen(filepath) > 1 && filepath[0] == '-' && filepath[1] == 'h')
+			{
 			printHelp(cout);
+			return 0;
+			}
 		else if (strlen(filepath) == 2 && filepath[0] == '-' && filepath[1] == 'v')
 			gVerbose = true;
 		else if (slen > 1 && filepath[0] == '-' && filepath[1] == 's')
@@ -267,6 +347,28 @@ int main(int argc, char *argv[])
 			if (f == MultiFormatReader::UNSUPPORTED_FORMAT)
 				{
 				cerr << "Expecting a format after after -f\n" << endl;
+				printHelp(cerr);
+				return 2;
+				}
+			}
+		else if (slen > 1 && filepath[0] == '-' && filepath[1] == 'c')
+			{
+			std::string commandName;
+			if (slen > 2)
+				{
+				commandName = string(filepath + 2, slen - 2);
+
+				}
+			if (commandName == "poly") {
+				gCommand = POLYTOMY_COUNT;
+			} else if (commandName == "tips") {
+				gCommand = TIP_LABEL_LIST;
+			} else if (commandName == "labels") {
+				gCommand = NODE_LABEL_LIST;
+			}
+			else
+				{
+				cerr << "Expecting a command after after -c\n" << endl;
 				printHelp(cerr);
 				return 2;
 				}
