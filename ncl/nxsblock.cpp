@@ -282,6 +282,7 @@ NxsBlock::NxsBlock()
 	nexusReader(NULL),
 	next(NULL),
 	linkAPI(false),
+	 autoTitle(false),
 	storeSkippedCommands(true)
 	{
 	}
@@ -638,4 +639,3 @@ void NxsBlock::DemandEndSemicolon(NxsToken &token, const char *contextString) co
 	{
 	NxsToken::DemandEndSemicolon(token, this->errormsg, contextString);
 	}
-
