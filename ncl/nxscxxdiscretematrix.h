@@ -108,7 +108,7 @@ class NxsCXXDiscreteMatrix
 			return nativeCMatrix.matrix;
 			}
 
-		const int getDatatype() const
+		int getDatatype() const
 			{
 			return (int)nativeCMatrix.datatype;
 			}
