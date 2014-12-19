@@ -187,11 +187,13 @@ AC_CONFIG_FILES([					\
 	example/basiccmdline/Makefile	\
 	example/compressor/Makefile	\
 	example/gapcode/Makefile		\
+	example/ot-tree-inspect/Makefile \
 	example/nclsimplest/Makefile	\
 	example/ncltest/Makefile		\
 	example/normalizer/Makefile		\
 	example/patristic/Makefile		\
 	example/phylobaseinterface/Makefile		\
+	example/polytomy-count/Makefile		\
 	example/splitsinfile/Makefile	\
 	example/subsetter/Makefile	\
 	example/translate/Makefile   	\

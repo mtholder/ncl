@@ -1473,6 +1473,7 @@ void MultiFormatReader::readPhylipTreeFile(std::istream & inf, bool relaxedNames
 	try {
 		treesB->Reset();
 		NxsToken inTokens(inf);
+		treesB->WarnAboutMissingTaxaBlock(false);
 		treesB->ReadPhylipTreeFile(inTokens);
 		if (!relaxedNames)
 			{
