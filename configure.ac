@@ -30,8 +30,8 @@ AC_PROG_LIBTOOL
 # So we cache the argument to configure
 #	here in ARG_CXX_FLAGS (so that our macro does not override them)
 ARG_CXX_FLAGS="$CXXFLAGS"
+ARG_CPP_FLAGS="$CPPFLAGS"
 ################################################################################
-ARG_CXX_FLAGS="$CXXFLAGS"
 AC_PROG_CXX
 
 #Ranlib handled by check for libtool
@@ -114,7 +114,7 @@ fi
 AC_SUBST(CXXFLAGS)
 #AC_CXX_RTTI
 
-CPPFLAGS="-I\$(top_srcdir) $CPPFLAGS"
+CPPFLAGS="-I\$(top_srcdir) $CPPFLAGS $ARG_CPP_FLAGS"
 # Checks for libraries.
 
 # Checks for header files.
