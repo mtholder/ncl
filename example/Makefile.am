@@ -10,5 +10,6 @@ SUBDIRS = compressor \
 	translate \
 	phylobaseinterface \
 	polytomy-count \
-	ot-tree-inspect
+	ot-tree-inspect \
+	outdeg1count
 

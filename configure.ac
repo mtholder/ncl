@@ -194,6 +194,7 @@ AC_CONFIG_FILES([					\
 	example/patristic/Makefile		\
 	example/phylobaseinterface/Makefile		\
 	example/polytomy-count/Makefile		\
+	example/outdeg1count/Makefile	\
 	example/splitsinfile/Makefile	\
 	example/subsetter/Makefile	\
 	example/translate/Makefile   	\
