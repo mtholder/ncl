@@ -97,9 +97,11 @@ NxsSimpleTree * refTree = 0;
 
 NxsSimpleTree * taxonomyTree = 0;
 std::map<long, const NxsSimpleNode *> ottID2RefNode;
-std::set<const NxsSimpleNode *> gSupportedNodes;
-std::set<long> ottIDSet;
+std::map<long, const NxsSimpleNode *> ottID2TaxNode;
+std::map<const NxsSimpleNode *, long> taxNode2ottID;
 
+
+std::set<const NxsSimpleNode *> gSupportedNodes;
 void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, std::set<const NxsSimpleNode *> & gSupportedNodes) {
 	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
 	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
@@ -172,17 +174,81 @@ void processTaxonomyTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree)
 	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
 		long ottID = getOTTIndex(tb, **nIt);
 		assert(ottID >= 0);
-		assert(ottIDSet.find(ottID) == ottIDSet.end());
-		ottIDSet.insert(ottID);
+		assert(ottID2TaxNode.find(ottID) == ottID2TaxNode.end());
+		ottID2TaxNode[ottID] = *nIt;
+		taxNode2ottID[*nIt] = ottID;
 	}
 	for (std::map<long, const NxsSimpleNode *>::const_iterator nit = ottID2RefNode.begin(); nit != ottID2RefNode.end(); ++nit) {
-		assert(ottIDSet.find(nit->first) != ottIDSet.end());
+		assert(ottID2TaxNode.find(nit->first) != ottID2TaxNode.end());
 	}
 }
 
+//@recursive!
+void fillTipOTTIDs(const std::map<long, const NxsSimpleNode *> &taxonomy, long ottID, std::set<long> & tipOTTIDs) {
+	std::map<long, const NxsSimpleNode *>::const_iterator tnIt = taxonomy.find(ottID);
+	assert(tnIt != taxonomy.end());
+	const NxsSimpleNode * tn = tnIt->second;
+	std::vector<NxsSimpleNode *> children = tn->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree == 0) {
+		tipOTTIDs.insert(taxNode2ottID[tn]);
+	} else {
+		for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+			long ct = taxNode2ottID[*cIt];
+			fillTipOTTIDs(taxonomy, ct, tipOTTIDs);
+		}
+	}
+}
+
+const NxsSimpleNode * findMRCA(const std::map<long, const NxsSimpleNode *> & ref, const std::map<long, const NxsSimpleNode *> &taxonomy, long ottID) {
+	std::set<long> tipOTTIDs;
+	fillTipOTTIDs(taxonomy, ottID, tipOTTIDs);
+	const unsigned nTips = tipOTTIDs.size();
+	if (nTips < 2) {
+		std::cerr << "findMRCA called on " << ottID << '\n';
+		assert(false);
+	}
+	std::map<const NxsSimpleNode *, unsigned int> n2c;
+	long shortestPathLen = -1;
+	const NxsSimpleNode * shortestPathNode = 0;
+	for (std::set<long>::const_iterator toIt = tipOTTIDs.begin(); toIt != tipOTTIDs.end(); ++toIt) {
+		const NxsSimpleNode * nd = 0;
+		std::map<long, const NxsSimpleNode *>::const_iterator rIt = ref.find(*toIt);
+		if (rIt == ref.end()) {
+			std::cerr << "tip " << *toIt << " a descendant of " << ottID << " not found.\n";
+			assert(false);
+		}
+		nd = rIt->second;
+		long currPathLen = 0;
+		while (nd != 0) {
+			n2c[nd] += 1;
+			currPathLen += 1;
+			nd = nd->GetEdgeToParentRef().GetParent();
+		}
+		if (shortestPathLen < 0 || currPathLen < shortestPathLen) {
+			shortestPathLen = currPathLen;
+			shortestPathNode = rIt->second;
+		}
+	}
+	const NxsSimpleNode * cn = shortestPathNode;
+	while (cn != 0) {
+		if (n2c[cn] == nTips) {
+			return cn;
+		}
+		cn = cn->GetEdgeToParentRef().GetParent();
+	}
+	assert(false);
+	return 0L;
+}
+
 void markPathToRoot(std::map<const NxsSimpleNode *, std::set<long> > &n2m, long ottID) {
-	assert(ottID2RefNode.find(ottID) != ottID2RefNode.end());
-	const NxsSimpleNode * nd = ottID2RefNode[ottID];
+	const NxsSimpleNode * nd = 0;
+	std::map<long, const NxsSimpleNode *>::const_iterator fIt = ottID2RefNode.find(ottID);
+	if (fIt != ottID2RefNode.end()) {
+		nd = fIt->second;
+	} else {
+		nd = findMRCA(ottID2RefNode, ottID2TaxNode, ottID);
+	}
 	assert(nd != 0);
 	while (nd != 0) {
 		n2m[nd].insert(ottID);
@@ -245,7 +311,7 @@ void processSourceTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
 		} else if (outDegree == 0) {
 			long ottID = getOTTIndex(tb, **nIt);
 			assert(ottID >= 0);
-			assert(ottIDSet.find(ottID) != ottIDSet.end());
+			assert(ottID2TaxNode.find(ottID) != ottID2TaxNode.end());
 			ndp2mrca[&nd].insert(ottID);
 			markPathToRoot(refNdp2mrca, ottID);
 			leafSet.insert(ottID);
