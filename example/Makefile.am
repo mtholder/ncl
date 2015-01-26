@@ -2,6 +2,7 @@ SUBDIRS = compressor \
 	nclsimplest \
 	ncltest \
 	basiccmdline \
+	find-unsupported-edges \
 	normalizer \
 	subsetter \
 	patristic \

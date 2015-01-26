@@ -186,6 +186,7 @@ AC_CONFIG_FILES([					\
 	example/Makefile				\
 	example/basiccmdline/Makefile	\
 	example/compressor/Makefile	\
+	example/find-unsupported-edges/Makefile	\
 	example/gapcode/Makefile		\
 	example/ot-tree-inspect/Makefile \
 	example/nclsimplest/Makefile	\

@@ -17,32 +17,6 @@
 //	59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 //
 
-/*******************************************************************************
- * This file contains code for 4 executables:
- *		NEXUSnormalizer, NEXUSvalidator, NEXUSinspector, and NEX_us2ml
- *	with conditional compilation used to determine the behavior.
- *
- *		* NEXUSnormalizer - writes a NEXUS version of the file with consistent
- *			ordering of blocks and commands. Ideally 2 equivalent files will
- *			produce the same normalized output. This version of tthe program is
- *			less ambitious. The goal is to be able to run (for any valid NEXUS
- *			in.nex file):
- *				$ NEXUSnormalizer in.nex > outOrig.nex
- *				$ NEXUSnormalizer outOrig.nex > outSecond.nex
- *				$ diff outOrig.nex outSecond.nex
- *			and find no differences.
- *		* NEXUSvalidator - reports errors and warnings to stderr. Invalid files
- *			cause exit with a non-zero return code
- *		* NEXUSinspector - writes a brief report of every block parsed
- *		* NEXUS_us2ml - writes a nexml version of the input (partially
- *			implemented, note that the code to write nexml is in us2ml.cpp).
- * See the processFilepath() function for an example of how to deal with NCL
- *	to read a file using the new MultiFormatReader class. When the file
- *	is correctly read, the processContent() function is called.
- *
- * All other code has to do with reading command line arguments and other
- * 	user-interface concerns.
- */
 #include "ncl/ncl.h"
 #include "ncl/nxsblock.h"
 #include "ncl/nxspublicblocks.h"
@@ -115,10 +89,180 @@ void describeUnnamedNode(const NxsTaxaBlockAPI *taxa, const NxsSimpleNode &nd, s
 			std::string right = getRightmostDesName(taxa, *c);
 			out << "ancestor " << 1 + anc << " node(s) before MRCA of \"" << left << "\" and";
 			out << "\"" << right <<'\"' << std::endl;
-		
 		}
 	}
 }
+
+NxsSimpleTree * refTree = 0;
+
+NxsSimpleTree * taxonomyTree = 0;
+std::map<long, const NxsSimpleNode *> ottID2RefNode;
+std::set<const NxsSimpleNode *> gSupportedNodes;
+std::set<long> ottIDSet;
+
+void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, std::set<const NxsSimpleNode *> & gSupportedNodes) {
+	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+		const NxsSimpleNode * nd = *nIt;
+		std::vector<NxsSimpleNode *> children = nd->GetChildren();
+		const unsigned outDegree = children.size();
+		if (outDegree == 1 && gSupportedNodes.find(nd) != gSupportedNodes.end()) {
+			gSupportedNodes.insert(children[0]);
+		}
+	}
+}
+
+
+void summarize(std::ostream & out) {
+	extendSupportedToRedundantNodes(refTree, gSupportedNodes);
+	out << gSupportedNodes.size() << " supported nodes.\n";
+}
+
+
+
+inline long ottIDFromName(const std::string & n) {
+	//std::cout << "name \"" << n << "\"\n";
+	if (n.empty()) {
+		return -1;
+	}
+	const unsigned lastInd = n.length() - 1;
+	unsigned currInd = lastInd;
+	const char * c = n.c_str();
+	if (strchr("0123456789", c[currInd]) == 0) {
+		return -2;
+	}
+	while (currInd > 1) {
+		--currInd;
+		if (strchr("0123456789", c[currInd]) == 0) {
+			++currInd;
+			break;
+		}
+	}
+	long conv = -2;
+	NxsString::to_long(c + currInd, &conv);
+	return conv;
+}
+
+inline long getOTTIndex(const NxsTaxaBlockAPI * taxa, const NxsSimpleNode & nd) {
+	const std::string & name = nd.GetName();
+	if (name.empty()) {
+		const unsigned ind = nd.GetTaxonIndex();
+		if (ind < taxa->GetNumTaxonLabels()) {
+			const std::string tn = taxa->GetTaxonLabel(ind);
+			return ottIDFromName(tn);
+		}
+		return -1;
+	}
+	return ottIDFromName(name);
+}
+
+void processRefTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
+	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+		long ottID = getOTTIndex(tb, **nIt);
+		if (ottID >= 0) {
+			assert(ottID2RefNode.find(ottID) == ottID2RefNode.end());
+			ottID2RefNode[ottID] = *nIt;
+		}
+	}
+}
+
+void processTaxonomyTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
+	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+		long ottID = getOTTIndex(tb, **nIt);
+		assert(ottID >= 0);
+		assert(ottIDSet.find(ottID) == ottIDSet.end());
+		ottIDSet.insert(ottID);
+	}
+	for (std::map<long, const NxsSimpleNode *>::const_iterator nit = ottID2RefNode.begin(); nit != ottID2RefNode.end(); ++nit) {
+		assert(ottIDSet.find(nit->first) != ottIDSet.end());
+	}
+}
+
+void markPathToRoot(std::map<const NxsSimpleNode *, std::set<long> > &n2m, long ottID) {
+	assert(ottID2RefNode.find(ottID) != ottID2RefNode.end());
+	const NxsSimpleNode * nd = ottID2RefNode[ottID];
+	assert(nd != 0);
+	while (nd != 0) {
+		n2m[nd].insert(ottID);
+		nd = nd->GetEdgeToParentRef().GetParent();
+	}
+}
+
+bool mrcaInThisLeafSet(const NxsSimpleNode * nd, const std::map<const NxsSimpleNode *, std::set<long> > & refNdp2mrca, const std::set<long> & leafSet) {
+	std::vector<NxsSimpleNode *> children = nd->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree < 2) {
+		return false;
+	}
+	bool foundFirstInf = false;
+	for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+		const NxsSimpleNode * c = *cIt;
+		if (refNdp2mrca.find(c) != refNdp2mrca.end()) {
+			if (foundFirstInf) {
+				return true;
+			}
+			foundFirstInf = true;
+		}
+	}
+	return false;
+}
+
+void recordSupportedNodes(const std::map<const NxsSimpleNode *, std::set<long> > & refNdp2mrca,
+						  std::set<std::set<long> > & sourceClades,
+						  std::set<const NxsSimpleNode *> & supportedNodes,
+						  const std::set<long> & leafSet) {
+	for (std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nsIt = refNdp2mrca.begin(); nsIt != refNdp2mrca.end(); ++nsIt) {
+		const NxsSimpleNode * nd = nsIt->first;
+		const NxsSimpleNode * par = nd->GetEdgeToParentRef().GetParent();
+		if (par != 0) {
+			const std::set<long> & nm = nsIt->second;
+			if (mrcaInThisLeafSet(nd, refNdp2mrca, leafSet) && sourceClades.find(nm) != sourceClades.end()) {
+				supportedNodes.insert(nd);
+			}
+		}
+	}
+}
+
+void processSourceTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
+	std::map<const NxsSimpleNode *, std::set<long> > ndp2mrca;
+	std::map<const NxsSimpleNode *, std::set<long> > refNdp2mrca;
+	std::set<long> leafSet;
+	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (std::vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
+		const NxsSimpleNode & nd = **nIt;
+		std::vector<NxsSimpleNode *> children = nd.GetChildren();
+		const unsigned outDegree = children.size();
+		if (outDegree > 0) {
+			std::set<long> & mrca = ndp2mrca[&nd];
+			for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+				const NxsSimpleNode * c = *cIt;
+				assert(ndp2mrca.find(c) != ndp2mrca.end());
+				std::set<long> & csl = ndp2mrca[c];
+				mrca.insert(csl.begin(), csl.end());
+			}
+		} else if (outDegree == 0) {
+			long ottID = getOTTIndex(tb, **nIt);
+			assert(ottID >= 0);
+			assert(ottIDSet.find(ottID) != ottIDSet.end());
+			ndp2mrca[&nd].insert(ottID);
+			markPathToRoot(refNdp2mrca, ottID);
+			leafSet.insert(ottID);
+		}
+	}
+	std::set<std::set<long> > sourceClades;
+	for (std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nsIt = ndp2mrca.begin(); nsIt != ndp2mrca.end(); ++nsIt) {
+		const NxsSimpleNode * nd = nsIt->first;
+		const NxsSimpleNode * par = nd->GetEdgeToParentRef().GetParent();
+		if (par != 0) {
+			const std::set<long> & nm = nsIt->second;
+			sourceClades.insert(nm);
+		}
+	}
+	recordSupportedNodes(refNdp2mrca, sourceClades, gSupportedNodes, leafSet);
+}
+
 bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 {
 	static unsigned long gTreeCount = 0;
@@ -129,38 +273,18 @@ bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 	unsigned int nUnlabeledOutDegOne = 0;
 	unsigned int nLabeledOutDegOne = 0;
 	std::vector<std::string> parNames;
-	NxsSimpleTree nst(ftd, 0.0, 0, true);
-	std::vector<const NxsSimpleNode *> nodes =  nst.GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
-		 nIt != nodes.end(); ++nIt) {
-		const NxsSimpleNode *nd = *nIt;
-		const unsigned outDegree = nd->GetChildren().size();
-		if (outDegree == 1) {
-			const std::string & nname = nd->GetName();
-			if (nname.empty()) {
-				nUnlabeledOutDegOne += 1;
-				describeUnnamedNode(taxa, *nd, std::cout, 0);
-				const NxsSimpleNode *par = nd->GetEdgeToParent().GetParent();
-				if (par != 0) {
-					const std::string & parname = par->GetName();
-					if (!parname.empty()) {
-						parNames.push_back(parname);
-					}
-				}
-
-				const std::string & pname = nd->GetName();
-			
-			} else {
-				std::cerr << "outdeg1 for \"" << nname << "\"" << std::endl;
-				nLabeledOutDegOne += 1;
-			}
-		}
+	NxsSimpleTree * nst = new NxsSimpleTree(ftd, 0.0, 0, true);
+	if (refTree == 0) {
+		refTree = nst;
+		processRefTree(taxa, nst);
+	} else if (taxonomyTree == 0) {
+		taxonomyTree = nst;
+		processTaxonomyTree(taxa, nst);
+	} else {
+		processSourceTree(taxa, nst);
 	}
-	std::cout << nLabeledOutDegOne << " named nodes with out degree = 1." << std::endl;
-	std::cout << nUnlabeledOutDegOne << " unnamed nodes with out degree = 1." << std::endl;
-	std::cout << "    " << parNames.size() << " have parents with names:" << std::endl;
-	for (std::vector<std::string>::const_iterator sit = parNames.begin(); sit != parNames.end(); ++sit) {
-		std::cout << "        \"" << *sit << '\"' << std::endl;
+	if (refTree != nst && taxonomyTree != nst) {
+		delete nst;
 	}
 	return false;
 }
@@ -355,6 +479,7 @@ int main(int argc, char *argv[])
 		printHelp(cerr);
 		return 1;
 		}
+	summarize(std::cout);
 	return 0;
 	}
 
