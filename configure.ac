@@ -185,6 +185,7 @@ AC_CONFIG_FILES([					\
 	Makefile 						\
 	example/Makefile				\
 	example/basiccmdline/Makefile	\
+	example/check-taxo-nodes/Makefile	\
 	example/compressor/Makefile	\
 	example/find-unsupported-edges/Makefile	\
 	example/gapcode/Makefile		\

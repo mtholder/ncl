@@ -2,6 +2,7 @@ SUBDIRS = compressor \
 	nclsimplest \
 	ncltest \
 	basiccmdline \
+	check-taxo-nodes \
 	find-unsupported-edges \
 	normalizer \
 	subsetter \
