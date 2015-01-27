@@ -39,77 +39,102 @@ bool newTreeHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 
 void describeUnnamedNode(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &, std::ostream & out);
 
-std::string getLeftmostDesName(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &nd) {
-	const unsigned ind = nd.GetTaxonIndex();
-	if (ind < taxa->GetNumTaxonLabels()) {
-		return taxa->GetTaxonLabel(ind);
-	}
-	const std::string & name = nd.GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	const unsigned outDegree = nd.GetChildren().size();
-	if (outDegree == 0) {
-		assert(false);
-		return name;
-	}
-	return getLeftmostDesName(taxa, *nd.GetChildren()[0]);
-}
-
-std::string getRightmostDesName(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &nd) {
-	const unsigned ind = nd.GetTaxonIndex();
-	if (ind < taxa->GetNumTaxonLabels()) {
-		return taxa->GetTaxonLabel(ind);
-	}
-	const std::string & name = nd.GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	const unsigned outDegree = nd.GetChildren().size();
-	if (outDegree == 0) {
-		assert(false);
-		return name;
-	}
-	const unsigned lastInd = outDegree - 1;
-	return getRightmostDesName(taxa, *nd.GetChildren()[lastInd]);
-}
-void describeUnnamedNode(const NxsTaxaBlockAPI *taxa, const NxsSimpleNode &nd, std::ostream & out, unsigned int anc) {
-	const NxsSimpleNode *c = nd.GetChildren()[0];
-	assert(c);
-	const std::string & cname = c->GetName();
-	if (!cname.empty()) {
-		out << "ancestor " << 1 + anc << " node(s) before \"" << cname << "\"\n";
-		out.flush();
-	} else {
-		const unsigned coutDegree = c->GetChildren().size();
-		if (coutDegree == 1U) {
-			describeUnnamedNode(taxa, *c, out, anc + 1);
-		} else {
-			std::string left = getLeftmostDesName(taxa, *c);
-			std::string right = getRightmostDesName(taxa, *c);
-			out << "ancestor " << 1 + anc << " node(s) before MRCA of \"" << left << "\" and";
-			out << "\"" << right <<'\"' << std::endl;
-		}
-	}
-}
 
 NxsSimpleTree * refTree = 0;
 
 NxsSimpleTree * taxonomyTree = 0;
 std::map<long, const NxsSimpleNode *> ottID2RefNode;
+std::map<const NxsSimpleNode *, std::string> refTipToName;
 std::map<long, const NxsSimpleNode *> ottID2TaxNode;
 std::map<const NxsSimpleNode *, long> taxNode2ottID;
 
 
 std::set<const NxsSimpleNode *> gSupportedNodes;
+
+
+std::string getLeftmostDesName(const NxsSimpleNode *nd) {
+	const std::string & name = nd->GetName();
+	if (!name.empty()) {
+		return name;
+	}
+	const unsigned outDegree = nd->GetChildren().size();
+	if (outDegree == 0) {
+		return refTipToName[nd];
+	}
+	return getLeftmostDesName(nd->GetChildren()[0]);
+}
+
+std::string getRightmostDesName(const NxsSimpleNode *nd) {
+	const std::string & name = nd->GetName();
+	if (!name.empty()) {
+		return name;
+	}
+	const unsigned outDegree = nd->GetChildren().size();
+	if (outDegree == 0) {
+		return refTipToName[nd];
+	}
+	const unsigned lastInd = outDegree - 1;
+	return getRightmostDesName(nd->GetChildren()[lastInd]);
+}
+
+void describeUnnamedNode(const NxsSimpleNode *nd, std::ostream & out, unsigned int anc) {
+	std::vector<NxsSimpleNode *> children = nd->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree == 1U) {
+		describeUnnamedNode(children[0], out, anc + 1);
+	} else {
+		std::string left = getLeftmostDesName(children[0]);
+		std::string right = getRightmostDesName(children[outDegree - 1]);
+		out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and ";
+		out << "\"" << right <<'\"' << std::endl;
+	}
+}
+
+
 void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, std::set<const NxsSimpleNode *> & gSupportedNodes) {
 	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+	for (std::vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
 		const NxsSimpleNode * nd = *nIt;
 		std::vector<NxsSimpleNode *> children = nd->GetChildren();
 		const unsigned outDegree = children.size();
-		if (outDegree == 1 && gSupportedNodes.find(nd) != gSupportedNodes.end()) {
-			gSupportedNodes.insert(children[0]);
+		if (outDegree == 1 && gSupportedNodes.find(children[0]) != gSupportedNodes.end()) {
+			gSupportedNodes.insert(nd);
+		}
+	}
+}
+
+bool singleDesNamed(const NxsSimpleNode *nd) {
+	std::vector<NxsSimpleNode *> children = nd->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree == 1) {
+		if (!nd->GetName().empty()) {
+			return true;
+		} else {
+			return singleDesNamed(children[0]);
+		}
+	}
+	return false;
+}
+
+void describeUnnamedUnsupported(std::ostream &out, const NxsSimpleTree * tree, const std::set<const NxsSimpleNode *> & gSupportedNodes) {
+	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
+	++nIt; //skip the root
+	for (;nIt != nodes.end(); ++nIt) {
+		const NxsSimpleNode * nd = *nIt;
+		std::vector<NxsSimpleNode *> children = nd->GetChildren();
+		const unsigned outDegree = children.size();
+		if (outDegree > 0 && gSupportedNodes.find(nd) == gSupportedNodes.end()) {
+			if (outDegree == 1) {
+				if (singleDesNamed(nd)) {
+					continue;
+				}
+			}
+			if (nd->GetName().length() > 0) { //assume that it is from the taxonomy
+			} else {
+				out << "Unsupported node ";
+				describeUnnamedNode(nd, out, 0);
+			}
 		}
 	}
 }
@@ -117,6 +142,7 @@ void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, std::set<const 
 
 void summarize(std::ostream & out) {
 	extendSupportedToRedundantNodes(refTree, gSupportedNodes);
+	describeUnnamedUnsupported(out, refTree, gSupportedNodes);
 	out << gSupportedNodes.size() << " supported nodes.\n";
 }
 
@@ -161,10 +187,18 @@ inline long getOTTIndex(const NxsTaxaBlockAPI * taxa, const NxsSimpleNode & nd) 
 void processRefTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
 	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
 	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
-		long ottID = getOTTIndex(tb, **nIt);
+		const NxsSimpleNode * nd = *nIt;
+		long ottID = getOTTIndex(tb, *nd);
+		if (nd->GetChildren().size() == 0) {
+			std::map<long, const NxsSimpleNode *> ottID2RefNode;
+			const unsigned ind = nd->GetTaxonIndex();
+			assert(ind < tb->GetNumTaxonLabels());
+			const std::string tn = tb->GetTaxonLabel(ind);
+			refTipToName[nd] = tn;
+		}
 		if (ottID >= 0) {
 			assert(ottID2RefNode.find(ottID) == ottID2RefNode.end());
-			ottID2RefNode[ottID] = *nIt;
+			ottID2RefNode[ottID] = nd;
 		}
 	}
 }
