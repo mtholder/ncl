@@ -259,24 +259,54 @@ void writeSetDiff(std::ostream & out, const char *indent, const set<long> &fir, 
 
 }
 
+bool isProperSubset(const set<long> & small, const set<long> & big) {
+	if (big.size() <= small.size()) {
+		return false;
+	}
+	for (set<long>::const_iterator rIt = small.begin(); rIt != small.end(); ++rIt) {
+		if (big.find(*rIt) == big.end()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool doCheckEquivalent(std::ostream &out, long ottID, const NxsSimpleNode * snode, std::map<const NxsSimpleNode *, std::set<long> > & srcLookup,
+										  const NxsSimpleNode * tnode, std::map<const NxsSimpleNode *, std::set<long> > & taxLookup,
+										  bool topLevel, bool climbSynth, bool climbTax) {
+	std::map<const NxsSimpleNode *, std::set<long> >::const_iterator streeLSIt = srcLookup.find(snode);
+	assert(streeLSIt != srcLookup.end());
+	std::map<const NxsSimpleNode *, std::set<long> >::const_iterator taxtreeLSIt = taxLookup.find(tnode);
+	assert(taxtreeLSIt != taxLookup.end());
+	const std::set<long> & streeMRCA = streeLSIt->second;
+	const std::set<long> & taxtreeMRCA = taxtreeLSIt->second;
+	if (streeMRCA != taxtreeMRCA) {
+		if (topLevel) {
+			out << "ottID " << ottID << " incorrect:\n";
+			writeSetDiff(out, "    ", streeMRCA, "synth", taxtreeMRCA, "taxonomy");
+		}
+		if (climbSynth && isProperSubset(streeMRCA, taxtreeMRCA)) {
+			return doCheckEquivalent(out, ottID, snode->GetEdgeToParent().GetParent(), srcLookup, tnode, taxLookup, false, true, false);
+		} else if (climbTax && isProperSubset(taxtreeMRCA, streeMRCA)) {
+			return doCheckEquivalent(out, ottID, snode, srcLookup, tnode->GetEdgeToParent().GetParent(), taxLookup, false, false, true);
+		} else {
+			return false;
+		}
+	} else if (!topLevel) {
+		out << "        Found identical leaf sets for the synthetic tree \"" << snode->GetName() << "\" and the taxonomic node \"" << tnode->GetName() << "\".\n";
+	}
+	return true;
+}
+
 void summarize(std::ostream & out) {
 	for (map<const NxsSimpleNode *, long>::const_iterator rnit = gRefNamedNodes.begin(); rnit != gRefNamedNodes.end(); ++rnit) {
 		const NxsSimpleNode * nd = rnit->first;
 		const long ottID = rnit->second;
-		std::map<const NxsSimpleNode *, std::set<long> >::const_iterator r2lsIt = gRefNdp2mrca.find(nd);
-		assert(r2lsIt != gRefNdp2mrca.end());
 		std::map<long, const NxsSimpleNode *>::const_iterator tID2nd = gOttID2TaxNode.find(ottID);
 		assert(tID2nd != gOttID2TaxNode.end());
 		const NxsSimpleNode *taxNd = tID2nd->second;
-		std::map<const NxsSimpleNode *, std::set<long> >::const_iterator streeLSIt = gRefNdp2mrca.find(nd);
-		assert(streeLSIt != gRefNdp2mrca.end());
-		std::map<const NxsSimpleNode *, std::set<long> >::const_iterator taxtreeLSIt = gTaxNdp2mrca.find(taxNd);
-		assert(taxtreeLSIt != gTaxNdp2mrca.end());
-		const std::set<long> & streeMRCA = streeLSIt->second;
-		const std::set<long> & taxtreeMRCA = taxtreeLSIt->second;
-		if (streeMRCA != taxtreeMRCA) {
-			out << "ottID " << ottID << " incorrect:\n";
-			writeSetDiff(out, "    ", streeMRCA, "synth", taxtreeMRCA, "taxonomy");
+		if (!doCheckEquivalent(out, ottID, nd, gRefNdp2mrca, taxNd, gTaxNdp2mrca, true, true, true)) {
+			out << "        Could not find this set of leaves in the synth \"" << nd->GetName() <<"\" in any taxonomic node.\n";
 		}
 	}
 	if (gTaxLeafSet != gRefLeafSet) {
