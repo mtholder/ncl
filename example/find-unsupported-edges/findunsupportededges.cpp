@@ -50,6 +50,7 @@ std::map<long, std::set<long> > gNonMono;
 const bool gTrustNamedNodes = true;
 std::map<const NxsSimpleNode *, long> gExpanded;
 std::map<long, const NxsSimpleNode *> gTabooLeaf;
+std::set<long> gTaxLeafOTTIDs;
 
 
 std::string getLeftmostDesName(const NxsSimpleNode *nd) {
@@ -80,6 +81,7 @@ std::string getRightmostDesName(const NxsSimpleNode *nd) {
 void describeUnnamedNode(const NxsSimpleNode *nd, std::ostream & out, unsigned int anc) {
 	if (nd->GetName().length() > 0) {
 		out << "ancestor " << anc << " node(s) before \"" << nd->GetName() << "\"" << std::endl;
+		return;
 	}
 	std::vector<NxsSimpleNode *> children = nd->GetChildren();
 	const unsigned outDegree = children.size();
@@ -222,6 +224,7 @@ void processTaxonomyTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree)
 		assert(gOttID2TaxNode.find(ottID) == gOttID2TaxNode.end());
 		if (nd->IsTip()) {
 			assert(gOttID2RefNode.find(ottID) != gOttID2RefNode.end());
+			gTaxLeafOTTIDs.insert(ottID);
 		}
 		gOttID2TaxNode[ottID] = *nIt;
 		gTaxNode2ottID[*nIt] = ottID;
@@ -443,7 +446,7 @@ void expandOTTInternalsWhichAreLeaves(const NxsTaxaBlockAPI * tb, NxsSimpleTree 
 			long ottID = getOTTIndex(tb, **nIt);
 			assert(ottID >= 0);
 			assert(gOttID2TaxNode.find(ottID) != gOttID2TaxNode.end());
-			if (gOttID2RefNode.find(ottID) == gOttID2RefNode.end()) {
+			if (gTaxLeafOTTIDs.find(ottID) == gTaxLeafOTTIDs.end()) {
 				std::set<long> leafSet;
 				fillTipOTTIDs(gOttID2TaxNode, ottID, leafSet);
 				replaceNodes[const_cast<NxsSimpleNode *>(&nd)] = leafSet;
@@ -734,7 +737,7 @@ int main(int argc, char *argv[])
 				gCurrentFilename = filepathstr.substr(sp + 1);
 				}
 			gCurrTmpFilepath = std::string("tmp/") + gCurrentFilename;
-			std::cout << "gCurrTmpFilepath = " << gCurrTmpFilepath << '\n';
+			std::cerr << "gCurrTmpFilepath = " << gCurrTmpFilepath << '\n';
 			std::ofstream tostream(gCurrTmpFilepath);
 			gCurrTmpOstream = &tostream;
 			try {
