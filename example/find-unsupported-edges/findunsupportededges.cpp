@@ -738,7 +738,7 @@ int main(int argc, char *argv[])
 				}
 			gCurrTmpFilepath = std::string("tmp/") + gCurrentFilename;
 			std::cerr << "gCurrTmpFilepath = " << gCurrTmpFilepath << '\n';
-			std::ofstream tostream(gCurrTmpFilepath);
+			std::ofstream tostream(gCurrTmpFilepath.c_str());
 			gCurrTmpOstream = &tostream;
 			try {
 				readFilepathAsNEXUS(filepath, f);
