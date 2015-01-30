@@ -30,7 +30,6 @@ long gStrictLevel = 2;
 bool gVerbose = false;
 void processContent(PublicNexusReader & nexusReader, ostream *out);
 
-
 bool newTreeHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
 
 void describeUnnamedNode(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &, ostream & out);
@@ -167,6 +166,41 @@ void writeSet(std::ostream & out, const char *indent, const set<long> &fir, cons
 	}
 }
 
+const string & getLeftmostDesName(const NxsSimpleNode *nd, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames) {
+		const string & name = nd->GetName();
+		if (!name.empty()) {
+			return name;
+		}
+	}
+	if (nd->IsTip()) {
+		map<const NxsSimpleNode *, string>::const_iterator tnIt = tipNameMap.find(nd);
+		if (tnIt == tipNameMap.end()) {
+			throw NxsException("AssertionError: tip node not found in tipNameMap");
+		}
+		return tnIt->second;
+	}
+	return getLeftmostDesName(nd->GetFirstChild(), tipNameMap, useNdNames);
+}
+
+const string &  getRightmostDesName(const NxsSimpleNode *nd, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames) {
+		const string & name = nd->GetName();
+		if (!name.empty()) {
+			return name;
+		}
+	}
+	if (nd->IsTip()) {
+		map<const NxsSimpleNode *, string>::const_iterator tnIt = tipNameMap.find(nd);
+		if (tnIt == tipNameMap.end()) {
+			throw NxsException("AssertionError: tip node not found in tipNameMap");
+		}
+		return tnIt->second;
+	}
+	return getRightmostDesName(nd->GetLastChild(), tipNameMap, useNdNames);
+}
+
+
 /* use some globals, because I'm being lazy... */
 NxsSimpleTree * gRefTree = 0;
 NxsSimpleTree * gTaxonTree = 0;
@@ -189,27 +223,6 @@ bool gNoAprioriTests = true;
 int gRefTreeNumNamedInternalsNodes = 0;
 int gExitCode = 0;
 
-string getLeftmostDesName(const NxsSimpleNode *nd) {
-	const string & name = nd->GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	if (nd->IsTip()) {
-		return gRefTipToName[nd];
-	}
-	return getLeftmostDesName(nd->GetFirstChild());
-}
-
-string getRightmostDesName(const NxsSimpleNode *nd) {
-	const string & name = nd->GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	if (nd->IsTip()) {
-		return gRefTipToName[nd];
-	}
-	return getRightmostDesName(nd->GetLastChild());
-}
 
 void describeUnnamedNode(const NxsSimpleNode *nd, ostream & out, unsigned int anc) {
 	if (nd->GetName().length() > 0) {
@@ -223,8 +236,8 @@ void describeUnnamedNode(const NxsSimpleNode *nd, ostream & out, unsigned int an
 	} else if (outDegree == 1U) {
 		describeUnnamedNode(children[0], out, anc + 1);
 	} else {
-		string left = getLeftmostDesName(children[0]);
-		string right = getRightmostDesName(children[outDegree - 1]);
+		string left = getLeftmostDesName(children[0], gRefTipToName, false);
+		string right = getRightmostDesName(children[outDegree - 1], gRefTipToName, false);
 		out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and ";
 		out << "\"" << right <<'\"' << endl;
 	}
