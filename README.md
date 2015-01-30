@@ -1,7 +1,7 @@
-NCL - the NEXUS Class Library
-==============================
+# NCL - the NEXUS Class Library
+[![Build Status](https://secure.travis-ci.org/OpenTreeOfLife/ncl.png)](http://travis-ci.org/OpenTreeOfLife/ncl)
 
-This is version 2.1.21-dev
+This is version 2.1.21-dev of NCL by Paul O. Lewis (and others see below)
 
 This git repo was forked from https://github.com/mtholder/ncl
 so that all of the open tree of life developers would have write
@@ -30,23 +30,43 @@ applications.
 As of March 09, 2012, NCL is available under a Simplified BSD license (see
 BSDLicense.txt) in addition to the GPL license.
 
-ACKNOWLEDGEMENTS
-================
+# ACKNOWLEDGEMENTS
+NCL AUTHORS -- the author of the NEXUS Class Library (NCL) version 2.0 is
+
+  Paul O. Lewis, Ph.D.
+  Department of Ecology and Evolutionary Biology
+  The University of Connecticut
+  75 North Eagleville Road, Unit 3043
+  Storrs, CT 06269-3043
+  U.S.A.
+
+  WWW: http://lewis.eeb.uconn.edu/lewishome
+  Email: paul.lewis@uconn.edu
+
+
+Versions after 2.0 contain changes primarily made by:
+  Mark T. Holder  mholder@users.sourceforge.net
+
+Other contributors to these versions include:
+  Derrick Zwickl
+  Brian O'Meara
+  Brandon Chisham
+  François Michonneau
+  Jeet Sukumaran
+
+The code in examples/phylobase... was written by Brian O'Meara and Derrick Zwickl
+for phylobase.
+
+David Suárez Pascal contributed SWIG bindings which heavily influenced those
+   found in branches/v2.2. Thanks to David for blazing the way on the swig binding,
+    Google for funding, and NESCent (in particular Hilmar Lapp) for getting the
+    NESCent GSoC program going.
+
+The 2010 GSoC effort also led to enhancements in terms of annotation storage and
+xml parsing which are currently on. Michael Elliot contributed some code to the branches/xml branch.
+Thanks to NESCent and  Google for supporting that work.
 
 Many of the files used for testing were provided by Arlin Stoltzfus (see
 http://www.molevol.org/camel/projects/nexus/ for more information), the Mesquite
 package, and from TreeBase (thanks, Bill Piel!).
-
-The SWIG bindings for version 2.1 were inspired by the work of David Suarez
-Pascal in the 2007 Google Summer of Code.  They were simplified using new
-features of NCL 2.1.  Thanks to David for blazing the way on the old version,
-Google for funding, and NESCent (in particular Hilmar Lapp) for getting the
-NESCent GSoC program going.
-
-The 2010 GSoC effort also led to enhancements in terms of annotation storage and
-xml parsing which are currently on:
-
- https://ncl.svn.sourceforge.net/svnroot/ncl/branches/xml
-
-Thanks to NESCent, Google, and Michael Elliot for that support.
 
