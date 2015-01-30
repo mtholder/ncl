@@ -30,80 +30,245 @@ long gStrictLevel = 2;
 bool gVerbose = false;
 void processContent(PublicNexusReader & nexusReader, ostream *out);
 
-
 bool newTreeHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
+const NxsSimpleNode * findMRCAFromIDSet(const map<long, const NxsSimpleNode *> & ref, const set<long> & idSet, long trigger);
+template<typename T>
+const std::string & getStrOrThrow(const T & nd, const std::map<T, std::string> & tipNameMap);
 
-void describeUnnamedNode(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &, std::ostream & out);
+
+const NxsSimpleNode * findNextSignificantNode(const NxsSimpleNode * node, const map<const NxsSimpleNode *, set<long> > & ndp2mrca) {
+	const NxsSimpleNode * currNode = node;
+	for (;;) {
+		map<const NxsSimpleNode *, set<long> >::const_iterator mIt = ndp2mrca.find(currNode);
+		assert(mIt != ndp2mrca.end());
+		const set<long> & oset = mIt->second;
+		vector<NxsSimpleNode *> children = currNode->GetChildren();
+		const NxsSimpleNode * sc = 0L;
+		for (vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+			const NxsSimpleNode * child = *cIt;
+			const map<const NxsSimpleNode *, set<long> >::const_iterator nIt = ndp2mrca.find(child);
+			if (nIt != ndp2mrca.end()) {
+				if (sc == 0L) {
+					sc = child;
+				} else {
+					return currNode; // more than one child is in ndp2mrca, so this node is significant
+				}
+			}
+		}
+		if (sc == 0L) {
+			cerr << "Failing. Node found with ottIDs marked, but no children with ottIDs marked:\n";
+			for (set<long>::const_iterator oIt = oset.begin(); oIt != oset.end(); ++oIt) {
+				if (oIt != oset.begin()) {
+					cerr << ", ";
+				}
+				cerr << *oIt;
+			}
+			cerr << endl;
+			assert(false);
+		}
+		const set<long> & dset = ndp2mrca.find(sc)->second;
+		if (dset != oset) {
+			cerr << "Failing. Internal node found with an ottID assignment. At this point the ottID should map to leaves. Par ottIDs:\n";
+			for (set<long>::const_iterator oIt = oset.begin(); oIt != oset.end(); ++oIt) {
+				if (oIt != oset.begin()) {
+					cerr << ", ";
+				}
+				cerr << *oIt;
+			}
+			cerr << endl;
+			cerr << "child ottIDs:\n";
+			for (set<long>::const_iterator oIt = dset.begin(); oIt != dset.end(); ++oIt) {
+				if (oIt != dset.begin()) {
+					cerr << ", ";
+				}
+				cerr << *oIt;
+			}
+			cerr << endl;
+			assert(false);
+		}
+		currNode = sc;
+	}
+
+}
+
+
+void writeSubtreeNewickOTTIDs(ostream &out, const NxsSimpleNode * node, const map<const NxsSimpleNode *, set<long> > & ndp2mrca) {
+	map<const NxsSimpleNode *, set<long> >::const_iterator nIt = ndp2mrca.find(node);
+	assert(nIt != ndp2mrca.end());
+	const set<long> & ottIDSet = nIt->second;
+	if (nIt->second.size() == 1) {
+		const long ottID = *ottIDSet.begin();
+		out << "ott" << ottID;
+	} else {
+		assert(nIt->second.size() > 1);
+		const NxsSimpleNode * nsn = findNextSignificantNode(node, ndp2mrca);
+		out << '(';
+		unsigned numcwritten = 0;
+		vector<NxsSimpleNode *> children = nsn->GetChildren();
+		for (vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+			const NxsSimpleNode * child = *cIt;
+			nIt = ndp2mrca.find(child);
+			if (nIt != ndp2mrca.end()) {
+				if (numcwritten > 0) {
+					out << ',';
+				}
+				writeSubtreeNewickOTTIDs(out, child, ndp2mrca);
+				++numcwritten;
+			}
+		}
+		assert(numcwritten > 1);
+		out << ')';
+	}
+}
+
+const NxsSimpleNode * findMRCAFromIDSet(const map<long, const NxsSimpleNode *> & ref,
+	                           			const set<long> & idSet, long trigger) {
+	map<const NxsSimpleNode *, unsigned int> n2c;
+	long shortestPathLen = -1;
+	const NxsSimpleNode * shortestPathNode = 0;
+	for (set<long>::const_iterator toIt = idSet.begin(); toIt != idSet.end(); ++toIt) {
+		const NxsSimpleNode * nd = 0;
+		map<long, const NxsSimpleNode *>::const_iterator rIt = ref.find(*toIt);
+		if (rIt == ref.end()) {
+			cerr << "tip " << *toIt << " a descendant of " << trigger << " not found.\n";
+			assert(false);
+		}
+		nd = rIt->second;
+		long currPathLen = 0;
+		while (nd != 0) {
+			n2c[nd] += 1;
+			currPathLen += 1;
+			nd = nd->GetEdgeToParentRef().GetParent();
+		}
+		if (shortestPathLen < 0 || currPathLen < shortestPathLen) {
+			shortestPathLen = currPathLen;
+			shortestPathNode = rIt->second;
+		}
+	}
+	const unsigned nTips = idSet.size();
+	const NxsSimpleNode * cn = shortestPathNode;
+	while (cn != 0) {
+		if (n2c[cn] == nTips) {
+			return cn;
+		}
+		cn = cn->GetEdgeToParentRef().GetParent();
+	}
+	assert(false);
+	return 0L;
+}
+
+void writeSet(std::ostream & out, const char *indent, const set<long> &fir, const char * sep) {
+	for (set<long>::const_iterator rIt = fir.begin(); rIt != fir.end(); ++rIt) {
+		if (rIt != fir.begin()) {
+			out << sep;
+		}
+		out << indent << "ott" << *rIt;
+	}
+}
+
+template<typename T>
+inline const std::string & getStrOrThrow(const T & nd, const std::map<T, std::string> & tipNameMap) {
+	typename std::map<T, string>::const_iterator tnIt = tipNameMap.find(nd);
+	if (tnIt == tipNameMap.end()) {
+		throw NxsException("AssertionError: Key not found");
+	}
+	return tnIt->second;
+}
+
+const string & getLeftmostDesName(const NxsSimpleNode *nd, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames) {
+		const string & name = nd->GetName();
+		if (!name.empty()) {
+			return name;
+		}
+	}
+	if (nd->IsTip()) {
+		return getStrOrThrow(nd, tipNameMap);
+	}
+	return getLeftmostDesName(nd->GetFirstChild(), tipNameMap, useNdNames);
+}
+
+const string &  getRightmostDesName(const NxsSimpleNode *nd, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames) {
+		const string & name = nd->GetName();
+		if (!name.empty()) {
+			return name;
+		}
+	}
+	if (nd->IsTip()) {
+		return getStrOrThrow(nd, tipNameMap);
+	}
+	return getRightmostDesName(nd->GetLastChild(), tipNameMap, useNdNames);
+}
+
+void describeUnnamedNode(const NxsSimpleNode *nd, ostream & out, unsigned int anc, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames && nd->GetName().length() > 0) {
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before \"" << nd->GetName() << "\"" << endl;
+		} else {
+			out << "the node \"" << nd->GetName() << "\"" << endl;
+		}
+		return;
+	}
+	vector<NxsSimpleNode *> children = nd->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree == 0) {
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before the leaf \"" << getStrOrThrow(nd, tipNameMap)  << "\"" << endl;
+		} else {
+			out << "the leaf \"" << getStrOrThrow(nd, tipNameMap)  << "\"" << endl;
+		}
+	} else if (outDegree == 1U) {
+		describeUnnamedNode(children[0], out, anc + 1, tipNameMap, useNdNames);
+	} else {
+		string left = getLeftmostDesName(children[0], tipNameMap, useNdNames);
+		string right = getRightmostDesName(children[outDegree - 1], tipNameMap, useNdNames);
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and " << "\"" << right <<'\"' << endl;
+		} else {
+			out <<  "MRCA of \"" << left << "\" and " << "\"" << right <<'\"' << endl;
+		}
+	}
+}
+
 
 /* use some globals, because I'm being lazy... */
 NxsSimpleTree * gRefTree = 0;
 NxsSimpleTree * gTaxonTree = 0;
-std::map<long, const NxsSimpleNode *> gOttID2RefNode;
-std::map<const NxsSimpleNode *, std::string> gRefTipToName;
-std::map<long, const NxsSimpleNode *> gOttID2TaxNode;
-std::map<const NxsSimpleNode *, long> gTaxNode2ottID;
-std::set<const NxsSimpleNode *> gSupportedNodes;
-std::string gCurrentFilename;
-std::string gCurrTmpFilepath;
-std::ostream * gCurrTmpOstream = 0L;
-std::map<long, std::set<long> > gNonMono;
+map<long, const NxsSimpleNode *> gOttID2RefNode;
+map<const NxsSimpleNode *, string> gRefTipToName;
+map<long, const NxsSimpleNode *> gOttID2TaxNode;
+map<const NxsSimpleNode *, long> gTaxNode2ottID;
+set<const NxsSimpleNode *> gSupportedNodes;
+string gCurrentFilename;
+string gCurrTmpFilepath;
+ostream * gCurrTmpOstream = 0L;
+bool gReadingTxtFile = false;
+map<long, set<long> > gNonMono;
 const bool gTrustNamedNodes = true;
-std::map<const NxsSimpleNode *, long> gExpanded;
-std::map<long, const NxsSimpleNode *> gTabooLeaf;
-std::set<long> gTaxLeafOTTIDs;
+map<const NxsSimpleNode *, long> gExpanded;
+map<long, const NxsSimpleNode *> gTabooLeaf;
+set<long> gTaxLeafOTTIDs;
+map<const NxsSimpleNode *, set<long> > gAPrioriProblemNode;
+bool gNoAprioriTests = true;
+int gRefTreeNumNamedInternalsNodes = 0;
+int gExitCode = 0;
 
 
-std::string getLeftmostDesName(const NxsSimpleNode *nd) {
-	const std::string & name = nd->GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	const unsigned outDegree = nd->GetChildren().size();
-	if (outDegree == 0) {
-		return gRefTipToName[nd];
-	}
-	return getLeftmostDesName(nd->GetChildren()[0]);
-}
-
-std::string getRightmostDesName(const NxsSimpleNode *nd) {
-	const std::string & name = nd->GetName();
-	if (!name.empty()) {
-		return name;
-	}
-	const unsigned outDegree = nd->GetChildren().size();
-	if (outDegree == 0) {
-		return gRefTipToName[nd];
-	}
-	const unsigned lastInd = outDegree - 1;
-	return getRightmostDesName(nd->GetChildren()[lastInd]);
-}
-
-void describeUnnamedNode(const NxsSimpleNode *nd, std::ostream & out, unsigned int anc) {
-	if (nd->GetName().length() > 0) {
-		out << "ancestor " << anc << " node(s) before \"" << nd->GetName() << "\"" << std::endl;
-		return;
-	}
-	std::vector<NxsSimpleNode *> children = nd->GetChildren();
-	const unsigned outDegree = children.size();
-	if (outDegree == 1U) {
-		describeUnnamedNode(children[0], out, anc + 1);
-	} else {
-		std::string left = getLeftmostDesName(children[0]);
-		std::string right = getRightmostDesName(children[outDegree - 1]);
-		out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and ";
-		out << "\"" << right <<'\"' << std::endl;
-	}
-}
-
-
-void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, std::set<const NxsSimpleNode *> & gSupportedNodes) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
+void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, set<const NxsSimpleNode *> & gSupportedNodes) {
+	assert(gAPrioriProblemNode.empty() == gNoAprioriTests);
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
 		const NxsSimpleNode * nd = *nIt;
-		std::vector<NxsSimpleNode *> children = nd->GetChildren();
+		vector<NxsSimpleNode *> children = nd->GetChildren();
 		const unsigned outDegree = children.size();
-		if (outDegree == 1 && gSupportedNodes.find(children[0]) != gSupportedNodes.end()) {
-			gSupportedNodes.insert(nd);
+		if (outDegree == 1) {
+			if (gSupportedNodes.find(children[0]) != gSupportedNodes.end() || children[0]->GetName().length() > 0) {
+				if (gAPrioriProblemNode.find(nd) != gAPrioriProblemNode.end()) {
+					assert(false); // shouldn't get out-degree one nodes w/ our designators
+				}
+				gSupportedNodes.insert(nd);
+			}
 		}
 	}
 }
@@ -112,51 +277,100 @@ bool singleDesSupportedOrNamed(const NxsSimpleNode *nd) {
 	if (gSupportedNodes.find(nd) != gSupportedNodes.end()) {
 		return true;
 	}
-	std::vector<NxsSimpleNode *> children = nd->GetChildren();
-	const unsigned outDegree = children.size();
-	if (outDegree == 1) {
+	if (nd->GetOutDegree() == 1) {
 		if (!nd->GetName().empty()) {
 			return true;
 		} else {
-			return singleDesSupportedOrNamed(children[0]);
+			return singleDesSupportedOrNamed(nd->GetFirstChild());
 		}
 	}
 	return false;
 }
-
-void describeUnnamedUnsupported(std::ostream &out, const NxsSimpleTree * tree, const std::set<const NxsSimpleNode *> & gSupportedNodes) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
+bool IsRedundantNodeAroundTip(const NxsSimpleNode * nd) {
+	if (nd->IsTip()) {
+		return true;
+	}
+	if (nd->GetOutDegree() == 1) {
+		return IsRedundantNodeAroundTip(nd->GetFirstChild());
+	}
+	return false;
+}
+int describeUnnamedUnsupported(ostream &out, const NxsSimpleTree * tree, const set<const NxsSimpleNode *> & supported) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin();
+	int numUnsupported = 0;
 	++nIt; //skip the root
 	for (;nIt != nodes.end(); ++nIt) {
 		const NxsSimpleNode * nd = *nIt;
-		std::vector<NxsSimpleNode *> children = nd->GetChildren();
+		vector<NxsSimpleNode *> children = nd->GetChildren();
 		const unsigned outDegree = children.size();
-		if (outDegree > 0 && gSupportedNodes.find(nd) == gSupportedNodes.end()) {
-			if (outDegree == 1) {
-				if (gTrustNamedNodes && singleDesSupportedOrNamed(nd)) {
-					continue;
+		if (outDegree > 0 && supported.find(nd) == supported.end()) {
+			if (IsRedundantNodeAroundTip(nd)) {
+				//pass
+			} else if (outDegree == 1 && gTrustNamedNodes && singleDesSupportedOrNamed(nd)) {
+				//pass
+			} else if (nd->GetName().length() == 0) { //assume that it is from the taxonomy
+				if (gNoAprioriTests) {
+					out << "Unsupported node ";
+				} else {
+					map<const NxsSimpleNode *, set<long> >::const_iterator gaIt = gAPrioriProblemNode.find(nd);
+					if (gaIt == gAPrioriProblemNode.end()) {
+						out << "Novel unsupported node ";
+					} else {
+						out << "Confirmation of unsupported node (designators =";
+						writeSet(out, "", gaIt->second, " ");
+						out << ") ";
+					}
 				}
-			}
-			if (nd->GetName().length() == 0) { //assume that it is from the taxonomy
-				out << "Unsupported node ";
-				describeUnnamedNode(nd, out, 0);
+				describeUnnamedNode(nd, out, 0, gRefTipToName, false);
+				numUnsupported += 1;
 			}
 		}
+	}
+	return numUnsupported;
+}
+
+
+void summarize(ostream & out) {
+	assert(gAPrioriProblemNode.empty() == gNoAprioriTests);
+	extendSupportedToRedundantNodes(gRefTree, gSupportedNodes);
+	int numUnsupported = describeUnnamedUnsupported(out, gRefTree, gSupportedNodes);
+	for (map<const NxsSimpleNode *, set<long> >::const_iterator gaIt = gAPrioriProblemNode.begin(); gaIt != gAPrioriProblemNode.end(); ++gaIt) {
+		if (gSupportedNodes.find(gaIt->first) != gSupportedNodes.end()) {
+			out << "Claim of unsupported apparently refuted for designators: ";
+			writeSet(out, "", gaIt->second, " ");
+			out << ". See standard error stream for details.\n";
+		}
+	} 
+	int supNonNamed = 0;
+	int numSupportedInternals = 0;
+	for (set<const NxsSimpleNode *>::const_iterator rIt = gSupportedNodes.begin(); rIt != gSupportedNodes.end(); ++rIt) {
+		if (!(*rIt)->IsTip()) {
+			numSupportedInternals += 1;
+			if ((*rIt)->GetName().length() == 0) {
+				supNonNamed += 1;
+			}
+		}
+	}
+	out << "\n\nFinal summary:\n";
+	out << gRefTreeNumNamedInternalsNodes << " internal nodes were named in the reference tree. These were not rigorously checked against the taxonomy. They may not be detected as errors.\n";
+	out << numSupportedInternals << " internal nodes where flagged as being supported by an input (including taxonomy).\n";
+	int supNamed = numSupportedInternals - supNonNamed;
+	out << "    " << supNamed << " of these were named (some of the support could just be the taxonomic expansion of tips).\n";
+	out << "    " << supNonNamed << " of these were unnamed.\n";
+	out << numUnsupported << " unsupported nodes.\n";
+	out << endl;
+	if (gExitCode < 0) {
+		gExitCode -= numUnsupported;
+	} else {
+		gExitCode = numUnsupported;
 	}
 }
 
 
-void summarize(std::ostream & out) {
-	extendSupportedToRedundantNodes(gRefTree, gSupportedNodes);
-	describeUnnamedUnsupported(out, gRefTree, gSupportedNodes);
-	out << gSupportedNodes.size() << " supported nodes.\n";
-}
 
-
-
-inline long ottIDFromName(const std::string & n) {
-	//std::cout << "name \"" << n << "\"\n";
+inline long ottIDFromName(const string & n) {
+	//cout << "name \"" << n << "\"\n";
 	if (n.empty()) {
 		return -1;
 	}
@@ -182,14 +396,14 @@ inline long getOTTIndex(const NxsTaxaBlockAPI * taxa, const NxsSimpleNode & nd) 
 	const NxsSimpleNode * ndp = &nd;
 	map<const NxsSimpleNode *, long>::const_iterator expIt = gExpanded.find(ndp);
 	if (expIt != gExpanded.end()) {
-		std::cerr << "  shortcircuit returning " << expIt->second << std::endl;
+		//cerr << "  shortcircuit returning " << expIt->second << endl;
 		return expIt->second;
 	}
-	const std::string & name = nd.GetName();
+	const string & name = nd.GetName();
 	if (name.empty()) {
 		const unsigned ind = nd.GetTaxonIndex();
 		if (ind < taxa->GetNumTaxonLabels()) {
-			const std::string tn = taxa->GetTaxonLabel(ind);
+			const string tn = taxa->GetTaxonLabel(ind);
 			return ottIDFromName(tn);
 		}
 		return -1;
@@ -198,15 +412,17 @@ inline long getOTTIndex(const NxsTaxaBlockAPI * taxa, const NxsSimpleNode & nd) 
 }
 
 void processRefTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
 		const NxsSimpleNode * nd = *nIt;
 		long ottID = getOTTIndex(tb, *nd);
-		if (nd->GetChildren().size() == 0) {
+		if (nd->IsTip()) {
 			const unsigned ind = nd->GetTaxonIndex();
 			assert(ind < tb->GetNumTaxonLabels());
-			const std::string tn = tb->GetTaxonLabel(ind);
+			const string tn = tb->GetTaxonLabel(ind);
 			gRefTipToName[nd] = tn;
+		} else if (nd->GetName().length() > 0) {
+			gRefTreeNumNamedInternalsNodes += 1;
 		}
 		if (ottID >= 0) {
 			assert(gOttID2RefNode.find(ottID) == gOttID2RefNode.end());
@@ -216,8 +432,8 @@ void processRefTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
 }
 
 void processTaxonomyTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (vector<const NxsSimpleNode *>::const_iterator nIt = nodes.begin(); nIt != nodes.end(); ++nIt) {
 		const NxsSimpleNode * nd = *nIt;
 		long ottID = getOTTIndex(tb, **nIt);
 		assert(ottID >= 0);
@@ -229,74 +445,45 @@ void processTaxonomyTree(const NxsTaxaBlockAPI * tb, const NxsSimpleTree * tree)
 		gOttID2TaxNode[ottID] = *nIt;
 		gTaxNode2ottID[*nIt] = ottID;
 	}
-	for (std::map<long, const NxsSimpleNode *>::const_iterator nit = gOttID2RefNode.begin(); nit != gOttID2RefNode.end(); ++nit) {
+	for (map<long, const NxsSimpleNode *>::const_iterator nit = gOttID2RefNode.begin(); nit != gOttID2RefNode.end(); ++nit) {
 		assert(gOttID2TaxNode.find(nit->first) != gOttID2TaxNode.end());
 	}
 }
 
 //@recursive!
-void fillTipOTTIDs(const std::map<long, const NxsSimpleNode *> &taxonomy, long ottID, std::set<long> & tipOTTIDs) {
-	std::map<long, const NxsSimpleNode *>::const_iterator tnIt = taxonomy.find(ottID);
+void fillTipOTTIDs(const map<long, const NxsSimpleNode *> &taxonomy, long ottID, set<long> & tipOTTIDs) {
+	map<long, const NxsSimpleNode *>::const_iterator tnIt = taxonomy.find(ottID);
 	assert(tnIt != taxonomy.end());
 	const NxsSimpleNode * tn = tnIt->second;
-	std::vector<NxsSimpleNode *> children = tn->GetChildren();
+	vector<NxsSimpleNode *> children = tn->GetChildren();
 	const unsigned outDegree = children.size();
 	if (outDegree == 0) {
 		tipOTTIDs.insert(gTaxNode2ottID[tn]);
 	} else {
-		for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+		for (vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
 			long ct = gTaxNode2ottID[*cIt];
 			fillTipOTTIDs(taxonomy, ct, tipOTTIDs);
 		}
 	}
 }
 
-const NxsSimpleNode * findMRCA(const std::map<long, const NxsSimpleNode *> & ref, const std::map<long, const NxsSimpleNode *> &taxonomy, long ottID) {
-	std::set<long> tipOTTIDs;
+const NxsSimpleNode * findMRCA(const map<long, const NxsSimpleNode *> & ref,
+	                           const map<long, const NxsSimpleNode *> &taxonomy, long ottID) {
+	set<long> tipOTTIDs;
 	fillTipOTTIDs(taxonomy, ottID, tipOTTIDs);
 	const unsigned nTips = tipOTTIDs.size();
 	if (nTips < 2) {
-		std::cerr << "findMRCA called on " << ottID << '\n';
+		cerr << "findMRCA called on " << ottID << '\n';
 		assert(false);
 	}
 	gNonMono[ottID] = tipOTTIDs;
-
-	std::map<const NxsSimpleNode *, unsigned int> n2c;
-	long shortestPathLen = -1;
-	const NxsSimpleNode * shortestPathNode = 0;
-	for (std::set<long>::const_iterator toIt = tipOTTIDs.begin(); toIt != tipOTTIDs.end(); ++toIt) {
-		const NxsSimpleNode * nd = 0;
-		std::map<long, const NxsSimpleNode *>::const_iterator rIt = ref.find(*toIt);
-		if (rIt == ref.end()) {
-			std::cerr << "tip " << *toIt << " a descendant of " << ottID << " not found.\n";
-			assert(false);
-		}
-		nd = rIt->second;
-		long currPathLen = 0;
-		while (nd != 0) {
-			n2c[nd] += 1;
-			currPathLen += 1;
-			nd = nd->GetEdgeToParentRef().GetParent();
-		}
-		if (shortestPathLen < 0 || currPathLen < shortestPathLen) {
-			shortestPathLen = currPathLen;
-			shortestPathNode = rIt->second;
-		}
-	}
-	const NxsSimpleNode * cn = shortestPathNode;
-	while (cn != 0) {
-		if (n2c[cn] == nTips) {
-			return cn;
-		}
-		cn = cn->GetEdgeToParentRef().GetParent();
-	}
-	assert(false);
-	return 0L;
+	return findMRCAFromIDSet(ref, tipOTTIDs, ottID);
 }
 
-void markPathToRoot(std::map<const NxsSimpleNode *, std::set<long> > &n2m, long ottID) {
+
+void markPathToRoot(map<const NxsSimpleNode *, set<long> > &n2m, long ottID) {
 	const NxsSimpleNode * nd = 0;
-	std::map<long, const NxsSimpleNode *>::const_iterator fIt = gOttID2RefNode.find(ottID);
+	map<long, const NxsSimpleNode *>::const_iterator fIt = gOttID2RefNode.find(ottID);
 	if (fIt != gOttID2RefNode.end()) {
 		nd = fIt->second;
 	} else {
@@ -310,14 +497,14 @@ void markPathToRoot(std::map<const NxsSimpleNode *, std::set<long> > &n2m, long 
 	}
 }
 
-bool mrcaInThisLeafSet(const NxsSimpleNode * nd, const std::map<const NxsSimpleNode *, std::set<long> > & refNdp2mrca, const std::set<long> & leafSet) {
-	std::vector<NxsSimpleNode *> children = nd->GetChildren();
+bool mrcaInThisLeafSet(const NxsSimpleNode * nd, const map<const NxsSimpleNode *, set<long> > & refNdp2mrca, const set<long> & leafSet) {
+	vector<NxsSimpleNode *> children = nd->GetChildren();
 	const unsigned outDegree = children.size();
 	if (outDegree < 2) {
 		return false;
 	}
 	bool foundFirstInf = false;
-	for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+	for (vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
 		const NxsSimpleNode * c = *cIt;
 		if (refNdp2mrca.find(c) != refNdp2mrca.end()) {
 			if (foundFirstInf) {
@@ -329,136 +516,84 @@ bool mrcaInThisLeafSet(const NxsSimpleNode * nd, const std::map<const NxsSimpleN
 	return false;
 }
 
-void recordSupportedNodes(const std::map<const NxsSimpleNode *, std::set<long> > & refNdp2mrca,
-						  std::set<std::set<long> > & sourceClades,
-						  std::set<const NxsSimpleNode *> & supportedNodes,
-						  const std::set<long> & leafSet) {
-	for (std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nsIt = refNdp2mrca.begin(); nsIt != refNdp2mrca.end(); ++nsIt) {
+// find most recent anc of nd with out-degree > 1
+const NxsSimpleNode * findFirstBranchingAnc(const NxsSimpleNode *nd) {
+	const NxsSimpleNode * anc = nd->GetEdgeToParentRef().GetParent();
+	assert(anc);
+	while (anc->GetOutDegree() == 1) {
+		anc = anc->GetEdgeToParentRef().GetParent();
+	}
+	return anc;
+}
+
+void recordSupportedNodes(const map<const NxsSimpleNode *, set<long> > & refNdp2mrca,
+						  const map<set<long>, const NxsSimpleNode *> & sourceClades,
+						  set<const NxsSimpleNode *> & supportedNodes,
+						  const set<long> & leafSet,
+						  const map<const NxsSimpleNode *, set<long> > & srcNdp2mrca) {
+	assert(gAPrioriProblemNode.empty() == gNoAprioriTests);
+	
+	for (map<const NxsSimpleNode *, set<long> >::const_iterator nsIt = refNdp2mrca.begin(); nsIt != refNdp2mrca.end(); ++nsIt) {
 		const NxsSimpleNode * nd = nsIt->first;
 		const NxsSimpleNode * par = nd->GetEdgeToParentRef().GetParent();
 		if (par != 0) {
-			const std::set<long> & nm = nsIt->second;
-			if (mrcaInThisLeafSet(nd, refNdp2mrca, leafSet) && sourceClades.find(nm) != sourceClades.end()) {
-				supportedNodes.insert(nd);
+			const set<long> & nm = nsIt->second;
+			const NxsSimpleNode * firstBranchingAnc = findFirstBranchingAnc(nd);
+			map<const NxsSimpleNode *, set<long> >::const_iterator ancIt = refNdp2mrca.find(firstBranchingAnc);
+			assert(ancIt != refNdp2mrca.end());
+			const set<long> & anm = ancIt->second;
+			if (mrcaInThisLeafSet(nd, refNdp2mrca, leafSet) && (anm != nm)) {
+				map<set<long>, const NxsSimpleNode *>::const_iterator scIt = sourceClades.find(nm);
+				if (scIt != sourceClades.end()) {
+					if (gAPrioriProblemNode.find(nd) != gAPrioriProblemNode.end()) {
+						ostream & out = cerr;
+						map<const NxsSimpleNode *, set<long> >::const_iterator apIt = gAPrioriProblemNode.find(nd);
+						out << "ERROR!: a priori unsupported node found. Designators were ";
+						writeSet(out, "", apIt->second, " ");
+						out << ". A node was found, which (when pruned to the leaf set of an input tree) contained:\n";
+						writeSet(out, "    ", nm, " ");
+						out << "\nThe subtree from the source was: ";
+						const NxsSimpleNode * srcNd = scIt->second;
+						writeSubtreeNewickOTTIDs(out, srcNd, srcNdp2mrca);
+						gExitCode = -1;
+					}
+					supportedNodes.insert(nd);
+				}
 			}
 		}
 	}
 }
 
-const NxsSimpleNode * findNextSignificantNode(const NxsSimpleNode * node, const std::map<const NxsSimpleNode *, std::set<long> > & ndp2mrca) {
-	const NxsSimpleNode * currNode = node;
-	for (;;) {
-		std::map<const NxsSimpleNode *, std::set<long> >::const_iterator mIt = ndp2mrca.find(currNode);
-		assert(mIt != ndp2mrca.end());
-		const std::set<long> & oset = mIt->second;
-		std::vector<NxsSimpleNode *> children = currNode->GetChildren();
-		const NxsSimpleNode * sc = 0L;
-		for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
-			const NxsSimpleNode * child = *cIt;
-			const std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nIt = ndp2mrca.find(child);
-			if (nIt != ndp2mrca.end()) {
-				if (sc == 0L) {
-					sc = child;
-				} else {
-					return currNode; // more than one child is in ndp2mrca, so this node is significant
-				}
-			}
-		}
-		if (sc == 0L) {
-			std::cerr << "Failing. Node found with ottIDs marked, but no children with ottIDs marked:\n";
-			for (std::set<long>::const_iterator oIt = oset.begin(); oIt != oset.end(); ++oIt) {
-				if (oIt != oset.begin()) {
-					std::cerr << ", ";
-				}
-				std::cerr << *oIt;
-			}
-			std::cerr << std::endl;
-			assert(false);
-		}
-		const std::set<long> & dset = ndp2mrca.find(sc)->second;
-		if (dset != oset) {
-			std::cerr << "Failing. Internal node found with an ottID assignment. At this point the ottID should map to leaves. Par ottIDs:\n";
-			for (std::set<long>::const_iterator oIt = oset.begin(); oIt != oset.end(); ++oIt) {
-				if (oIt != oset.begin()) {
-					std::cerr << ", ";
-				}
-				std::cerr << *oIt;
-			}
-			std::cerr << std::endl;
-			std::cerr << "child ottIDs:\n";
-			for (std::set<long>::const_iterator oIt = dset.begin(); oIt != dset.end(); ++oIt) {
-				if (oIt != dset.begin()) {
-					std::cerr << ", ";
-				}
-				std::cerr << *oIt;
-			}
-			std::cerr << std::endl;
-			assert(false);
-		}
-		currNode = sc;
-	}
-
-}
-
-void writeSubtreeNewickOTTIDs(std::ostream &out, const NxsSimpleNode * node, const std::map<const NxsSimpleNode *, std::set<long> > & ndp2mrca) {
-	std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nIt = ndp2mrca.find(node);
-	assert(nIt != ndp2mrca.end());
-	const std::set<long> & ottIDSet = nIt->second;
-	if (nIt->second.size() == 1) {
-		const long ottID = *ottIDSet.begin();
-		out << "ott" << ottID;
-	} else {
-		assert(nIt->second.size() > 1);
-		const NxsSimpleNode * nsn = findNextSignificantNode(node, ndp2mrca);
-		out << '(';
-		unsigned numcwritten = 0;
-		std::vector<NxsSimpleNode *> children = nsn->GetChildren();
-		for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
-			const NxsSimpleNode * child = *cIt;
-			nIt = ndp2mrca.find(child);
-			if (nIt != ndp2mrca.end()) {
-				if (numcwritten > 0) {
-					out << ',';
-				}
-				writeSubtreeNewickOTTIDs(out, child, ndp2mrca);
-				++numcwritten;
-			}
-		}
-		assert(numcwritten > 1);
-		out << ')';
-	}
-}
-void writeNewickOTTIDs(std::ostream &out, const NxsSimpleTree * tree, const std::map<const NxsSimpleNode *, std::set<long> > & ndp2mrca) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+void writeNewickOTTIDs(ostream &out, const NxsSimpleTree * tree, const map<const NxsSimpleNode *, set<long> > & ndp2mrca) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
 	const NxsSimpleNode * root = nodes[0];
 	writeSubtreeNewickOTTIDs(out, root, ndp2mrca);
 	out << ";\n";
 }
 
 void expandOTTInternalsWhichAreLeaves(const NxsTaxaBlockAPI * tb, NxsSimpleTree * tree) {
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	std::map<NxsSimpleNode *, std::set<long> > replaceNodes;
-	for (std::vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	map<NxsSimpleNode *, set<long> > replaceNodes;
+	for (vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
 		const NxsSimpleNode & nd = **nIt;
-		std::vector<NxsSimpleNode *> children = nd.GetChildren();
-		const unsigned outDegree = children.size();
+		const unsigned outDegree = nd.GetOutDegree();
 		if (outDegree == 0) {
 			long ottID = getOTTIndex(tb, **nIt);
 			assert(ottID >= 0);
 			assert(gOttID2TaxNode.find(ottID) != gOttID2TaxNode.end());
 			if (gTaxLeafOTTIDs.find(ottID) == gTaxLeafOTTIDs.end()) {
-				std::set<long> leafSet;
+				set<long> leafSet;
 				fillTipOTTIDs(gOttID2TaxNode, ottID, leafSet);
 				replaceNodes[const_cast<NxsSimpleNode *>(&nd)] = leafSet;
 			}
 		}
 	}
-	for (std::map<NxsSimpleNode *, std::set<long> >::const_iterator rIt = replaceNodes.begin(); rIt != replaceNodes.end(); ++rIt) {
+	for (map<NxsSimpleNode *, set<long> >::const_iterator rIt = replaceNodes.begin(); rIt != replaceNodes.end(); ++rIt) {
 		NxsSimpleNode * oldNode = rIt->first;
-		const std::set<long> & leafSet = rIt->second;
+		const set<long> & leafSet = rIt->second;
 		assert(leafSet.size() > 0);
 		oldNode->SetTaxonIndex(UINT_MAX); // make this no longer appear to be a tip
-		for (std::set<long>::const_iterator lsIt = leafSet.begin(); lsIt != leafSet.end(); ++lsIt) {
+		for (set<long>::const_iterator lsIt = leafSet.begin(); lsIt != leafSet.end(); ++lsIt) {
 			NxsSimpleNode *newNode =  tree->AllocNewNode(oldNode);
 			oldNode->AddChild(newNode);
 			gExpanded[newNode] = *lsIt;
@@ -470,26 +605,26 @@ void expandOTTInternalsWhichAreLeaves(const NxsTaxaBlockAPI * tb, NxsSimpleTree 
 
 void processSourceTree(const NxsTaxaBlockAPI * tb, NxsSimpleTree * tree) {
 	expandOTTInternalsWhichAreLeaves(tb, tree);
-	std::map<const NxsSimpleNode *, std::set<long> > ndp2mrca;
-	std::map<const NxsSimpleNode *, std::set<long> > refNdp2mrca;
-	std::set<long> leafSet;
+	map<const NxsSimpleNode *, set<long> > ndp2mrca;
+	map<const NxsSimpleNode *, set<long> > refNdp2mrca;
+	set<long> leafSet;
 
-	std::vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
-	for (std::vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
+	vector<const NxsSimpleNode *> nodes =  tree->GetPreorderTraversal();
+	for (vector<const NxsSimpleNode *>::const_reverse_iterator nIt = nodes.rbegin(); nIt != nodes.rend(); ++nIt) {
 		const NxsSimpleNode & nd = **nIt;
-		std::vector<NxsSimpleNode *> children = nd.GetChildren();
+		vector<NxsSimpleNode *> children = nd.GetChildren();
 		const unsigned outDegree = children.size();
 		if (outDegree > 0) {
-			std::set<long> & mrca = ndp2mrca[&nd];
-			for (std::vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
+			set<long> & mrca = ndp2mrca[&nd];
+			for (vector<NxsSimpleNode *>::const_iterator cIt = children.begin(); cIt != children.end(); ++cIt) {
 				const NxsSimpleNode * c = *cIt;
 				assert(ndp2mrca.find(c) != ndp2mrca.end());
-				std::set<long> & csl = ndp2mrca[c];
+				set<long> & csl = ndp2mrca[c];
 				mrca.insert(csl.begin(), csl.end());
 			}
 		} else if (outDegree == 0) {
 			long ottID = getOTTIndex(tb, **nIt);
-			std::map<long, const NxsSimpleNode *>::const_iterator tlIt = gTabooLeaf.find(ottID);
+			map<long, const NxsSimpleNode *>::const_iterator tlIt = gTabooLeaf.find(ottID);
 			if (tlIt != gTabooLeaf.end()) {
 				assert(tlIt->second == *nIt);
 			}
@@ -500,16 +635,16 @@ void processSourceTree(const NxsTaxaBlockAPI * tb, NxsSimpleTree * tree) {
 			leafSet.insert(ottID);
 		}
 	}
-	std::set<std::set<long> > sourceClades;
-	for (std::map<const NxsSimpleNode *, std::set<long> >::const_iterator nsIt = ndp2mrca.begin(); nsIt != ndp2mrca.end(); ++nsIt) {
+	map<set<long>, const NxsSimpleNode *> sourceClades;
+	for (map<const NxsSimpleNode *, set<long> >::const_iterator nsIt = ndp2mrca.begin(); nsIt != ndp2mrca.end(); ++nsIt) {
 		const NxsSimpleNode * nd = nsIt->first;
 		const NxsSimpleNode * par = nd->GetEdgeToParentRef().GetParent();
 		if (par != 0) {
-			const std::set<long> & nm = nsIt->second;
-			sourceClades.insert(nm);
+			const set<long> & nm = nsIt->second;
+			sourceClades[nm] = nsIt->first;
 		}
 	}
-	recordSupportedNodes(refNdp2mrca, sourceClades, gSupportedNodes, leafSet);
+	recordSupportedNodes(refNdp2mrca, sourceClades, gSupportedNodes, leafSet, ndp2mrca);
 	if (gCurrTmpOstream != 0) {
 		*gCurrTmpOstream << "#NEXUS\nBEGIN TREES;\n";
 
@@ -529,10 +664,10 @@ bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 	const NxsTaxaBlockAPI * taxa = treesB->GetTaxaBlockPtr();
 	gTreeCount++;
 	if (gVerbose)
-		std::cerr << "Read tree " <<  gTreeCount<< '\n';
+		cerr << "Read tree " <<  gTreeCount<< '\n';
 	unsigned int nUnlabeledOutDegOne = 0;
 	unsigned int nLabeledOutDegOne = 0;
-	std::vector<std::string> parNames;
+	vector<string> parNames;
 	NxsSimpleTree * nst = new NxsSimpleTree(ftd, 0.0, 0, true);
 	gExpanded.clear();
 	gTabooLeaf.clear();
@@ -550,20 +685,48 @@ bool newTreeHook(NxsFullTreeDescription &ftd, void * arg, NxsTreesBlock *treesB)
 	}
 	return false;
 }
-////////////////////////////////////////////////////////////////////////////////
-// Takes NxsReader that has successfully read a file, and processes the
-//	information stored in the reader.
-//
-// The caller is responsibel for calling DeleteBlocksFromFactories() to clean
-//	up (if the reader uses the factory API).
-////////////////////////////////////////////////////////////////////////////////
-void processContent(PublicNexusReader & nexusReader, ostream *out)
-{
-	if (!out)
-		return;
 
+void markSuspectNode(const set<long> & designators) {
+	const NxsSimpleNode * mrca = findMRCAFromIDSet(gOttID2RefNode, designators, -1);
+	assert(mrca->GetName().length() == 0);
+	gAPrioriProblemNode[mrca] = designators;
 }
 
+
+void parseAndProcessMRCADesignatorsFile(string filepath) {
+	if (gRefTree == 0L || gTaxonTree != 0L) {
+		cerr << "gRefTree" << (long )gRefTree << "\n";
+		cerr << "gTaxonTree" << (long )gTaxonTree << "\n";
+		cerr << "\nDesignators file must come after the full tree estimate, but before the taxonomy in the argument length\n";
+		throw exception();
+	}
+	ifstream inpf(filepath.c_str());
+	assert(inpf.good());
+	string line;
+	while (getline(inpf, line)) {
+		string stripped = NxsString::strip_surrounding_whitespace(line);
+		if (!stripped.empty()) {
+			list<string> words;
+			NxsString::split(stripped, &words);
+			if (words.size() < 2) {
+				cerr << "Expecting >1 designator. Found: " << line << "\n";
+				throw exception();
+			}
+			set<long> designators;
+			for (list<string>::const_iterator dIt = words.begin(); dIt != words.end(); ++dIt) {
+				long d;
+				if (!NxsString::to_long(dIt->c_str(), &d)) {
+					cerr << "Expecting numeric designator. Found: " << line << "\n";
+					throw exception();
+				}
+				designators.insert(d);
+			}
+			markSuspectNode(designators);
+		}
+	}
+	assert(gAPrioriProblemNode.empty() == gNoAprioriTests);
+	inpf.close();
+}
 ////////////////////////////////////////////////////////////////////////////////
 // Creates a NxsReader, and tries to read the file `filename`.  If the
 //	read succeeds, then processContent will be called.
@@ -597,7 +760,6 @@ void processFilepath(
 		cerr << "Executing" <<endl;
 		try {
 			nexusReader.ReadFilepath(filename, fmt);
-			processContent(nexusReader, out);
 			}
 		catch(...)
 			{
@@ -630,22 +792,6 @@ void readFilepathAsNEXUS(const char *filename, MultiFormatReader::DataFormatType
 		}
 	}
 
-void readFilesListedIsFile(const char *masterFilepath, MultiFormatReader::DataFormatType fmt)
-	{
-	ifstream masterStream(masterFilepath, ios::binary);
-	if (masterStream.bad())
-		{
-		cerr << "Could not open " << masterFilepath << "." << endl;
-		exit(3);
-		}
-	char filename[1024];
-	while ((!masterStream.eof())  && masterStream.good())
-		{
-		masterStream.getline(filename, 1024);
-		if (strlen(filename) > 0 && filename[0] != '#')
-			readFilepathAsNEXUS(filename, fmt);
-		}
-	}
 
 void printHelp(ostream & out)
 	{
@@ -676,8 +822,8 @@ void printHelp(ostream & out)
 	out << "            -fdnafasta  DNA data in fasta\n";
 	out << "            -frnafasta  RNA data in fasta\n";
 	out << "        The complete list of format names that can follow the -f flag is:\n";
-	std::vector<std::string> fmtNames =  MultiFormatReader::getFormatNames();
-	for (std::vector<std::string>::const_iterator n = fmtNames.begin(); n != fmtNames.end(); ++n)
+	vector<string> fmtNames =  MultiFormatReader::getFormatNames();
+	for (vector<string>::const_iterator n = fmtNames.begin(); n != fmtNames.end(); ++n)
 		{
 		out << "            "<< *n << "\n";
 		}
@@ -685,7 +831,7 @@ void printHelp(ostream & out)
 
 int main(int argc, char *argv[])
 	{
-	MultiFormatReader::DataFormatType f(MultiFormatReader::NEXUS_FORMAT);
+	MultiFormatReader::DataFormatType f(MultiFormatReader::RELAXED_PHYLIP_TREE_FORMAT);
 
 	bool readfile = false;
 	bool el = false;
@@ -713,7 +859,7 @@ int main(int argc, char *argv[])
 			f = MultiFormatReader::UNSUPPORTED_FORMAT;
 			if (slen > 2)
 				{
-				std::string fmtName(filepath + 2, slen - 2);
+				string fmtName(filepath + 2, slen - 2);
 				f =  MultiFormatReader::formatNameToCode(fmtName);
 				}
 			if (f == MultiFormatReader::UNSUPPORTED_FORMAT)
@@ -726,9 +872,9 @@ int main(int argc, char *argv[])
 		else
 			{
 			readfile = true;
-			const std::string filepathstr(filepath);
+			const string filepathstr(filepath);
 			const size_t sp = filepathstr.find_last_of('/');
-			if (sp == std::string::npos)
+			if (sp == string::npos)
 				{
 				gCurrentFilename = filepathstr;
 				}
@@ -736,18 +882,31 @@ int main(int argc, char *argv[])
 				{
 				gCurrentFilename = filepathstr.substr(sp + 1);
 				}
-			gCurrTmpFilepath = std::string("tmp/") + gCurrentFilename;
-			std::cerr << "gCurrTmpFilepath = " << gCurrTmpFilepath << '\n';
-			std::ofstream tostream(gCurrTmpFilepath.c_str());
+			gCurrTmpFilepath = string("tmp/") + gCurrentFilename;
+			cerr << "gCurrTmpFilepath = " << gCurrTmpFilepath << '\n';
+			ofstream tostream(gCurrTmpFilepath.c_str());
 			gCurrTmpOstream = &tostream;
+			const size_t fnl = gCurrentFilename.length();
+			if (gCurrentFilename.substr(fnl - 4) == string(".txt")) {
+				gReadingTxtFile = true;
+			} else {
+				gReadingTxtFile = false;
+			}
 			try {
-				readFilepathAsNEXUS(filepath, f);
+				if (gReadingTxtFile) {
+					gNoAprioriTests = false;
+					cerr << "found text file. Treating each line as a series of MRCA designators. Nodes defined by these designators are asserted to be unsupported. If support is found, execution will stop at the supporting tree.\n";
+					parseAndProcessMRCADesignatorsFile(filepath);
+				} else {
+					readFilepathAsNEXUS(filepath, f);
+				}
 				tostream.close();
 				}
 			catch (...)
 				{
 				tostream.close();
-				throw;
+				cerr << "\nExiting due to and exception.\n";
+				return 1;
 				}
 			gCurrTmpOstream = 0L;
 			}
@@ -758,7 +917,7 @@ int main(int argc, char *argv[])
 		printHelp(cerr);
 		return 1;
 		}
-	summarize(std::cout);
-	return 0;
+	summarize(cout);
+	return gExitCode;
 	}
 

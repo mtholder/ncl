@@ -1,17 +1,17 @@
-SUBDIRS = compressor \
+SUBDIRS = basiccmdline \
+	check-taxo-nodes \
+	compressor \
+	find-unsupported-edges \
+	gapcode \
 	nclsimplest \
 	ncltest \
-	basiccmdline \
-	check-taxo-nodes \
-	find-unsupported-edges \
 	normalizer \
-	subsetter \
+	ot-subtree \
+	ot-tree-inspect \
+	outdeg1count \
 	patristic \
-	gapcode \
-	splitsinfile \
-	translate \
 	phylobaseinterface \
 	polytomy-count \
-	ot-tree-inspect \
-	outdeg1count
-
+	splitsinfile \
+	subsetter \
+	translate
