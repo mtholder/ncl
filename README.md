@@ -1,7 +1,7 @@
 NCL - the NEXUS Class Library
 ==============================
 
-This is version 2.1.20
+This is version 2.1.21-dev
 
 This git repo was forked from https://github.com/mtholder/ncl
 so that all of the open tree of life developers would have write
