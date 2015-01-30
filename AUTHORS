@@ -19,13 +19,13 @@ Other contributors to these versions include:
   Derrick Zwickl
   Brian O'Meara
   Brandon Chisham
-  François Michonneau
+  FranÁois Michonneau
   Jeet Sukumaran
 
 The code in examples/phylobase... was written by Brian O'Meara and Derrick Zwickl
 for phylobase.
 
-David Suárez Pascal contributed SWIG bindings which heavily influenced those
+David Su·rez Pascal contributed SWIG bindings which heavily influenced those
    found in branches/v2.2 
 
 Michael Elliot contributed some code to the branches/xml branch.
