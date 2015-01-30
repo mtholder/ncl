@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT(NCL, 2.1.20, mtholder@gmail.com)
+AC_INIT(NCL, 2.1.21, mtholder@gmail.com)
 AC_CONFIG_HEADERS([config.h])
 
 AC_PREREQ(2.57)
@@ -189,6 +189,7 @@ AC_CONFIG_FILES([					\
 	example/compressor/Makefile	\
 	example/find-unsupported-edges/Makefile	\
 	example/gapcode/Makefile		\
+	example/ot-subtree/Makefile \
 	example/ot-tree-inspect/Makefile \
 	example/nclsimplest/Makefile	\
 	example/ncltest/Makefile		\
