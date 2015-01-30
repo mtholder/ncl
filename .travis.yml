@@ -1,0 +1,8 @@
+sudo: false
+language: C++
+compiler:
+    - clang++
+install:
+    - sh travis-build-and-test.sh
+script:
+    - echo 'Success. The tests are in the travis-build-and-test.sh script'
