@@ -31,10 +31,10 @@ bool gVerbose = false;
 void processContent(PublicNexusReader & nexusReader, ostream *out);
 
 bool newTreeHook(NxsFullTreeDescription &, void *, NxsTreesBlock *);
-
-void describeUnnamedNode(const NxsTaxaBlockAPI* taxa, const NxsSimpleNode &, ostream & out);
-
 const NxsSimpleNode * findMRCAFromIDSet(const map<long, const NxsSimpleNode *> & ref, const set<long> & idSet, long trigger);
+template<typename T>
+const std::string & getStrOrThrow(const T & nd, const std::map<T, std::string> & tipNameMap);
+
 
 const NxsSimpleNode * findNextSignificantNode(const NxsSimpleNode * node, const map<const NxsSimpleNode *, set<long> > & ndp2mrca) {
 	const NxsSimpleNode * currNode = node;
@@ -166,6 +166,15 @@ void writeSet(std::ostream & out, const char *indent, const set<long> &fir, cons
 	}
 }
 
+template<typename T>
+inline const std::string & getStrOrThrow(const T & nd, const std::map<T, std::string> & tipNameMap) {
+	typename std::map<T, string>::const_iterator tnIt = tipNameMap.find(nd);
+	if (tnIt == tipNameMap.end()) {
+		throw NxsException("AssertionError: Key not found");
+	}
+	return tnIt->second;
+}
+
 const string & getLeftmostDesName(const NxsSimpleNode *nd, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
 	if (useNdNames) {
 		const string & name = nd->GetName();
@@ -174,11 +183,7 @@ const string & getLeftmostDesName(const NxsSimpleNode *nd, const map<const NxsSi
 		}
 	}
 	if (nd->IsTip()) {
-		map<const NxsSimpleNode *, string>::const_iterator tnIt = tipNameMap.find(nd);
-		if (tnIt == tipNameMap.end()) {
-			throw NxsException("AssertionError: tip node not found in tipNameMap");
-		}
-		return tnIt->second;
+		return getStrOrThrow(nd, tipNameMap);
 	}
 	return getLeftmostDesName(nd->GetFirstChild(), tipNameMap, useNdNames);
 }
@@ -191,13 +196,39 @@ const string &  getRightmostDesName(const NxsSimpleNode *nd, const map<const Nxs
 		}
 	}
 	if (nd->IsTip()) {
-		map<const NxsSimpleNode *, string>::const_iterator tnIt = tipNameMap.find(nd);
-		if (tnIt == tipNameMap.end()) {
-			throw NxsException("AssertionError: tip node not found in tipNameMap");
-		}
-		return tnIt->second;
+		return getStrOrThrow(nd, tipNameMap);
 	}
 	return getRightmostDesName(nd->GetLastChild(), tipNameMap, useNdNames);
+}
+
+void describeUnnamedNode(const NxsSimpleNode *nd, ostream & out, unsigned int anc, const map<const NxsSimpleNode *, string> & tipNameMap, bool useNdNames) {
+	if (useNdNames && nd->GetName().length() > 0) {
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before \"" << nd->GetName() << "\"" << endl;
+		} else {
+			out << "the node \"" << nd->GetName() << "\"" << endl;
+		}
+		return;
+	}
+	vector<NxsSimpleNode *> children = nd->GetChildren();
+	const unsigned outDegree = children.size();
+	if (outDegree == 0) {
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before the leaf \"" << getStrOrThrow(nd, tipNameMap)  << "\"" << endl;
+		} else {
+			out << "the leaf \"" << getStrOrThrow(nd, tipNameMap)  << "\"" << endl;
+		}
+	} else if (outDegree == 1U) {
+		describeUnnamedNode(children[0], out, anc + 1, tipNameMap, useNdNames);
+	} else {
+		string left = getLeftmostDesName(children[0], tipNameMap, useNdNames);
+		string right = getRightmostDesName(children[outDegree - 1], tipNameMap, useNdNames);
+		if (anc > 0) {
+			out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and " << "\"" << right <<'\"' << endl;
+		} else {
+			out <<  "MRCA of \"" << left << "\" and " << "\"" << right <<'\"' << endl;
+		}
+	}
 }
 
 
@@ -222,26 +253,6 @@ map<const NxsSimpleNode *, set<long> > gAPrioriProblemNode;
 bool gNoAprioriTests = true;
 int gRefTreeNumNamedInternalsNodes = 0;
 int gExitCode = 0;
-
-
-void describeUnnamedNode(const NxsSimpleNode *nd, ostream & out, unsigned int anc) {
-	if (nd->GetName().length() > 0) {
-		out << "ancestor " << anc << " node(s) before \"" << nd->GetName() << "\"" << endl;
-		return;
-	}
-	vector<NxsSimpleNode *> children = nd->GetChildren();
-	const unsigned outDegree = children.size();
-	if (outDegree == 0) {
-		out << "ancestor " << anc << " node(s) before \"" << gRefTipToName[nd] << "\"" << endl;
-	} else if (outDegree == 1U) {
-		describeUnnamedNode(children[0], out, anc + 1);
-	} else {
-		string left = getLeftmostDesName(children[0], gRefTipToName, false);
-		string right = getRightmostDesName(children[outDegree - 1], gRefTipToName, false);
-		out << "ancestor " << anc << " node(s) before MRCA of \"" << left << "\" and ";
-		out << "\"" << right <<'\"' << endl;
-	}
-}
 
 
 void extendSupportedToRedundantNodes(const NxsSimpleTree * tree, set<const NxsSimpleNode *> & gSupportedNodes) {
@@ -311,7 +322,7 @@ int describeUnnamedUnsupported(ostream &out, const NxsSimpleTree * tree, const s
 						out << ") ";
 					}
 				}
-				describeUnnamedNode(nd, out, 0);
+				describeUnnamedNode(nd, out, 0, gRefTipToName, false);
 				numUnsupported += 1;
 			}
 		}
