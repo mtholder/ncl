@@ -11,12 +11,14 @@ def runTest(inArgPath,
             outParent,
             compareOut=True,
             copyOutput=False,
-            strictLevel=2, absentOnlyMode=False,
+            strictLevel=2,
+            absentOnlyMode=False,
             copyFile=False,
             external=False,
             invalid=False,
             parseOutput=True,
-            extra_args=[]):
+            extra_args=[],
+            inoutxml=False):
     if invalid:
         compareOut = False
     if external:
@@ -95,6 +97,9 @@ def runTest(inArgPath,
                     sys.exit("Call to " + normalizer + " accepted the invalid file " + inFile)
             elif retCode != 0:
                 sys.exit("Call to " + normalizer + " failed for "+ inFile)
+            if inoutxml:
+                os.rename('out.xml', ".roundTripNCLOut.nex")
+              
             if copyOutput and pRep == 0:
                 shutil.copy2(tf, expectedOut)
             elif compareOut:
@@ -185,6 +190,11 @@ parser.add_option("-x",
               default=False,
               action="store_true",
               help="-x argument to NEXUSnormalizer (means that internal node taxon labels won't be validated during the parse).")
+parser.add_option("-y",
+              dest="y",
+              default=False,
+              action="store_true",
+              help="Expect the output to go in out.xml rather than standard out.")
 
 (options, args) = parser.parse_args()
 if options.batch != "~/.ncl_round_triprc":
@@ -242,7 +252,18 @@ try:
             extra_args = ['-x']
         else:
             extra_args = []
-        runTest(inputParentPath, outputParentPath, not options.parseOnly, options.force, options.strict, options.absent, options.copy, options.external, options.invalid, options.parseOutput, extra_args=extra_args)
+        runTest(inputParentPath,
+                outputParentPath,
+                not options.parseOnly,
+                options.force,
+                options.strict,
+                options.absent,
+                options.copy,
+                options.external,
+                options.invalid,
+                options.parseOutput,
+                extra_args=extra_args,
+                inoutxml=options.y)
 
 except StopIteration:
     if len(inputParentPath) > 0 and inputParentPath != "#":

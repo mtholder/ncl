@@ -107,6 +107,7 @@ std::string getOrGenId(std::pair<T, unsigned> & p,
 	ToIDIterator f = toId.find(t);
 	if (f == toId.end())
 		{
+		//std::cerr << " did not find match for (" << (long)(t) << ", " << p.second << ")\n";
 		unsigned index = p.second;
 		if (index == UINT_MAX)
 			{
@@ -124,8 +125,12 @@ std::string getOrGenId(std::pair<T, unsigned> & p,
 		toObj[identifier] = t;
 		return identifier;
 		}
+	else {
+		//std::cerr << " found match for (" << (long)(p.first) << ", " << p.second << ")\n";
+	}
 	return f->second;
 }
+
 
 template <typename T>
 std::string getOrGenerateGlobalID(T container, 
@@ -156,6 +161,17 @@ std::string getOrGenerateGlobalID(T container,
 	}
 	return f->second;
 }
+
+template <typename T>
+std::string getOrGenerateNestedID(T container, 
+								  std::map< std::pair<T, unsigned>, std::string> & toId,
+								  std::map<std::string, std::pair<T, unsigned> > & toObj, 
+								  const std::string & pref, 
+								  unsigned indInContainer) {
+	unsigned t = indInContainer;
+	return getOrGenerateGlobalID(container, toId, toObj, pref, indInContainer, t);
+}
+
 
 template <typename T>
 std::string getGlobalIDNoGen(T container, 
@@ -221,23 +237,9 @@ class NexmlIDStrorer
 			{
 			return getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, treesPrefix, translationCfg.currentTreesIndex);
 			}
-		std::string getTaxID(TaxaBlockPtrIndPair taxa, unsigned taxonInd, bool allowGen)
+		std::string getTaxID(TaxaBlockPtrIndPair taxa, unsigned taxonInd)
 			{
-			if (allowGen)
-				{
-				if (translationCfg.globalIncrementingIDs)
-					{
-					return getOrGenerateGlobalID(taxa.first, taxonToID, idToTaxon, otuPrefix, taxonInd, translationCfg.currentOTUIndex);
-					}
-				std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, otusPrefix);
-				p.append(1, 'n');
-				return generateID(p, taxonInd);
-				}
-			if (translationCfg.globalIncrementingIDs)
-				{
-				return getGlobalIDNoGen(taxa.first, taxonToID, taxonInd);
-				}
-			return getIdNoGen<const NxsTaxaBlock *>(taxa, taxaBToID);
+			return getGlobalIDNoGen(taxa.first, taxonToID, taxonInd);
 			}
 		std::string getID(TaxaBlockPtrIndPair taxa, unsigned taxonInd)
 			{
@@ -247,7 +249,7 @@ class NexmlIDStrorer
 				}
 			std::string p =  getOrGenId<const NxsTaxaBlock *>(taxa, taxaBToID, idToTaxaB, otusPrefix);
 			p.append(1, 'n');
-			return generateID(p, taxonInd);
+			return getOrGenerateNestedID(taxa.first, taxonToID, idToTaxon, p, taxonInd);
 			}
 		std::string getCharID(CharBlockPtrIndPair chars, unsigned charInd)
 			{
@@ -537,7 +539,11 @@ void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConv
 }
 
 
-void writeOTUS(ostream & os, const NxsTaxaBlock *taxa, const std::vector<const NxsAssumptionsBlock *> & , NexmlIDStrorer &memo, unsigned index)
+void writeOTUS(ostream & os,
+		const NxsTaxaBlock *taxa,
+		const std::vector<const NxsAssumptionsBlock *> & ,
+		NexmlIDStrorer &memo,
+		unsigned index)
 {
 	if (taxa == NULL)
 		return;
@@ -552,6 +558,7 @@ void writeOTUS(ostream & os, const NxsTaxaBlock *taxa, const std::vector<const N
 	for (; labelIt != labels.end(); ++labelIt, ++n)
 		{
 		std::string taxonId = memo.getID(tbp, n);
+		//std::cerr << "taxa = " << (long) taxa << " index =" << index << " n = " << n << " taxonId = " << taxonId << '\n';
 		OtuElement o(taxonId, *labelIt, os);
 		}
 }
@@ -941,8 +948,8 @@ std::string writeSimpleNode(ostream & os,
 	//std::cerr << "identifier = " << identifier << '\n';
 	unsigned otuInd = nd.GetTaxonIndex();
 	if (otuInd != UINT_MAX) {
-		std::string otuID = memo.getTaxID(taxa, otuInd, false);
-		//std::cerr << "   otuInd = " << otuInd << "   otuID = " << otuID << '\n';
+		std::string otuID = memo.getTaxID(taxa, otuInd);
+		//std::cerr << "   taxa = " << (long)taxa.first << " taxa.second " << taxa.second << " << otuInd = " << otuInd << "   otuID = " << otuID << '\n';
 		if (!otuID.empty()) {
 			v.push_back(AttributeData("otu", otuID));
 		} else if (n2mm != 0L) {

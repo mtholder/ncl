@@ -6,3 +6,4 @@ installcheck-local:
 	$(PYTHON) $(srcdir)/roundTripNCLTest.py $(bindir)/NEXUSnormalizer $(top_srcdir)/data/characters.nex $(srcdir)/data
 	$(PYTHON) $(srcdir)/roundTripNCLTest.py $(bindir)/NEXUSnormalizer $(top_srcdir)/data/sample.tre $(srcdir)/data
 	$(PYTHON) $(srcdir)/roundTripNCLTest.py $(bindir)/NEXUSnormalizer $(srcdir)/NTSValidIn $(srcdir)/NTSValidOut
+	$(PYTHON) $(srcdir)/roundTripNCLTest.py -o -y -e $(bindir)/NCLconverter $(srcdir)/2NexmlIn $(srcdir)/2NexmlOut
