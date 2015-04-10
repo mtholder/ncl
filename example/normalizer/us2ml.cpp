@@ -282,7 +282,7 @@ class NexmlIDStrorer
 			const std::string pref = this->prefix + "g";
 			std::string p =  getOrGenId<const NxsTreesBlock *>(trees, treesBToID, idToTreesB, pref);
 			p.append(1, 'n');
-			return generateID(p, treeInd);
+			return getOrGenerateNestedID(trees.first, treeToID, idToTree, p, treeInd);
 			}
 		std::string getID(MapperStateLabelVecIndPair m, unsigned sIndex)
 			{
