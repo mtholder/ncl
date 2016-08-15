@@ -1,0 +1,22 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Taxa;
+    DIMENSIONS NTAX=4;
+    TAXLABELS
+        A B C D 
+    ;
+END;
+
+
+begin TREES;
+
+    TRANSLATE
+        1 A,
+        2 B,
+        3 C,
+        4 D;
+
+
+    TREE 't' = ((1,2):.3,3,4);
+end;
+
