@@ -996,12 +996,14 @@ std::string writeSimpleEdge(ostream & os,
 	
 	NxsString lenstring;
 	AttributeDataVec v;
-	if (edgesAsIntegers)
-		lenstring << edge.GetIntEdgeLen();
-	else
-		lenstring << edge.GetDblEdgeLen();
 	if (!defEdgeLen)
+		{ 
+		if (edgesAsIntegers)
+			lenstring << edge.GetIntEdgeLen();
+		else
+			lenstring << edge.GetDblEdgeLen();
 		v.push_back(AttributeData("length", lenstring));
+		}
 	v.push_back(AttributeData("target", nid));
 	const NxsSimpleNode * par = edge.GetParent();
 	assert(par);
