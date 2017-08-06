@@ -7,6 +7,7 @@ if(MSVC)
   else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   endif()
+  add_definitions(/D_CRT_SECURE_NO_WARNINGS)
 else()
   # Update if necessary
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC")
