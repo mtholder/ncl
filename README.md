@@ -51,13 +51,15 @@ Other contributors to these versions include:
   Derrick Zwickl
   Brian O'Meara
   Brandon Chisham
-  FranÁois Michonneau
+  Fran√ßois Michonneau
   Jeet Sukumaran
+
+Chris Desjardins (https://github.com/cdesjardins) provided the cmake files.
 
 The code in examples/phylobase... was written by Brian O'Meara and Derrick Zwickl
 for phylobase.
 
-David Su·rez Pascal contributed SWIG bindings which heavily influenced those
+David Su√°rez Pascal contributed SWIG bindings which heavily influenced those
    found in branches/v2.2. Thanks to David for blazing the way on the swig binding,
     Google for funding, and NESCent (in particular Hilmar Lapp) for getting the
     NESCent GSoC program going.
