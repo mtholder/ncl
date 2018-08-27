@@ -67,6 +67,7 @@ std::ostream * gCommonOstream = 0L;
 		RELAXED_PHYLIP_EXPORT_FORMAT,
 		FASTA_EXPORT_FORMAT,
 		NEXML_EXPORT_FORMAT,
+		TREE_NEXML_EXPORT_FORMAT,
 		UNSUPPORTED_EXPORT_FORMAT
 		};
 	ExportFormatEnum gExportFormat = NEXML_EXPORT_FORMAT;
@@ -81,9 +82,10 @@ std::ostream * gCommonOstream = 0L;
 												"phylip",
 												"relaxedphylip",
 												"fasta",
-												"nexml"
+												"nexml",
+												"treenexml"
 												};
-		const unsigned gNumExportFormats = 5;
+		const unsigned gNumExportFormats = 6;
 	
 		NxsString l(s.c_str());
 		NxsString::to_lower(l);
@@ -274,8 +276,12 @@ void processContent(PublicNexusReader & nexusReader, ostream *os, ProcessActions
 			MultiFormatReader::DataFormatType f = MultiFormatReader::NEXUS_FORMAT;
 			if (gExportFormat == NEXUS_EXPORT_FORMAT)
 				exportData(nexusReader, MultiFormatReader::NEXUS_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gTranslatingConventions);
-			else if (gExportFormat == NEXML_EXPORT_FORMAT)
+			else if (gExportFormat == NEXML_EXPORT_FORMAT || gExportFormat == TREE_NEXML_EXPORT_FORMAT ) {
+				if (gExportFormat == TREE_NEXML_EXPORT_FORMAT) {
+					gTranslatingConventions.emitTreesAndTaxaOnly = true;
+				}
 				exportData(nexusReader, MultiFormatReader::NEXML_FORMAT, gInterleaveLen, gExportPrefix, gCommonOstream, gTranslatingConventions);
+			}
 			else if (gExportFormat == PHYLIP_EXPORT_FORMAT) {
 				fullExportPrefix = gExportPrefix;
 				fullExportPrefix.append(".dna");
@@ -550,6 +556,7 @@ void printHelp(ostream & out)
 	out << "            -ephylip  Trees and character data in phylip (could result in multiple output files)\n";
 	out << "            -erelaxedphylip  Trees and character data in relaxed phylip (could result in multiple output files)\n";
 	out << "            -enexml  nexml output (this is also the default)\n";
+	out << "            -etreenexml  nexml output of trees and taxa only\n";
 #endif
 	out << "    -f<format> specifies the input file format expected:\n";
 	out << "            -fnexus     NEXUS (this is also the default)\n";

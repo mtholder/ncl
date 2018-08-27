@@ -505,32 +505,37 @@ void writeAsNexml(PublicNexusReader & nexusReader, ostream & os, TranslatingConv
 		const NxsTaxaBlock * tb = nexusReader.GetTaxaBlock(t);
 
 		std::vector<const NxsAssumptionsBlock *> assumps;
-		for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(tb); ++j)
-			assumps.push_back(nexusReader.GetAssumptionsBlock(tb, j));
-
-		writeOTUS(os, tb, assumps, memo, t);
-
-		const unsigned nCharBlocks = nexusReader.GetNumCharactersBlocks(tb);
-		for (unsigned i = 0; i < nCharBlocks; ++i)
+		if (!transConv.emitTreesAndTaxaOnly)
 			{
-			NxsCharactersBlock * cb = nexusReader.GetCharactersBlock(tb, i);
-
-			assumps.clear();
-			for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(cb); ++j)
-				assumps.push_back(nexusReader.GetAssumptionsBlock(cb, j));
-
-			writeCharacters(os, cb, assumps, memo, nCharBlocksRead++);
+			for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(tb); ++j)
+				assumps.push_back(nexusReader.GetAssumptionsBlock(tb, j));
 			}
+		writeOTUS(os, tb, assumps, memo, t);
+		if (!transConv.emitTreesAndTaxaOnly)
+			{
+			const unsigned nCharBlocks = nexusReader.GetNumCharactersBlocks(tb);
+			for (unsigned i = 0; i < nCharBlocks; ++i)
+				{
+				NxsCharactersBlock * cb = nexusReader.GetCharactersBlock(tb, i);
 
+				assumps.clear();
+				for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(cb); ++j)
+					assumps.push_back(nexusReader.GetAssumptionsBlock(cb, j));
+
+				writeCharacters(os, cb, assumps, memo, nCharBlocksRead++);
+				}
+			}
 		const unsigned nTreesBlocks = nexusReader.GetNumTreesBlocks(tb);
 		for (unsigned i = 0; i < nTreesBlocks; ++i)
 			{
 			NxsTreesBlock * cb = nexusReader.GetTreesBlock(tb, i);
 
 			assumps.clear();
-			for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(cb); ++j)
-				assumps.push_back(nexusReader.GetAssumptionsBlock(cb, j));
-
+			if (!transConv.emitTreesAndTaxaOnly)
+				{
+				for (unsigned j= 0; j < nexusReader.GetNumAssumptionsBlocks(cb); ++j)
+					assumps.push_back(nexusReader.GetAssumptionsBlock(cb, j));
+				}
 			writeTrees(os, cb, assumps, memo, nTreeBlocksRead++, transConv.treatNodeLabelsAsStrings);
 			}
 		}

@@ -22,7 +22,8 @@ class TranslatingConventions {
 			currentTreeIndex(0),
 			currentNodeIndex(0),
 			currentEdgeIndex(0),
-			treatNodeLabelsAsStrings(false) {
+			treatNodeLabelsAsStrings(false),
+			emitTreesAndTaxaOnly(false) {
 			}
 	std::string idPrefix;
 	bool globalIncrementingIDs;
@@ -38,6 +39,7 @@ class TranslatingConventions {
 	unsigned currentNodeIndex;
 	unsigned currentEdgeIndex;
 	bool treatNodeLabelsAsStrings;
+	bool emitTreesAndTaxaOnly;
 };
 
 #endif
