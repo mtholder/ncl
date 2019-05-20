@@ -1,4 +1,5 @@
 #include "splitsstructs.h"
+#include <algorithm>
 bool TreesToSplits::gTrackTrivial = false;
 bool TreesToSplits::gTreatAsRooted = false;
 bool TreesToSplits::gTrackFreq = false;
