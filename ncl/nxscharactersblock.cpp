@@ -2180,7 +2180,29 @@ void NxsCharactersBlock::HandleFormat(
 		else if (wIt->Equals("TRANSPOSE"))
 			transposing = true;
 		else if (wIt->Equals("INTERLEAVE"))
-			interleaving = true;
+			{
+			// check if followed by =yes/no (strictly, not Nexus-compliant)
+			wIt++;
+			if (wIt->Equals("="))
+				{
+				wIt++;
+				if (wIt->Equals("YES"))
+					{
+						interleaving = true;
+					}
+				else if (wIt->Equals("NO"))
+					{
+						interleaving = false;
+					}
+				else
+					throw NxsException("Cannot parse interleave command", *wIt); // probably want a more informative error
+				}
+			else
+				{
+					wIt--;
+					interleaving = true;
+				}
+			}
 		else if (wIt->Equals("ITEMS"))
 			{
 			DemandEquals(wIt, tvEnd, "after keyword ITEMS");
