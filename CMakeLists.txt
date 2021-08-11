@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.1)
 
+project(ncl)
+
 if(MSVC)
   # Force to always compile with W4
   if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
