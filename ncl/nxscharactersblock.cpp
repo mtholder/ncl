@@ -4551,8 +4551,10 @@ void NxsCharactersBlock::HandleStatelabels(
 	charStates.clear();
 	for (;;)
 		{
+        if (semicolonFoundInInnerLoop)
+            break;
 		token.GetNextToken();
-		if (token.Equals(";") || semicolonFoundInInnerLoop)
+		if (token.Equals(";"))
 			break;
         int n = -1;
         try {
