@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import os
 import subprocess
 import filecmp
 import itertools
-import cStringIO
+from io import StringIO
 import shutil
 
 def runTest(inArgPath,
@@ -38,7 +38,7 @@ def runTest(inArgPath,
         inFiles = [os.path.basename(inArgPath)]
 
     if not inFiles:
-        print >>sys.stderr, "No files to test (looking for " + " ".join(fileNamePatterns) + " files)"
+        print("No files to test (looking for " + " ".join(fileNamePatterns) + " files)", file=sys.stderr)
         sys.exit(0)
 
     if compareOut:
@@ -103,22 +103,22 @@ def runTest(inArgPath,
             if copyOutput and pRep == 0:
                 shutil.copy2(tf, expectedOut)
             elif compareOut:
-                e = file(expectedOut, "rU")
-                o = file(tf, "rU")
+                e = open(expectedOut, "r")
+                o = open(tf, "r")
                 eit = iter(e)
                 oit = iter(o)
                 n = 1
                 while True:
                     try:
-                        eLine = eit.next()
+                        eLine = next(eit)
                         try:
-                            oLine = oit.next()
+                            oLine = next(oit)
                         except StopIteration:
                             oLine = ""
                     except StopIteration:
                         eLine = ""
                         try:
-                            oLine = oit.next()
+                            oLine = next(oit)
                         except StopIteration:
                             break
                     if eLine != oLine:
@@ -128,7 +128,7 @@ def runTest(inArgPath,
                         sys.exit(basicMsg + fileInfo + diff)
                 e.close()
                 o.close()
-                print >>sys.stderr, sys.argv[0], ": Call to", normalizer, "succeeded for", inFile
+                print(sys.argv[0], ": Call to", normalizer, "succeeded for", inFile)
             if os.path.exists(tf):
                 os.remove(tf)
 
@@ -229,7 +229,7 @@ else:
         fs = "%s\n%s\n" % (args[1], args[2])
     else:
         fs = "%s\n" % (args[1])
-    resourceFileStream = cStringIO.StringIO(fs)
+    resourceFileStream = StringIO(fs)
 normalizer = os.path.abspath(args[0])
 if not os.path.exists(normalizer):
     sys.exit(normalizer + " does not exist")
@@ -240,14 +240,13 @@ try:
     while True:
         inputParentPath = "#"
         while len(inputParentPath) < 1 or inputParentPath.strip().startswith("#"):
-            inputParentPath = lineIter.next().strip()
+            inputParentPath = next(lineIter).strip()
         if options.invalid:
             outputParentPath = None
         else:
             outputParentPath = "#"
             while  len(outputParentPath) < 1 or outputParentPath.strip().startswith("#"):
-                outputParentPath = lineIter.next().strip()
-        #print "next round: ", inputParentPath,"\n ", outputParentPath
+                outputParentPath = next(lineIter).strip()
         if options.x:
             extra_args = ['-x']
         else:
