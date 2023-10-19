@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nex:nexml xmlns:nex="http://www.nexml.org/2009" xmlns="http://www.nexml.org/2009" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:tb="http://purl.org/phylo/treebase/2.0/terms#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" about="#S100" generator="opentree.2nexml" version="0.9" >
+  <otus id='t0' label='Taxa'>
+    <otu id='t0n0' label='A'/>
+    <otu id='t0n1' label='B'/>
+    <otu id='t0n2' label='C'/>
+    <otu id='t0n3' label='D'/>
+  </otus>
+  <trees id='g0' otus='t0' label='Untitled TREES Block 1'>
+    <tree id='g0n0' label='t' xsi:type='nex:FloatTree'>
+      <node id='g0n0n0' root='true'/>
+      <node id='g0n0n1'/>
+      <node id='g0n0n2' otu='t0n0'/>
+      <node id='g0n0n3' otu='t0n1'/>
+      <node id='g0n0n4' otu='t0n2'/>
+      <node id='g0n0n5' otu='t0n3'/>
+      <edge id='g0n0eg0n0n1' length='0.3' target='g0n0n1' source='g0n0n0'/>
+      <edge id='g0n0eg0n0n2' target='g0n0n2' source='g0n0n1'/>
+      <edge id='g0n0eg0n0n3' target='g0n0n3' source='g0n0n1'/>
+      <edge id='g0n0eg0n0n4' target='g0n0n4' source='g0n0n0'/>
+      <edge id='g0n0eg0n0n5' target='g0n0n5' source='g0n0n0'/>
+    </tree>
+  </trees>
+</nex:nexml>
