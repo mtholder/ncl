@@ -1,0 +1,982 @@
+#NEXUS
+
+    [ File output by Morphobank v3.0 (http://www.morphobank.org); 2023-07-22 02.50.13 ]
+
+    BEGIN TAXA;
+    DIMENSIONS NTAX=60;
+    TAXLABELS
+    		'Acanthodes'
+		'Akmonistion'
+		'Austroptyctodus'
+		'Bothriolepis'
+		'Brachyacanthus'
+		'Brindabellaspis'
+		'Brochoadmones'
+		'Buchanosteus'
+		'Campbellodus'
+		'Cassidiceps'
+		'Cheiracanthus'
+		'Cheirolepis'
+		'Chondrenchelys'
+		'Cladodoides'
+		'Cladoselache'
+		'Climatius'
+		'Cobelodus'
+		'Coccosteus'
+		'Cowralepis'
+		'Culmacanthus'
+		'Debeerius'
+		'Dialipina'
+		'Dicksonosteus'
+		'Diplacanthus'
+		'Doliodus'
+		'Eusthenopteron'
+		'Euthacanthus'
+		'Galeaspida'
+		'Gladiobranchus'
+		'Gogonasus'
+		'Guiyu'
+		'Hamiltonichthys'
+		'Homalacanthus'
+		'Howqualepis'
+		'Ischnacanthus'
+		'Kathemacanthus'
+		'Ligulalepis'
+		'Macropetalichthys'
+		'Mesacanthus'
+		'Mimia'
+		'Obtusacanthus'
+		'Onychodus'
+		'Onychoselache'
+		'Orthacanthus'
+		'Osteostraci'
+		'Parexus'
+		'Poracanthodes'
+		'Porolepis'
+		'Promesacanthus'
+		'Psarolepis'
+		'Pterichthyodes'
+		'Ptomacanthus'
+		'Pucapampella'
+		'Rhamphodopsis'
+		'Tamiobatis'
+		'Tetanopsyrus'
+		'Tristychius'
+		'Lupopsyrus'
+		'Rhadinacanthus'
+		'Vernicomacanthus'
+    ;
+    ENDBLOCK;
+
+    BEGIN CHARACTERS;
+	DIMENSIONS NCHAR=138;
+	FORMAT DATATYPE=STANDARD GAP=- MISSING=? SYMBOLS="0123";
+	CHARLABELS
+		 [1] 'Tessellate prismatic calcified cartilage'
+		 [2] 'Perichondral bone'
+		 [3] 'Extensive endochondral ossification'
+		 [4] 'Dentine'
+		 [5] 'Dentine kind'
+		 [6] 'Cosmine'
+		 [7] 'Lepidotrichia or lepidotrichia-like scale alignment'
+		 [8] 'Body scale growth pattern'
+		 [9] 'Body scale growth concentric'
+		 [10] 'Body scales with peg-and-socket articulation'
+		 [11] 'Body scale profile'
+		 [12] 'Body scales with bulging base'
+		 [13] 'Body scales with flattened base'
+		 [14] 'Flank scale alignment'
+		 [15] 'Sensory line canal'
+		 [16] 'Sensory line network'
+		 [17] 'Jugal portion of infraorbital canal'
+		 [18] 'Dermal skull roof'
+		 [19] 'Tessera morphology'
+		 [20] 'Extent of dermatocranial cover'
+		 [21] 'Endolymphatic ducts open in dermal skull roof'
+		 [22] 'Endolymphatic ducts with oblique course through dermal skull bones'
+		 [23] 'Series of paired median skull roofing bones that meet at the dorsal midline of the skull (rectilinear skull roof pattern)'
+		 [24] 'Consolidated cheek plates'
+		 [25] 'Pineal opening perforation in dermal skull roof'
+		 [26] 'Enlarged postorbital tessera separate from orbital series'
+		 [27] 'Bony hyoidean gill-cover series (branchiostegals)'
+		 [28] 'Branchiostegal plate series along ventral margin of lower jaw'
+		 [29] 'Branchiostegal ossifications'
+		 [30] 'Branchiostegal ossification ornamentation'
+		 [31] 'Imbricated branchiostegal ossifications'
+		 [32] 'Opercular cover of branchial chamber'
+		 [33] 'Opercular (submarginal) ossification'
+		 [34] 'Shape of opercular (submarginal) ossification'
+		 [35] 'Gular plates'
+		 [36] 'Size of lateral gular plates'
+		 [37] 'Basihyal'
+		 [38] 'Interhyal'
+		 [39] 'Oral dermal tubercles borne on jaw cartilages'
+		 [40] 'Tooth whorls'
+		 [41] 'Bases of tooth whorls'
+		 [42] 'Enlarged adsymphysial tooth whorl'
+		 [43] 'Teeth ankylosed to dermal bones'
+		 [44] 'Dermal jaw plates on biting surface of jaw cartilages'
+		 [45] 'Maxillary and dentary tooth-bearing bones'
+		 [46] 'Large otic process of the palatoquadrate'
+		 [47] 'Insertion area for jaw adductor muscles on palatoquadrate'
+		 [48] 'Oblique ridge or groove along medial face of palatoquadrate'
+		 [49] 'Fenestration of palatoquadrate at basipterygoid articulation'
+		 [50] 'Perforate or fenestrate anterodorsal (metapterygoid) portion of palatoquadrate'
+		 [51] 'Pronounced dorsal process on Meckelian bone or cartilage'
+		 [52] 'Preglenoid process'
+		 [53] 'Jaw articulation located on rearmost extremity of mandible'
+		 [54] 'Precerebral fontanelle'
+		 [55] 'Median dermal bone of palate (parasphenoid)'
+		 [56] 'Nasal opening(s)'
+		 [57] 'Olfactory tracts'
+		 [58] 'Prominent pre-orbital rostral expansion of the neurocranium'
+		 [59] 'Pronounced sub-ethmoidal keel'
+		 [60] 'Position of myodome for superior oblique eye muscles'
+		 [61] 'Endoskeletal intracranial joint'
+		 [62] 'Spiracular groove on basicranial surface'
+		 [63] 'Spiracular groove on lateral commissure'
+		 [64] 'Subpituitary fenestra'
+		 [65] 'Supraorbital shelf broad with convex lateral margin'
+		 [66] 'Orbit dorsal or facing dorsolaterally, surrounded laterally by endocranium'
+		 [67] 'Extended prehypophysial portion of sphenoid'
+		 [68] 'Narrow interorbital septum'
+		 [69] 'The main trunk of facial nerve (N. VII)'
+		 [70] 'Hyoid ramus of facial nerve (N. VII) exits through posterior jugular opening'
+		 [71] 'Glossopharyngeal nerve (N. IX) exit'
+		 [72] 'Short otico-occipital region of braincase'
+		 [73] 'Ethmoid region elongate with dorsoventrally deep lateral walls'
+		 [74] 'Basicranial morphology'
+		 [75] 'Ascending basisphenoid pillar pierced by common internal carotid'
+		 [76] 'Jugular vein'
+		 [77] 'Canal for lateral dorsal aorta within basicranial cartilage'
+		 [78] 'Entrance of internal carotids'
+		 [79] 'Canal for efferent pseudobranchial artery within basicranial cartilage'
+		 [80] 'Position of basal/basipterygoid articulation'
+		 [81] 'Postorbital process articulates with palatoquadrate'
+		 [82] 'Labyrinth cavity'
+		 [83] 'Basipterygoid process (basal articulation) with vertically oriented component'
+		 [84] 'Pituitary vein canal'
+		 [85] 'External (horizontal) semicircular canal'
+		 [86] 'Sinus superior'
+		 [87] 'External (horizontal) semicircular canal joins the vestibular region:'
+		 [88] 'Trigemino-facial recess'
+		 [89] 'Posterior dorsal fontanelle'
+		 [90] 'Shape of posterior dorsal fontanelle'
+		 [91] 'Dorsal ridge'
+		 [92] 'Endolymphatic ducts'
+		 [93] 'Lateral otic process'
+		 [94] 'Process forming part or complete wall of jugular groove or canal projecting from otic capsule wall'
+		 [95] 'Position of hyomandibula articulation on neurocranium'
+		 [96] 'Ventral cranial fissure'
+		 [97] 'Metotic (otic-occipital) fissure'
+		 [98] 'Vestibular fontanelle'
+		 [99] 'Occipital arch wedged in between otic capsules'
+		 [100] 'Spino-occipital nerve foramina'
+		 [101] 'Ventral notch between parachordals'
+		 [102] 'Parachordal shape'
+		 [103] 'Hypotic lamina (and dorsally directed glossopharyngeal canal)'
+		 [104] 'Macromeric dermal shoulder girdle'
+		 [105] 'Dermal shoulder girdle composition'
+		 [106] 'Dermal shoulder girdle forming a complete ring around the trunk'
+		 [107] 'Pectoral fenestra completely encircled by dermal shoulder armour'
+		 [108] 'Median dorsal plate'
+		 [109] 'Pronounced internal crista (Â‘keelÂ’) on median dorsal surface of shoulder girdle'
+		 [110] 'Scapular process of shoulder endoskeleton'
+		 [111] 'Ventral margin of separate scapular ossification'
+		 [112] 'Cross sectional shape of scapular process'
+		 [113] 'Flange on trailing edge of scapulocoracoid'
+		 [114] 'Scapular process with posterodorsal angle'
+		 [115] 'Endoskeletal postbranchial lamina on scapular process'
+		 [116] 'Mineralisation of internal surface of scapular blade '
+		 [117] 'Coracoid process'
+		 [118] 'Procoracoid mineralisation'
+		 [119] 'Fin base articulation on scapulocoracoid'
+		 [120] 'Perforate propterygium'
+		 [121] 'Pelvic fins'
+		 [122] 'Pelvic claspers'
+		 [123] 'Dermal pelvic clasper ossifications'
+		 [124] 'Pectoral fins covered in macromeric dermal armour'
+		 [125] 'Pectoral fin base has large, hemispherical dermal component'
+		 [126] 'Dorsal fin spines'
+		 [127] 'Anal fin spine'
+		 [128] 'Paired fin spines'
+		 [129] 'Median fin spine insertion'
+		 [130] 'Intermediate fin spines'
+		 [131] 'Prepectoral fin spines'
+		 [132] 'Fin spines with ridges'
+		 [133] 'Fin spines with nodes'
+		 [134] 'Fin spines with rows of large retrorse denticles'
+		 [135] 'Synarcual'
+		 [136] 'Number of dorsal fins, if present'
+		 [137] 'Anal fin'
+		 [138] 'Caudal radials'
+	;
+	STATELABELS
+		1
+		'Absent'
+		'Present'
+		,
+		2
+		'Present'
+		'Absent'
+		,
+		3
+		'Absent'
+		'Present'
+		,
+		4
+		'Absent'
+		'Present'
+		,
+		5
+		'mesodentine'
+		'semidentine'
+		'orthodentine'
+		,
+		6
+		'Absent'
+		'Present'
+		,
+		7
+		'Present'
+		'Absent'
+		,
+		8
+		'monodontode'
+		'polyodontode'
+		,
+		9
+		'Absent'
+		'Present'
+		,
+		10
+		'Absent'
+		'Present'
+		,
+		11
+		'distinct crown and base demarcated by a constriction (neck)'
+		'flattened'
+		,
+		12
+		'Absent'
+		'Present'
+		,
+		13
+		'Present'
+		'Absent'
+		,
+		14
+		'vertical rows '
+		'oblique rows or hexagonal/rhombic packing '
+		'disorganised '
+		,
+		15
+		'passes between or beneath scales '
+		'passes over scales and/or is partially enclosed or surrounded by scales '
+		'perforates and passes through scales '
+		,
+		16
+		'sensory lines pass through canals enclosed within dermal bones'
+		'preserved as open grooves (sulci) in dermal bones '
+		,
+		17
+		'Present'
+		'Absent'
+		,
+		18
+		'includes large dermal plates '
+		'consists of undifferentiated plates or tesserae'
+		,
+		19
+		'large interlocking polygonal plates '
+		'microsquamose, not larger than body squamation '
+		,
+		20
+		'complete'
+		'incomplete (scale-free cheek and elsewhere) '
+		,
+		21
+		'Present'
+		'Absent'
+		,
+		22
+		'Absent'
+		'Present'
+		,
+		23
+		'Absent'
+		'Present'
+		,
+		24
+		'Absent'
+		'Present'
+		,
+		25
+		'Present'
+		'Absent'
+		,
+		26
+		'Absent'
+		'Present'
+		,
+		27
+		'Absent'
+		'Present'
+		,
+		28
+		'Absent'
+		'Present'
+		,
+		29
+		'plate-like '
+		'narrow and ribbon-like '
+		,
+		30
+		'ornamented '
+		'unornamented '
+		,
+		31
+		'Absent'
+		'Present'
+		,
+		32
+		'complete or partial '
+		'separate gill covers and gill slits '
+		,
+		33
+		'Absent'
+		'Present'
+		,
+		34
+		': broad plate that tapers towards its proximal end'
+		'narrow, rod-shaped '
+		,
+		35
+		'Absent'
+		'Present'
+		,
+		36
+		'extending most of length of the lower jaw '
+		'restricted to the anterior third of the jaw (no longer than the width of three or four branchiostegals)'
+		,
+		37
+		'Present'
+		'absent, hyoid arch articulates directly with basibranchial '
+		,
+		38
+		'Absent'
+		'Present'
+		,
+		39
+		'Absent'
+		'Present'
+		,
+		40
+		'Absent'
+		'Present'
+		,
+		41
+		'single, continuous plate '
+		'some or all whorls consist of separate tooth units '
+		,
+		42
+		'Absent'
+		'Present'
+		,
+		43
+		'Absent'
+		'Present'
+		,
+		44
+		'Absent'
+		'Present'
+		,
+		45
+		'Absent'
+		'Present'
+		,
+		46
+		'Absent'
+		'Present'
+		,
+		47
+		'ventral or medial '
+		'lateral '
+		,
+		48
+		'Absent'
+		'Present'
+		,
+		49
+		'Absent'
+		'Present'
+		,
+		50
+		'Absent'
+		'Present'
+		,
+		51
+		'Absent'
+		'Present'
+		,
+		52
+		'Absent'
+		'Present'
+		,
+		53
+		'Absent'
+		'Present'
+		,
+		54
+		'Absent'
+		'Present'
+		,
+		55
+		'Absent'
+		'Present'
+		,
+		56
+		'dorsal, placed between orbits '
+		'ventral and anterior to orbit '
+		,
+		57
+		'elongate and tubular (much longer than wide) '
+		'short, with olfactory capsules situated close to telencephalon cavity '
+		,
+		58
+		'Present'
+		'Absent'
+		,
+		59
+		'Absent'
+		'Present'
+		,
+		60
+		'posterior and dorsal to foramen for nerve II'
+		'anterior and dorsal to foramen '
+		,
+		61
+		'Absent'
+		'Present'
+		,
+		62
+		'Absent'
+		'Present'
+		,
+		63
+		'Absent'
+		'Present'
+		,
+		64
+		'Absent'
+		'Present'
+		,
+		65
+		'Absent'
+		'Present'
+		,
+		66
+		'Present'
+		'Absent'
+		,
+		67
+		'Absent'
+		'Present'
+		,
+		68
+		'Absent'
+		'Present'
+		,
+		69
+		'elongate and passes anterolaterally through orbital floor'
+		'stout, divides within otic capsule at the level of the postorbital process '
+		,
+		70
+		'Absent'
+		'Present'
+		,
+		71
+		'foramen situated posteroventral to otic capsule and anterior to metotic fissure'
+		'through metotic fissure '
+		,
+		72
+		'Absent'
+		'Present'
+		,
+		73
+		'Absent'
+		'Present'
+		,
+		74
+		'Platybasic'
+		'Tropibasic'
+		,
+		75
+		'Absent'
+		'Present'
+		,
+		76
+		'invested in otic capsule wall posterior to the postorbital process '
+		'lateral wall of jugular canal incomplete or absent '
+		,
+		77
+		'Absent'
+		'Present'
+		,
+		78
+		'through separate openings flanking the hypophyseal opening or recess'
+		'through a common opening at the central midline of the basicranium '
+		,
+		79
+		'Absent'
+		'Present'
+		,
+		80
+		'same anteroposterior level as hypophysial opening'
+		'anterior to hypophysial opening '
+		,
+		81
+		'Absent'
+		'Present'
+		,
+		82
+		'separated from the main neurocranial cavity by a cartilaginous or ossified capsular wall'
+		'skeletal capsular wall absent '
+		,
+		83
+		'Absent'
+		'Present'
+		,
+		84
+		'dorsal to level of basipterygoid process '
+		'flanked posteriorly by basipterygoid process '
+		,
+		85
+		'Absent'
+		'Present'
+		,
+		86
+		'absent or indistinguishable from union of anterior and posterior canals with saccular chamber'
+		'Present'
+		,
+		87
+		'dorsal to posterior ampulla'
+		'level with posterior ampulla '
+		,
+		88
+		'Absent'
+		'Present'
+		,
+		89
+		'Absent'
+		'Present'
+		,
+		90
+		'approximately as long as broad '
+		'much longer than wide, slot-shaped'
+		,
+		91
+		'Absent'
+		'Present'
+		,
+		92
+		'posteriodorsally angled tubes '
+		'tubes oriented vertically through median endolymphatic fossa '
+		,
+		93
+		'Absent'
+		'Present'
+		,
+		94
+		'Absent'
+		'Present'
+		,
+		95
+		'below or anterior to orbit, on ventrolateral angle of braincase '
+		'posterior to orbit '
+		,
+		96
+		'Absent'
+		'Present'
+		,
+		97
+		'Absent'
+		'Present'
+		,
+		98
+		'Absent'
+		'Present'
+		,
+		99
+		'Absent'
+		'Present'
+		,
+		100
+		'two or more, aligned horizontally '
+		'one or two, dorsoventrally offset '
+		,
+		101
+		'Absent'
+		'present or entirely unfused '
+		,
+		102
+		'broad, flat '
+		'keeled with sloping lateral margins '
+		,
+		103
+		'Absent'
+		'Present'
+		,
+		104
+		'Present'
+		'Absent'
+		,
+		105
+		'ventral and dorsal (scapular) components '
+		'ventral components only '
+		,
+		106
+		'Present'
+		'Absent'
+		,
+		107
+		'Present'
+		'Absent'
+		,
+		108
+		'Absent'
+		'Present'
+		,
+		109
+		'Absent'
+		'Present'
+		,
+		110
+		'Absent'
+		'Present'
+		,
+		111
+		'horizontal '
+		'deeply angled '
+		,
+		112
+		'flattened or strongly ovate '
+		'subcircular '
+		,
+		113
+		'Absent'
+		'Present'
+		,
+		114
+		'Absent'
+		'Present'
+		,
+		115
+		'Present'
+		'Absent'
+		,
+		116
+		'mineralised all around '
+		'un-mineralised on internal face forming a hemicylindrical cross-section'
+		,
+		117
+		'Absent'
+		'Present'
+		,
+		118
+		'Absent'
+		'Present'
+		,
+		119
+		'stenobasal '
+		'eurybasal '
+		,
+		120
+		'Absent'
+		'Present'
+		,
+		121
+		'Absent'
+		'Present'
+		,
+		122
+		'Absent'
+		'Present'
+		,
+		123
+		'Absent'
+		'Present'
+		,
+		124
+		'Absent'
+		'Present'
+		,
+		125
+		'Absent'
+		'Present'
+		,
+		126
+		'Absent'
+		'Present'
+		,
+		127
+		'Absent'
+		'Present'
+		,
+		128
+		'Absent'
+		'Present'
+		,
+		129
+		'shallow, not greatly deeper than dermal bones/ scales '
+		'deep '
+		,
+		130
+		'Absent'
+		'Present'
+		,
+		131
+		'Absent'
+		'Present'
+		,
+		132
+		'Absent'
+		'Present'
+		,
+		133
+		'Absent'
+		'Present'
+		,
+		134
+		'Absent'
+		'Present'
+		,
+		135
+		'Absent'
+		'Present'
+		,
+		136
+		'one'
+		'two'
+		,
+		137
+		'Absent'
+		'Present'
+		,
+		138
+		'extend beyond level of body wall and deep into hypochordal lobe '
+		'radials restricted to axial lobe '
+		
+	;
+	MATRIX
+	'Acanthodes'		                 000120011001011-0111-?-0?00----10-0-1?0----0011101010?01?1??010?0111?0110111010011001101101001111?001101---0-10100101100100001111001000010
+	'Akmonistion'		                10012010?0-??21-?1?0---0-00----10-0-?01110-0011?000?0101010?01001110101100?111?11?001??110111010100?0011---0-1-001101110110001001000000000
+	'Austroptyctodus'		            0001?0?1?01010?0?0-01-001-0----0110-0010-011001???000?01010?0????101????????0????1????????????0???0??000001101-00000100?111001010?000011??
+	'Bothriolepis'		               0100-0-?--?--?11?0-100010-0----0100-???---?10000??00??00?0???????0?????00????????0????????????0????????000010?????1--00-0--11000-00---000?
+	'Brachyacanthus'		             000??00??????10??101??-0?11000000-0-????---00??????????1?1?????????????????????????????????????????????01-10-1010010?0??1?000111011110011?
+	'Brindabellaspis'		            000100?100010????0-?000?1-?????010???????????????????0?010000000000000-00000100?00??10000-00010000-0?0000????1-0001010??????0??1??0-?-????
+	'Brochoadmones'		              0101000100?111110111??-0?00----10-0-??1100-00??????????1?1?????????????????????????????????????????????1---0-??????-?-??10000111111110011?
+	'Buchanosteus'		               00?1?0?100010??1?0-101111-0----0110-??1--0?10000??0?001101000001010010-00000000?00??1000???0011000-0100000011?0?--1?1???????00?1??000-????
+	'Campbellodus'		               000??011?01010?0?0-01-001-?----0110-0010-0110010??000?0???????????????????????????????????????0????????000110???--1-?0??111001010?00-01?01
+	'Cassidiceps'		                000??00??00101?1?10???-???111?100-0-??0----0???????????1?1?????????????????????????????????????????????1---0-11?????????1?000111010100011?
+	'Cheiracanthus'		              000120011001010-?110??-0?01111100-0-??0----0011001010?01?1?????????????????????01??????????????????????1---0-1110010?1??10000111100100001?
+	'Cheirolepis'		                000120010101012010-11-110-1100101011??10-001111?10000?11?10??????11????10????0?0??00???????????1???????00110-?????1???1010000000-00---001?
+	'Chondrenchelys'		             11012010?00??-1-?1?0---0-00----00-0-??1100-0011?00011001110?0?000110??-111??0?????????????0?00110?0?0011---0-1-00110100-11000000-00---000?
+	'Cladodoides'		                110????????????-????---?-?????????????111?-0011?00???1010???00000110101000011111110011011111?0101010001???????????????????????????????????
+	'Cladoselache'		               1101201100-??2?-?1?0---0-00----10-0-?01110-00110000?0?01?10?0??0111????10???11?11???????1?1?101010??10?1---0-1-00110101010000100000?000000
+	'Climatius'		                  0001000??000110-?10100-0?11000000-0-??1100-0011?00010?0??1?????????????????????????????????????????????01-10-1000010?0??1?000111011110011?
+	'Cobelodus'		                  1101?01??0-????-?1?0---0-00----10-0-001110-0011?00010101?1??01000111101101011111110011011011001010000011---0-1-00110111011000000-00---0000
+	'Coccosteus'		                 000??01????????1?0-101111-0----0110-??10-0110??????00?11?1?????????????00??????????????????0???????????000011?0?--1?????1?000001-0001-100?
+	'Cowralepis'		                 000??0?????????1?0-0?-001-0????0110-0?10-0110?????00??1????????????????????????????????????????????????000?10????????01?1??00?01-000??1-00
+	'Culmacanthus'		               ?00??00??0010100?101??-1?00----00-0-????---?0????????????1?????????????????????????????????????????????01-10-10?0010?0??10?00111100100011?
+	'Debeerius'		                  11012010?0???-1-?1?0---0-00----00-0-00101?-0001?000?1001110?0?0?0111??-111??0?110??????10-0100100?0?00?1---0-1-00110100011?001-01001000100
+	'Dialipina'		                  0?0??00?011011?1?0-11-101??????0??10??10-00?1??????????1?1??????????????0??????????????????????????????00110-???????????10000?00-00--??11?
+	'Dicksonosteus'		              00?110?1?0?????1?0-101111-0----0100-??1???110000????001101000001010010-00001000?00??10000-0001100000?0000001000?--1-101????000?1-?001-1???
+	'Diplacanthus'		               0101?0011001010?0101??-0?00----0??0-??0--0-10?????1??????1?????????????????????????????????????????????00110-110100000??10000111110100011?
+	'Doliodus'		                   1?0??0?10??????-?1??---0-?0----?0-0-??1110-001???????101010?00?00010???00??111?11?00????11??10101000?0????-????????????????00??1???11?????
+	'Eusthenopteron'		             001120010010112000-11-110-11001010101110-001111100000011110111100110110101110000?1111111100?0011110101000110-0------000-10-00000-00---0111
+	'Euthacanthus'		               00010001?001110-0101??-0?01111100-0-??1100-00?????????0??1?????????????????????????????????????????????0-110-1110010????10000111011100011?
+	'Galeaspida'		                 0000-0-???0101?1?0010?--000-------0-------?----------000000?0-?0000000-000?0----?0??00?00-?00??000-0000-------?--?0-----0??--??0-?----0???
+	'Gladiobranchus'		             000120011001011-?101??-0101000100-0-??0----00?????1??????1?????????????????????????????????????????????1---0-100100010??10000111111110?11?
+	'Gogonasus'		                  0011211100101?2000-11-110-1101?010101?10-001111100000011110111010110110001110000??1111?1????0011110101000110-?????????0?????0?????????0?1?
+	'Guiyu'		                      0011200101101120?0-11-110-1100101010??10-0011?????000011?10?1???010?1??10?1????0???????????????1???????00??10?--?-1???0?1??001?1000100?01?
+	'Hamiltonichthys'		            11012010?00?120-?111---0-00----10-0-0?1110-0001?0?010101?11?00??0110??-?0??1???1????????110?0?10001??011---0-1-000101000110001001001010110
+	'Homalacanthus'		              000??00??001011?0110??-0?00--1?00-0-??0----00110010?0?01?1??????011????1?1?????01?????????????11?????1?1---0-1110010?1??100001111001000010
+	'Howqualepis'		                ?????00?0110112010-11-110-1100101011?1110101111?1??00?11?10?0110?111???101?????0????????????0?1111???1000110-?-???1??01110000000-00---?011
+	'Ischnacanthus'		              000??00??001010-01010?-0?01101100-0-??110111011100010?0??1????????????????????????????????????1????????1---0-1110011?1??10000111100100011?
+	'Kathemacanthus'		             0101000100?011?-?111??-0?00----00-0-??0----0-?1???000??1?1??????0???????0??????????????????????????????1---0-??????-?0??1?000111111100011?
+	'Ligulalepis'		                001??0?10??????0?0-?1-1??????????????????????????????0?101010?1?011010010??1?000010011?1100000111?????????????????????????????????????????
+	'Macropetalichthys'		          00?110?????????0?0-?000?1-???????0???????????????????001100?0000000000-0000?1-1?0???10?00-?0010000-?00?00??????????????????????1???01?????
+	'Mesacanthus'		                000??00???0?0101?100??-0101110000-0-??0----0011??00???01?1?????????????????????0???????????????????????1---0-111001?0???10000111010100001?
+	'Mimia'		                      001120010110112010-11-110-11001010111110-0011111100000111101011001111101011110000100111110000011110111000110-0----1-001110000000-00---0011
+	'Obtusacanthus'		              0101201000?0120-?111??-0?0?0???0??0-??0----00????????????1?????????????????????????????????????????????1---0-??????-?-??1?000111?01110011?
+	'Onychodus'		                  001120010010012000-11-111-1100?01010?11101011111????0?11110111?001001-?10111???0?1001???????0?1111?????00110-0----1-000-10000000-00---011?
+	'Onychoselache'		              1101?011?0-01-0-?1?0---0-00----?0-0-??1110-0001?0?0?0101?1??0????11?????0???????0?????????????????1????1---0-1-100101000110001001001010110
+	'Orthacanthus'		               1101201????????-?1??---0-?0----10-0-001110-00111000101010?1?00000110101000011111110011011111101010100011---0-1-0011011??11000100?00??00-10
+	'Osteostraci'		                0001000100?010?1?10100--000-----0-0-------?----------00000000-?0000000-000?0----?0??00-00-?00??000-??000000-0??--?0-100-0-000?0?-00---00??
+	'Parexus'		                    000??01100???10??101??-0?11000000-0-??1100-00?????????0??1?????????????????????????????????????????????01-10-1010010?0??10000111111110011?
+	'Poracanthodes'		              00012001000101???10???-0????????0?????1101110?1??00????????????????????????????????????????????????????1---0-1110011????1?000111?00100011?
+	'Porolepis'		                  001121010110112000-11-110-110?101010?1110101111100000011110?11?0011011?101110??0??101??1????001111??01?00110-0----1-000-10000000-00---?11?
+	'Promesacanthus'		             0001?001101101?1?100??-0101110000-0-??0----0011???010??1?1??????????????????????1??????????????????????1---0-111000001??1?000111011100001?
+	'Psarolepis'		                 0011?1?10??0???0?0-11-?10-????????????11?10?1?????0?0011?10?1?10010011?10?11???0?1001???100000111??????00????????-1??0??????01?10?0100????
+	'Pterichthyodes'		             010??0-1?0???011?0-10??10-0?---0100-??0--???0?????????00?0???????0????????????????????????????0????????0?0010?????1--00-0--11?00?00--?000?
+	'Ptomacanthus'		               ?00??0???00111???101??-0101?0001??????1100-00110000???01?10??0????0????0????0000????????????????????10?011-0-100001010??10000111011110011?
+	'Pucapampella'		               110??0?????????-????---?-??????????????????????????????1????000001101?1100?1101011001?0?101010111?00100???????????????????????????????????
+	'Rhamphodopsis'		              000??0???????0?0?0-01-001-0----0110-??10-01100????????0???????????????????????????????????????0????????00011??0?--1-????111001010?0110?10?
+	'Tamiobatis'		                 1101?0?1-0-01??-?11?---0-?????????????1110-0011?000??101??0?000001101010000111111?001???111110101000001?---??????1???????????1??1??110???0
+	'Tetanopsyrus'		               000120011001010-?111??-0?00----00-0-??10-0?10010001????1?1?????????????????????????????????????????????1---0-100001001??10000111000110011?
+	'Tristychius'		                11012011?0-??-?-?1?0---0-00----00-0-?01110-0001?0?010101010?000001101?-1000101?-0?001?????11101000?10011---0-1-001101000110001001001010110
+	'Lupopsyrus'		                 000??0100?0??20???1???????1010?00?0???00?0?00??????????????????????????????????????????????????????????1???0-10??????1??10-00111111110011?
+	'Rhadinacanthus'		             000??0????????????????????0100?0??????0?????0??????????????????????????????????????????????????????????????0-1?11????1??10-00111111110011?
+	'Vernicomacanthus'		           000??0???????1????????????10???1??????11?0?00??????????????????????????????????????????????????????????????0-1?00????1??10-00111111110011?
+    ;
+    ENDBLOCK;
+
+          BEGIN NOTES;
+              [Taxon comments]
+        
+        [Character comments]
+        	TEXT CHARACTER=1 TEXT='Coates & Sequeira (2001a,b); Maisey (2001); Brazeau (2009). Definition used in present study follows that proposed by Dean and Summers (2006).';
+	TEXT CHARACTER=2 TEXT='Janvier (1996); Donoghue & Aldridge (2001); Brazeau (2009).  Coding here follows Brazeau, although Young (1984) reports the presence of extremely thin and fragile perichondral ossifications in a single specimen of Bothriolepis.';
+	TEXT CHARACTER=3 TEXT='Forey (1980); Gardiner (1984); Brazeau (2009).';
+	TEXT CHARACTER=4 TEXT='Donoghue & Aldridge (2001); Brazeau 2009.';
+	TEXT CHARACTER=5 TEXT='Donoghue et al. (2000); Brazeau (2009).';
+	TEXT CHARACTER=7 TEXT='Among living fishes, lepidotrichia are unique to Osteichthyes. Absence of lepidotrichia, as in Chondrichthyes and extant agnathan vertebrates, is usually interpreted as primitive (Rosen et al. 1981; Friedman & Brazeau 2010). However, lepidotrichia-like small scales, aligned and radiating toward the fin margins, are present in osteostracans (Adrain & Wilson 1994; Coates 2003), anaspids (Janvier 1996) and many acanthodians (Hanke & Wilson 2004; 2010). Absence of lepidotrichia-like fin scales in placoderms, chondrichthyans and a subset of acanthodians is probably a derived condition.';
+	TEXT CHARACTER=8 TEXT='Hanke & Wilson (2004); Brazeau (2009). Here, "''odontode"'' is used as shorthand for the repeated units of which morphologically complex scales and teeth are structured. Thus Maisey"''s (1989) description of body scales in Hamiltonichthys as "''unicuspid"'' is treated here as monodontode. However, odontodes are not used in the present context as irreducible or ancestral units of tooth or scale development, and for a detailed and necessarily critical discussion of the "''odontode"'' concept see Donoghue (2002).';
+	TEXT CHARACTER=9 TEXT='Hanke & Wilson (2004); Brazeau (2009). This character is not equivalent the "''superpositional"'' character state used by Hanke & Wilson (2004). More precisely, it refers to the classic mode of acanthodian scale growth depicted in texts from Moy-Thomas & Miles (1971) onwards, and exemplified by Acanthodes and Nostolepis (shown again by Burrow & Turner 2010). Thus Brochoadmones (and similar taxa) coded by Hanke & Wilson (2004) and Burrow & Turner (2010) as sharing the same general superpositional mode of flank scale growth, is here coded as different (mid-sagittal sections of scales shown in Hanke & Wilson 2006).';
+	TEXT CHARACTER=10 TEXT='Gardiner (1984); Coates (1999); Brazeau 2009.';
+	TEXT CHARACTER=11 TEXT='Hanke & Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=12 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=13 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=14 TEXT='Hanke & Wilson''s (2004) and Brazeau"''s (2009) coding for this character is augmented with state 2 to characterize flank scale arrangements in chondrichthyan subgroups.';
+	TEXT CHARACTER=15 TEXT='Davis (2002); Friedman & Brazeau (2010). Lateral line sensory canals pass between scales in elasmobranchs and through scales in osteichthyans. Chimaeroids present a third condition (character state 1), in which the sensory canal is enclosed within crescent-shaped scales aligned as a flexible gutter (also present in certain stem-gnathostomes and fossil elasmobranchs). A similar pattern is apparent in certain placoderms where the sensory canal passes over the scale surface. Condition in Gogonasus undescribed, but depicted (state "''2"'') in Holland and Long 2009 Figure 5.';
+	TEXT CHARACTER=16 TEXT='Enclosed canals are known in Osteichthyes as well as a limited number of placoderms and acanthodians (Davis 2002).';
+	TEXT CHARACTER=17 TEXT='Definition changed from Brazeau (2009) to match that of Rosen et al. (1981). The condition in Guiyu (Zhu et al. 2009) remains uncertain: a canal runs through the preopercular plate, directed towards the infraorbital canal within the jugal, but the union of these two canals is unspecified.';
+	TEXT CHARACTER=18 TEXT='Forey (1980); Gardiner (1984); Brazeau (2009).';
+	TEXT CHARACTER=19 TEXT='Brazeau (2009). In many taxa, such as Climatius and Acanthodes, the alternative states of this character are clear. However, in examples such as Vernicomacanthus the destinction between the sizes of individual cranial tesserae and body scales is marginal (see Miles 1973a, plates 7, 8 and 9) and for this reason it is coded as uncertain.';
+	TEXT CHARACTER=20 TEXT='Brazeau (2009). Scale-free and dermal plate-free cheeks have a patchy distribution among early gnathostomes. Several chondrichthyans and certain placoderms including ptyctodontids and phyllolepids exhibit this condition. In agreement with Brazeau (2009) scale-free cheeks are scored as present in genera such as Mesacanthus, Promesacanthus and Cheiracanthus. Contra Brazeau, Acanthodes seems to bear cheek scales, but we acknowledge that the condition of this character is extremely variable and could be adjusted in future anlyses (alternative codings yield the same consensus tree topology). In cases of genera such as Obtusacanthus and Kathemacanthus where cheeks are incompleteley known, we score both as state "''0"''. Obtusacanthus, specimen UALVP 41488, has a large area of the central region of the right side cheek, missing. However, the entire rim of this missing region is scaled, and bases of scales from the opposite side (the left cheek) are visible. These show that the missing region was scale-covered (Hanke and Wilson 2004, Fig. 6A). Kathemacanthus, specimen UALVP 32402, shows the rear of the left side cheek, and this bears complete scale cover. Specimen UALVP 43113 displays most of the right side cheek region, and although disrupted, this is covered with scales (Hanke and Wilson 2010, Figs 4-6).';
+	TEXT CHARACTER=21 TEXT='Janvier (1996); Brazeau (2009).';
+	TEXT CHARACTER=22 TEXT='Goujet & Young (1995); Brazeau (2009); ';
+	TEXT CHARACTER=23 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=24 TEXT='Davis (2002); Brazeau (2009).';
+	TEXT CHARACTER=25 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=26 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=27 TEXT='Adapted from Davis (2002) and Hanke & Wilson (2004). Brazeau (2009) codes Acanthodes as state "''1"'': branchiostegals present. This identifies the slender rays extending from the lower half of the Acanthodes hyoid arch (Miles 1973b, plate 6) as homologues of the osteichthyan branchiostegal series, as well as the hyoidean gill-cover plates of several, but not all, acanthodian clades (Miles 1971, 1973b; Denison 1979; Friedman & Brazeau 2010). Such rays would therefore be part of the dermal skeleton. Alternatively, the Acanthodes hyoid rays can be homologized with those of modern and fossil chondrichthyans (Jarvik 1980). In this instance, these structures would be part of the endoskeleton, and Acanthodes must be coded as state "''0"''.^n		Both hypotheses are consistent with the proximity of these rays to the hyoid arch in specimens such as HU MB 11a (Miles 1973a, plate 6, in which rays are labeled as branchiostegal rays, and supplementary figure 6e, "''Hy.r"'', in the present work). Of the usual criteria used for estimating morphological homology (Panchen 1992), only overall shape similarity is available to assist choice between these alternative hypotheses. Likely close relatives of Acanthodes such as Homalacanthus (Gagnier 1996) show slightly more plate-shaped rays, and this could be used as an additional line of evidence to justify coding these rays in Acanthodes as state "''1"''. However, this decision includes an additional, implicit, hypothesis of phylogeny and character polarity. Here, the alternative coding is used: state "''0"'' for Acanthodes, based upon morphological similarity (Panchen 1992). This is consistent with the aim of leaving the analysis open to discovering patterns of character evolution (Brazeau 2011). But, we acknowledged that the apparent objectivity of such a position is questionable (Rieppel, 1988).^n';
+	TEXT CHARACTER=28 TEXT='Davis (2002); Hanke and Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=29 TEXT='Hanke and Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=30 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=31 TEXT='). Brazeau (2009) defines this character on the basis of "plates with imbricated margins at the proximal ends". Examples of imbricating plates are seen clearly in early osteichthyans such as Mimia (Gardiner 1984, fig. 97). In acanthodian examples such as Cassidiceps (UALVP 32454) the branchiostegal plates overlap in the region directly caudal to the level of the jaw joint. In Gladiobranchus (UALVP 19259), examples of the plates ventral to the mandible are similarly overlapped. It is also noteworthy that the proximal end of each plate is slightly curved, dorsally. In Mesacanthus (PF 1439), the proximal ends of members of the branchiostegal series are curved towards adjacent plates. However, the long margins of each plate are free, and bordered only by areas of matrix or scales: these rays are separated. Any imbrication between such plates, at the most proximal end, is uncertain. Brazeau"''s discussion of this character might cover two conditions of the branchiostegals: overlap (imbrication) and proximal curvature. Here, we code only for plate overlap, and score Mesacanthus as "''0"''.';
+	TEXT CHARACTER=32 TEXT='Modified from Hanke and Wilson (2004): a series of gill slits (with individual covers rather than pores, as in jawless fishes), none of which is overlain partly or completely by an enlarged hyoidean gill cover, represents a possible synapomorphy of certain acanthodians and certain, but not all Chondrichthyes. Notable exceptions include the Chimaeroids, as well as Tristychius (Dick 1978), and the symmoriid Falcatus (Lund 1985), as exhibited in specimen CM 41049. With regard to the present study, species of Acanthodes (Heidtke 1993; Beznosov 2009) consistently exhibit a long pharyngeal region separating the pectoral girdle from the occipital region, mandibular and hyoid arches. In several A. bronni specimens the gill skeleton is barely disturbed. The gill arch series preserved in specimen NHM P49979 (Supplementary Figure 12 e) especially resembles conditions in Akmonistion and Cladoselache, although overlain by an impression of skin with scales (these chondrichthyan exemplars are mostly scale-free). Although the skin impression in NHM P49979 is incomplete, the simplest interpretation is of a series of gill slits and flaps. Crucially, there is no evidence of a substantial, hyoid supported, opercular cover. ';
+	TEXT CHARACTER=33 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=34 TEXT='Brazeau (2009). ';
+	TEXT CHARACTER=35 TEXT='Gardiner (1984); Brazeau (2009)';
+	TEXT CHARACTER=36 TEXT='Coates (1999); Brazeau (2009)';
+	TEXT CHARACTER=37 TEXT='Basihyals are known in chondrichthyans (Zangerl &Case 1976; Didier 1995; Grogan & Lund 2000: the glossohyal reported in Debeerius is indistinguishable from a basihyal) and placoderms (Ritchie 2005; Long 1997). Direct articulation between the hyoid arch and one or more basibranchials (where a basihyal is absent) occurs in Acanthodes and osteichthyans (Nelson 1968; Miles 1973b; Gardiner 1984: alternative reconstructions of Acanthodes gill arches consistently show no basihyal). The polarity of this character is questionable, given the poverty of branchial arch data in early gnathostomes. Friedman & Brazeau (2010) discuss hypohyal presence as a possible osteichthyan synapomorphy, but predetermine the hypohyals of Debeerius (Grogan & Lund 2000) as independently derived, and offer no comment on the hypohyal of Cobelodus (Zangerl & Case 1976). Acanthodes lacks a hypohyal.';
+	TEXT CHARACTER=38 TEXT='An interhyal is absent in chondrichthyans (Maisey 1989; Janvier 1996) and present in osteichthyans, although occasionally identified as a stylohyal or symplectic (Patterson 1982; Veran 1988). Friedman & Brazeau (2010) are cautious about the polarity of this character because hyoid arches among early gnathostomes are poorly understood. The coding used here follows advice that an interhyal is absent in ptyctodontid placoderms (pers. com. Trinajstic; contra Long 1997). Maisey (1989a) speculates on interhyal presence in the chondrichthyan Cladoselache, but acknowledges that this is probably a preservational artifact (coded as ''absent'' in the present work). Acanthodes is problematic, and scored as condition uncertain in the present analysis, because evidence of an interhyal consists solely of an appropriately positioned prominence on second-generation copies (HUMB23; HUMB18b) of a lost original specimen (Miles (1973b; pers. obs. MIC).  Nevertheless, the existence of an Acanthodes interhyal is widely accepted (Rosen et al. 1981; Lauder & Liem 1983; Maisey 1986; Veran 1988; Janvier 1996). Intriguingly, direct evidence is persistently absent, even in specimens where most of the fossil bone of the visceral skeleton survives: e.g. Mus"©um de Paris 1884-10-7 and 1884-10-19. ^n';
+	TEXT CHARACTER=39 TEXT='Hanke & Wilson (2004); Obtusacanthus scored as "''0"'' (changed from "''1"'' in Brazeau 2009)';
+	TEXT CHARACTER=40 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=41 TEXT='Adjusted from Brazeau (2009). The presence of whorls composed of discrete teeth is probably unique to chondrichthyans. However, tooth whorls with continuous bases occur sporadically throughout early chondrichthyans, including holocephalan toothplates, such as those of Chondrenchelys, and early osteichthyans, e.g. Onychodus (Andrews et al. 2006), although within bony fish such whorls are positioned at, or next to, the mandibular symphysis.';
+	TEXT CHARACTER=42 TEXT='Hanke & Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=43 TEXT='Hanke & Wilson (2004); Brazeau (2009); Dicksonosteus changed from "''0"'' to "''1"'': dentition of the anterior and posterior superognathals illustrated by Goujet (1984); Campbellodus and Rhamphodopsis scored as "''1"'', because statodont toothplates (in the sense of Patterson 1992) are present and continuous with dermal jaw bones.';
+	TEXT CHARACTER=44 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=45 TEXT='Gardiner (1984).';
+	TEXT CHARACTER=46 TEXT='Coates & Sequeira (2001a); Davis (2002); Brazeau (2009).  Changed from "''?"'' to "''0"'' in Hamiltonichthys. A large palatoquadrate otic process is present in a wide variety of early chondrichthyans and osteichthyans (Janvier 1996). Although present in many acanthodian genera, it is by no means present in all (reviewed by Brazeau 2009; Hanke et al. 2001; Hanke & Wilson 2010).';
+	TEXT CHARACTER=47 TEXT='Janvier (1996); Brazeau (2009). Contra Brazeau (2009), changed from "''0"'' to "''1"'' in Campbellodus in agreement with Gardiner (1984; see also Miles & Young 1977, plate 4) and Austroptyctodus (Long 1997, fig. 35). The quadrate has a crest along the posterodorsal margin, forming the upper rim of a laterally directed recess (Long 1997, Fig.6), as in chondrichthyan, osteichthyan and acanthodian examples (see also line drawings and photographs of specimens in Miles and Young 1977, as cited above). A corresponding lateral recess is visible on the articular portion of the lower jaw of other ptyctodont species. These laterally concave areas suggest that in ptyctodonts a substantial part of the jaw adductor musculature originated and inserted on the lateral face of the mandibular arch. For additional images of conditions in Austroptyctodus, see Forey & Gardiner (1986, Fig. 3) and Long (1997, Figs 27-29, 35). This might be present to a greater of lesser extent in other placoderms. There appears to be no space of a lateral component on the adductor muscles on the palate of the arthrodire Dicksonosteus (Goujet 1984), whereas, in the antiarch Bothriolepis a small but distinct lateral adductor fossa might be present (Young 1984). Where the mandibular arch is known, in acanthodians the jaw adductor muscles articulated on the lateral face (including Kathemacanthus, Hanke & Wilson 2010, where an adductor fossa is also visible on the lateral surface of the lower jaw).';
+	TEXT CHARACTER=48 TEXT='Brazeau (2009). We note that this groove (or angle between medially and ventrally directed surfaces of the Palatoquadrate) is present in Acanthodes, exhibited in NMS 2001.7.1.';
+	TEXT CHARACTER=49 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=50 TEXT='Davis (2002); Brazeau (2009). Brazeau codes this incorrectly as present in Cheirolepis; coded as absent in current analysis (Pearson & Westoll, 1979; pers. obs.). Davis (2002, fig. 5.6b) provides a clear account of this opening in the palatoquadrate of Cheiracanthus (UMZC GN1132A) and notes its absence in Mesacanthus (NMS 1891.92.275); condition also shown clearly in Acanthodes (Supplementary Figures 2, 8 and 12).';
+	TEXT CHARACTER=51 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009). Brazeau uses this character to code for an apparent coronoid process in Tetanopsyrus and Gladiobranchus; not for the presence of a preglenoid process. Davis (2002, fig.5.2) notes that a pronounced dorsal process is also present in the mandible of Diplacanthus crassissimus (NMS 1891.92.334). Other Diplacanthus specimens lack mineralized remains of the jaws.';
+	TEXT CHARACTER=52 TEXT='). Miles (1973b) comments that the mandibular joint of Acanthodes (Supplementary Fig. 10) resembles that of chondrichthyans. The main articulation is a lateral concavity, the glenoid, supplemented by a mesial, pre-glenoid process. Miles reports that a preglenoid process is also present in Acanthodopsis and Climatius. Davis (2002) identifies a preglenoid process in Cheiracanthus (UMZC GN1132A) and Climatius (NMS 2001.7.2). No such process is known in Kathemacanthus (Hanke & Wilson 2010). Friedman & Brazeau (2010) refer to this preglenoid process as a mesial cotylus (some confusion here), and consider it to be widespread among early gnathostomes and primitive relative to Osteichthyes. The mesial cotylus (i.e. a mesial hollow or recess) of chondrichthyan jaws occurs on the palatoquadrate, but no such cotylus exists in Acanthodes because the preglenoid process (of the mandible) articulates with a groove between the prearticular and postarticular processes of the palatoquadrate (Miles 1973b).';
+	TEXT CHARACTER=53 TEXT=' A possible synapomorphy of holocephalans, the reorientation and re-position of the jaw joint (to the rear-surface of the mandible) appears to precede fusion of palate and neurocranium, if Debeerius (Grogan & Lund 2000) displays a plesiomorphic condition. The condition in Chondrenchelys coded from NMS G2002.68.';
+	TEXT CHARACTER=54 TEXT='Schaeffer (1981); Coates & Sequeira (1998, 2001); Maisey (2001); Brazeau (2009). Thus far, no acanthodian neurocranium is sufficiently well preserved to show evidence of the presence or absence of this standard characteristic of non-holocephalan chondrichthyans. Although a "''rostrum"'' is identified in Kathemacanthus (Hanke & Wilson 2010), if this is part of a mineralized neurocranial roof, it is insufficiently complete anteriorly to provide decisive evidence of fontanelle presence or absence.';
+	TEXT CHARACTER=55 TEXT=' Gardiner (1984); Brazeau (2009).';
+	TEXT CHARACTER=56 TEXT='Friedman (2007); Brazeau (2009). Various chondrichthyans included in the present data set are changed from "''?"'' to "''1"''. This seems likely to mark a significant distinction in the organization of gnathostome crania, potentially uniting a large subgroup of placoderms with more crownward taxa to the exclusion of others, notably including antiarchs, acanthothoracids and rhenanids. See also notes on cranial evolution scenarios appended to character 69. Galeaspids are coded as state "''0"'' after Gai et al. (2011), because the single nasal opening is between the orbits (acknowledging that the nasal opening is, nevertheless, anterior to these orbits and perhaps slightly ventral to orbital-level).';
+	TEXT CHARACTER=57 TEXT='Zhu et al. (2009); Brazeau (2009); Friedman & Brazeau (2010). The boundary between short and long conditions is somewhat arbitrary, but the character is retained as a means of encoding the generalization that chondrichthyans tend to have short tracts and osteichthyans long tracts. These conditions are linked to forebrain position relative to the orbits: between in chondrichthyans; mostly behind in osteichthyans. Ligulalepis (Basden et al. 2000; Basden & Young 2001), an osteichthyan, displays an apparently primitive condition. However, placoderms display a variety of conditions, exemplified by comparison of the short tracts in arthrodire crania (Goujet 1984; Janvier 1996) with the long olfactory tubes preserved in Brindabellaspis (Young 1980).';
+	TEXT CHARACTER=58 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=59 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Brazeau (2009).';
+	TEXT CHARACTER=60 TEXT='Young (1986); Coates & Sequeira (2001a); Brazeau (2009).';
+	TEXT CHARACTER=61 TEXT='Janvier (1996, and references therein).';
+	TEXT CHARACTER=62 TEXT='Miles"'' (1973a) osteichthyan version of Acanthodes identified a spiracular groove on the basisphenoid. Brazeau (2009) followed by Friedman and Brazeau (2010) proposed this as a synapomorphy of total-group osteichthyans. However, these basicranial grooves are unknown in several early osteichthyans (e.g., Ligulalepis Basen et al. 2000, Basden & Young 2001; Guiyu Zhu et al. 2009; Psarolepis Yu 1998), while present on the underside of narrow-based chondrichthyan neurocrania (Coates & Sequeira 1998, fig. 3; Maisey 2007, fig. 5) in which they extend, from dorsal to ventral surfaces, anteromedially around the base of the postorbital process. It is possible that such grooves in early chondrichthyans also indicate the passage of a spiracular pouch.';
+	TEXT CHARACTER=63 TEXT='In osteichthyans, a distinct groove associated with the spiracle is present on the lateral face of lateral commissure (deBeer 1937). This groove usually extends on to the lateral or posterolateral surface of the postorbital process. In Acanthodes (Supplementary Figs 5,6,9), chondrichthyans and placoderms this groove is unknown. Note that in Gogonasus (Long et al. 1997) that part of the otic portion of the braincase usually labeled as the lateral commissure in sarcopterygians (see Jarvik 1980 on Eusthenopteron), is posterior to and probably separated from the space occupied by the spiracular pouch.';
+	TEXT CHARACTER=64 TEXT='Goujet & Young (1995); Brazeau (2009).';
+	TEXT CHARACTER=65 TEXT='Coates & Sequeira (1998); Brazeau (2009). In the present analysis Doliodus is coded as state "''0"'' (contra Brazeau 2009); the strong similarity between supraorbital shelves of Akmonistion (Coates & Sequeira 1998) and Cladoselache (Harris 1938b) is not shared with those of Doliodus (Maisey 2009). However, Doliodus clearly possesses a supraorbital shelf (Maisey 2009), and we note that this character could be subdivided in further analyses focused on resolving relationships close to the chondrichthyan crown node. Alternate coding for Doliodus as state "''1"'' results in an identical consensus tree topology to that shown in Supplementary Figure 16, but tree length is increased by 1 step.';
+	TEXT CHARACTER=66 TEXT='Brazeau (2009): the distinction between primitive conditions, with orbits directed dorsally, and derived conditions, with orbits directed laterally, is clear, but with exceptions such as the chondrichthyan Doliodus (Maisey et al. 2009). Ptyctodonts are code as state "''1"'', but the position of the hyomandibular articulation, as currently restored, suggests that a neurocranial component might be present ventral and lateral to the orbit.';
+	TEXT CHARACTER=67 TEXT='Brazeau (2009) discusses a basisphenoid region that is longer than wide with a characteristic "''T"'' shape in ventral aspect, as present in many crown gnathostomes. These basicranial proportions are notably absent in Onychodus (Andrews et al. 2006), Guiyu (Zhu et al. 2009), Psarolepis (Yu 1998) and Ligulalepis (Basden & Young 2001). Characters 58, 68 and 69 describe alternative states of the proportions of the anterior of gnathostome neurocrania; each concerns the gross structure of the cranium above or derived from the trabeculae (anterior to the hypophysis: Rathke"''s pouch). The order of these changes has direct bearing on recent scenarios of gnathostome cranial evolution (Kuratani 2005, 2009; Mallat 2008).';
+	TEXT CHARACTER=68 TEXT='Brazeau (2009). Early actinopterygians exhibit a narrow interorbital septum; the dorsal surface of the basisphenoid indicates a similar condition present in Acanthodes (Supplementary Figures 15a and b). Narrow interorbital septa are known in certain chondrichthyans, including holocephalans (Didier 1995; Stahl 1999) and the symmoriid "Cobelodus" (Maisey 2007). However, the interorbital region in the early holocephalan Chondrenchelys is broad, with no evidence of a narrow septum (from NMS 1998.35.1). The interorbital septum of the ptyctodont Austroptyctodus is coded tentatively as narrow (state 1) after Long"''s (1997) interpretation of the braincase. See also notes for character 74 (tropibasic basicranial morphology).';
+	TEXT CHARACTER=69 TEXT='Brazeau (2009). Scored as state "''?"'' in Austroptyctodus: although the orbit floor in pyctodontids shows no evidence of a large canal for the facial nerve, in this context it should be noted that the hyomandibula is restored as articulating in a suborbital position (Long 1997). This implies that the main trunk of the facial nerve was directed anterolaterally.';
+	TEXT CHARACTER=70 TEXT='Friedman (2007); Brazeau (2009); Friedman & Brazeau (2010). Recoded from "''?"'' to "''0"'' in Acanthodes. Brazeau notes that descriptions of Ligulalepis (Basden et al. 2000; Basden & Young 2001) show no (posterior) opening for the jugular vein. However, the space for the jugular vein appears to have been enclosed by the lateral commissure, as in other, similarly formed, gnathostome neurocrania. In contrast, Friedman & Brazeau (2010, fig. 4B) argue that the foramen below the hyoid facet (in Ligulalepis) enclosed the posterior exit of the jugular vein as well the hyoid branch of the facial nerve (n.VII). Here, this interpretation is considered unlikely, because the foramen in question (housing vein and nerve) is small; notably smaller than that which is thought to have housed the glossopharyngeal nerve (n. IX) (Basden et al. 2000, Basden & Young 2001). Therefore, Ligulalepis is recoded from state "''?"'' to "''0"''.';
+	TEXT CHARACTER=71 TEXT='Schaeffer (1981); Coates & Sequeira (1998, 2001); Brazeau (2009). Recoded from "''0"'' to "''1"'' in Acanthodes (Supplementary Figures 9, 10 and 15). The condition in Gogonasus is coded as state "''0"'', acknowledging uncertainty expressed by Long et al. (1997). For taxa lacking a metotic fissure, this character is inapplicable.';
+	TEXT CHARACTER=72 TEXT='Schaeffer (1981); Coates & Sequeira (1998, 2001); Maisey (2001); Brazeau (2009).';
+	TEXT CHARACTER=73 TEXT='Holocephalan synapomorphy: in extant species the pre-orbital walls of the ethmoid region provide anchorage for most of the jaw adductor muscles (Didier 1995). This is a likely synapomorphy of a larger clade including non-holocephalan members of the chimaeroid total group (Stahl 1999; Grogan & Lund 2000). Although coded as uncertain in the vast majority of acanthodians, orbit and snout proportions indicate that all could be scored as "''0"''. ';
+	TEXT CHARACTER=74 TEXT='Brazeau (2009) uses Maisey"''s (2007) criteria for determination of platybasic and tropibasic conditions, but acknowledges that these are difficult to apply to fossils. Maisey (2007) concedes that, in many instances, presence or absence of an interorbital septum is the only workable diagnostic feature in fossils, thus overlap with character 68 is likely. Further overlap occurs with character 103: presence of a narrow-based parachordal region. There is a risk of over-weighting the phylogenetic significance of a narrow basicranium. Friedman & Brazeau (2010) follow the established argument that tropibasic conditions are synapomorphic for the Osteichthyes total group. However, in the present analysis, tropibasic conditions are also coded as present in certain chondrichthyans. Coding for the acanthodian Homalacanthus is adopted from Brazeau"''s (2009) matrix. Significantly, given the rarity of such material, some of the Homalacanthus neurocranium is visible, as described and shown by Gagnier (1996, fig. 18).';
+	TEXT CHARACTER=75 TEXT='Miles (1973b); Brazeau (2009); Friedman & Brazeau (2010). Scored as present in Guiyu (Zhu et al. 2009) because of close correspondence to conditions in Psarolepis (Yu 1998).';
+	TEXT CHARACTER=76 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=77 TEXT='). Schaeffer (1981); Coates & Sequeira (1998); Brazeau (2009).';
+	TEXT CHARACTER=78 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Brazeau (2009). In Cladodoides (Maisey 2005, fig. 21), Akmonistion (Coates & Sequeira 1998, fig. 3), Cobelodus (Maisey 2007, fig. 14), Cladoselache (Maisey 2007, fig. 69), and Tamiobatis (Schaeffer 1981, fig. 19; Williams 1998 , and Maisey 2005, fig. 35), paired openings for the internal carotids are situated at the ventral midline, and these are sometimes partly enclosed within a single, larger opening. A similar condition is present in Acanthodes (Miles 1973b; see also Supplementary Figure 14, "''Bf"'', the basal foramen). These internal carotid foramena do not flank the hypophyseal opening as such, and, therefore, are coded as exhibiting the derived state, otherwise seen clearly in taxa such as Squalus (Homberger & Walker 2004) and Egertonodus (Maisey 1983). Pucapampella is coded as exhibiting the primitive state, consistent with alternative interpretations from Maisey (2001) and as quoted by Brazeau (2009). Character state "''0"'' persists in osteichthyans, such as Gogonasus (Long et al. 1997, figure 32). Notably, this primitive condition is also visible in Ligulalepis (Basden et al. 2000, Basden & Young 2001) and is remarkably similar to conditions in Mimia (with the parasphenoid removed) as shown by Gardiner & Bartram (1977, figs 5 and 6), although Brazeau codes Mimia as state "''1"''';
+	TEXT CHARACTER=79 TEXT='Brazeau (2009). Grooves entering the basal foramen in Acanthodes, visible in ventral aspect (Supplementary Fig. 9), are interpreted as for the efferent pseudobranchial arteries (Miles 1973b).  The basisphenoid in Ligulalepis (Basden et al. 2000; Basden & Young 2001) displays a very similar arrangement of grooves and basal foramen (thus both are coded as state "''0"''). State "''1"'' is a likely chondrichthyan synapomorphy, although known to occur in certain placoderms.';
+	TEXT CHARACTER=80 TEXT='Brazeau (2009); see Maisey (2005) for discussion of condition in early chondrichthyans.';
+	TEXT CHARACTER=81 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Maisey (2001a). Characteristic of early chondrichthyans (Cladodoides and Pucapampella) and Acanthodes (Supplementary Figures 3-5, 7-9, 12 and 15), but absent in osteichthyans in which a postorbital process is present. Redescription of Acanthodes shows no a-priori reason for coding the palatal-postorbital articulation as fundamentally different from that of early chondrichthyans (contra Miles 1973b). Promesacanthus provides another acanthodian example in which the palatoquadrate is visibly preserved in articulation with a large postorbital process (Hanke 2008, fig. 4), as in early chondrichthyans. Acanthodes could be characterized as "archaeostylic" (Maisey 2008), because the postorbital articulation (the ventral condyle in particular) overlaps the portion of the postorbital process that, in Recent fishes, includes the lateral commissure (Supplementary Figures 6-9, and 15). However, Maisey (2008), informed by Miles"''s (1973b) interpretation, concludes that the postorbital, otic articulation with the palate in Acanthodes is specialized and only superficially resembles early chondrichthyan conditions. Here, it is noted that the major difference is the division of the articulation into dorsal ventral components.';
+	TEXT CHARACTER=82 TEXT='Schaeffer (1981): formerly considered general characteristic of chondrichthyans, a medial capsular wall now seems more likely to be a synapomorphy of crown group elasmobranchs and hybodont sharks (Lane 2010; Maisey & Lane 2010; coded as uncertain for Hamiltonichthys, Onychoselache and Tristychius in the present analysis). In many early chondrichthyans a capsular wall is absent, as it is in osteichthyans and Acanthodes (Supplementary Figures 10 and 11). A substantial capsular wall is present in osteostracan, galeaspid and many but not all placoderm neurocrania (Janvier 1996 and references therein). In ptyctodontids, exemplified by Austoptyctodus (Long 1997; Miles & Young 1977; pers. com. Trinajstic) the basicranial ossifications include no evidence of the base of a medial capsular wall.';
+	TEXT CHARACTER=83 TEXT='The general condition for the basal articulation in gnathostomes is in the form of a simple, horizontal shelf or peg-like outgrowth (Maisey 2005, Brazeau 2009). In a subset of sarcopterygians, including stem-tetrapods and stem-dipnoans (porolepiforms), the posterior part of this articular surface is extended vertically.';
+	TEXT CHARACTER=84 TEXT='A canal for the pituitary vein passing behind the hypophyseal pillar is ubiquitous among early gnathostomes, and provides a valuable marker for inter-taxon comparisons. Unusually, in stem-tetrapods, this easily identified foramen is situated either anterior to part of the basipterygoid process, or more-or-less cupped by the C-shaped profile of this articulation in osteolepiforms such as Gogonasus (Long et al. 1997).';
+	TEXT CHARACTER=85 TEXT='Janvier (1996). The network of semicircular canals, ampullae and other chambers of the inner ear can be preserved with considerable fidelity because of extensive surrounding skeletal tissues (e.g. Supplementary Figure 10b). In addition to information from serial sectioning, grinding (e.g. Chang 1982) and endocasts (Moodie 1915; Coates 1998), data on labyrinth morphologies are increasingly available via computerized tomography (Maisey & Lane 2010).';
+	TEXT CHARACTER=86 TEXT='Thus far, a sinus superior appears to be unique to osteichthyans, chondrichthyans and acanthodids at least, among acanthodians. This vertical component of the labyrinth, dorsal to the vestibular region, leaves a clear trace within the endocranial spaces of early gnathostomes (Supplementary Figure 10c). It is unknown in any placoderm cranium described to date.';
+	TEXT CHARACTER=87 TEXT='The posterior end of the external (horizontal) canal usually joins the vestibular region level with the ampulla for the posterior semicircular canal in living and fossil osteichthyans (Jarvik 1980; Coates 1998; Maisey 2001b). In chondrichthyans, including extant and fossil examples, the posterior of the external semicircular canal joins the labyrinth dorsal to the posterior ampulla, and close to the base of the crus commune (Maisey 2001b, 2007; Maisey & Lane 2010). The chondrichthyan arrangement appears to be the more general condition because it also occurs in placoderms, albeit without clear evidence of a crus commune (Stensio 1963; Goujet 1984; Janvier 1996). Acanthodes (Figure 2b, Supplementary Figure 10c) conforms to this conjectured primitive condition, as does at least one early osteichthyan, the Lower Devonian sarcopterygian Youngolepis (Chang 1982). Character state 1 is a possible synapomorphy of osteichthyans, although the Youngolepis datum shows that the configuration of semicircular canals in early members of the crown clade is varied. Further conditions within early osteichthyan neurocrania need to be sampled; most notably the braincase attributed to Ligulalepis (Basden et al. 2000, Basden & Young 2001). ';
+	TEXT CHARACTER=88 TEXT='Goodrich (1930, fig. 284) summarized conditions graphically in his comparisons of fish chondrocrania. Schaeffer (1971) and Gardiner (1984) describe this extra-mural chamber for trigeminal and facial ganglia in early actinopterygians, and note similarities with chondrichthyan conditions; see also Maisey (2005) on conditions in early chondrichthyans, and compare conditions shown in Supplementary Figures 11a and b. Note also the equivalence of the relevant (shaded) areas in chondrichthyan and osteichthyan examples, and the large lateral opening in the pre-otic braincase wall of Acanthodes bronni (Figure 4 of the main text). A derived version of the general chondrichthyan condition is present in holocephalans (Kesteven 1932; deBeer 1937; Didier 1995). No such recess is present in osteostracans (Janvier 1985) and placoderm examples (Stensio 1963; Young 1980; Goujet 1984), and passages for the roots of trigeminal (N.V) and facial (N.VII) nerves remain separate until they unite within the main cranial cavity. Furthermore, there is no indication that these osteostracan and placoderm crania show superposition of N.V above N.VII as both nerves pass around the anterior of the otic capsule. In Acanthodes, only the dorsal part of the trigemino-facial recess is preserved. The roof is perichondrally lined, but margins of the ventral region are incomplete (Supplementary Figures 3, 5, 8, 9, 11, 13-15).';
+	TEXT CHARACTER=89 TEXT='Schaeffer (1981); Coates & Sequeira (1998).';
+	TEXT CHARACTER=90 TEXT='Coates & Sequeira (2001); Brazeau (2009).';
+	TEXT CHARACTER=91 TEXT='Coates & Sequeira (1998, 2001); Maisey (2001); Davis (2002). A dorsal ridge is absent in placoderms such Brindabellaspis and Dicksonosteus, but present in many early chondrichthyans, including Akmonistion, Pucapampella, Cobelodus and Cladodoides. The primary neurocranial roof of osteichthyans such as Eusthenopteron (Jarvik 1980) and Mimia (Gardiner 1984, fig. 27: posterior face of otic region) lacks evidence of such a mid-line dorsal ridge concealed beneath the dermal skull table. In the present work, Acanthodes is coded as state "''1"'', ridge present (Supplementary Figures 3-5 and 15), whereas in previous studies such a ridge has been interpreted as absent.';
+	TEXT CHARACTER=92 TEXT='Schaeffer (1981); Coates & Sequeira (1998, 2001); Davis (2002); Brazeau (2009). Recoded from "''?"'' to "''0"'' for Acanthodes (Supplementary Figures 3, 5 and 15): note that both internal and external openings of these tubes are preserved. Pucapampella (Maisey 2001a) is recoded similarly from "''?"'' to "''0"'', because it exhibits the same condition as Acanthodes: the ducts exit though the posterior dorsal fontanelle, which is continuous with the dorsal portion of the otico-occipital fissure (see features tagged "''end"'' in fig. 16.1 of Maisey 2001a). Maisey and Lane (2010, fig. 5) show rendered CT scans of the otic labyrinth of Pucapampella, and these include no trace of the endolymphatic duct. This suggests that, like Acanthodes, the duct passed through no substantial internal skeletal walls. Contrasting conditions are exhibited in early chondrichthyans such as Akmonistion (Coates and Sequeira 1998) and Cobelodus (Maisey 2007), in which the posterior dorsal fontanelle is situated anterior to the fissure, and separated from it by a posterior tectum. In these genera, the fontanelle lies level with the intersection of anterior and posterior semicircular canals. Therefore, although detailed information about the internal anatomy of the ear capsule might be absent (as in Akmonistion), it is reasonable to infer that the endolymphatic ducts passed vertically, directly up and through the braincase roof (see also condition for Cladodoides, illustrated in Supplementary Figures 10 e and f).';
+	TEXT CHARACTER=93 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Brazeau (2009). In chondrichthyans, the lateral otic process extends from the posterolateral portion of the otic capsule, and houses the outermost part of the semicircular canal. Examples include Pucapampella (Maisey, 2001a, fig.1), Akmonistion (Coates and Sequeira 1998, figs 1, 4), Orthacanthus (Schaeffer 1981, fig.6) and Tamiobatis (Schaeffer 1981, fig. 19; Williams 1998, fig. 2). From these contrasting examples, it is clear that the process exists in forms exhibiting different degrees of posterolateral projection. These could be further characterized as long and short variants. In many early taxa, this process is the site of articulation with hyomandibula; Tristychius (Dick 1978) is a noteworthy exception. It is also noteworthy that Maisey (2007) and Maisey and Lane (2010) describe the symmoriid chondrichthyan Cobelodus has having no such process. There is no lateral otic process in Acanthodes. The posterolateral surface of the otic capsule is continuously convex, and lacks any distinct vertical ridge or button-shaped prominence, although it is clear that this part of the braincase contains the outermost loop of the posterior semicircular canal. This is clear from the incomplete and perhaps damaged roof of the canal visible in Supplementary Figure 9.';
+	TEXT CHARACTER=94 TEXT='The anterolateral otic process of Acanthodes ("''Alop"'', Figure 2b and d, Supplementary Figures 9 and 15) is here suggested as a possible homologue of the thickened margin and posterior postorbital process of placoderm neurocrania (Stensio 1963; Goujet 1984; Young 1980). Topographically, these processes are near-equivalents: each projects laterally from the otic wall, situated between or surrounding the jugular passage and the exit of the glossopharyngeal nerve. However, the polarity of this character is admittedly difficult to judge, relative to conditions in jawless outgroups.';
+	TEXT CHARACTER=95 TEXT='Coates & Sequeira (2001); Brazeau (2009); Friedman & Brazeau (2010). State (1) includes articular surfaces on the postorbital process, the lateral commissure, the otic capsule wall and lateral otic process ("''Ahm"'', Figure 2d, Supplementary Figures 3, 9, 10a, 12 and 15).';
+	TEXT CHARACTER=96 TEXT='Janvier (1996); Coates & Sequeira (2001); Maisey (2001); Davis (2002); Brazeau (2009). Coding for Homalacanthus adopted from Brazeau (2009); see also Gagnier (1996). Unexpectedly, in the context of a holocephalan chondrocranium, there is evidence of a ventral fissure in Chondrenchelys, visible in the basicranium of NMS 2002.68.1.';
+	TEXT CHARACTER=97 TEXT='Schaeffer (1981); Janvier (1996); Coates & Sequeira (1998); Maisey (2001); Davis (2002); Brazeau (2009). Conditions of cranial fissures remain uncertain for ptyctodontids, pending description of further neurocranial material (pers. com. Trinajstic).';
+	TEXT CHARACTER=98 TEXT='Brazeau (2009); Friedman & Brazeau (2010). Gardiner (1984) concluded that a cartilage-lined fontanelle (a persistent basicapsular fenestra) is primitive for gnathostomes. Friedman & Brazeau (2010) suggest that a vestibular fontanelle is restricted to osteichthyans. In osteichthyans the fontanelle margin can be unfinished (Mimia, Gardiner 1984) or lined with perichondral bone (Pteronisculus, Nielsen 1942: a large although unlabeled example of this opening is clearly visible in Supplementary Figure 10a). In Acanthodes the presence of this opening is uncertain: unfinished edges of the basicapsular region are very widely separated and the space might have been cartilage-filled in life. Vestibular fontanelles are unknown in placoderms and fossil jawless outgroups in which the neurocranium is preserved.';
+	TEXT CHARACTER=99 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Maisey (2001a); Brazeau (2009). Crown group elasmobranchs are united by the location of the occipital arch wedged anteriorly between the otic capsules (Schaeffer 1981; Maisey 1983). Among stem-elasmobranchs, this is most evident in hybodontids; Hamiltonichthys conforms to the cranial proportions known in Egertonodus and is coded accordingly. Maisey and Lane (2010) point out that this character state might be more widespread, and note that the occipital arch in chimaeroids has also been described as intruding between the otic capsules. In fact, de Beer (1937, plate 29), summarizing earlier studies, shows the posterior margin of the otic roof and posterior tectum to be concave, in much the same manner as Cobelodus (Maisey 2007) and Akmonistion (Coates and Sequeira 1998). However, this arrangement is barely distinguishable (in dorsal aspect) from conditions in the osteichthyan Mimia (Gardiner 1984, fig. 79). Significantly, the condition in Mimia is less marked than appears to be present in Acanthodes, see Supplementary Figure 15e. With regard to the present analysis, Chondrenchelys (NMS 2002.68.1) and Debeerius (Grogan & Lund 2000) demonstrate no indication of occipital intrusion between the otic capsules. A minimal degree of wedging of the occipital region between the otic capsules might represent a synapomorphy of a large clade of gnathostome fishes.';
+	TEXT CHARACTER=100 TEXT='Schaeffer (1981); Coates & Sequeira (1998); Brazeau (2009). Acanthodes displays the plesiomorphic condition (Supplementary Figures 13 and 15); Tristychius (Dick 1978) exhibits a derived state seen otherwise in osteichthyans.';
+	TEXT CHARACTER=101 TEXT='Brazeau (2009). Gardiner (1984, p.189) reports that the floor of the notochordal canal in Mimia is incompletely ossified along the midline, and notes a similar condition depicted by Miles (1973a) in Acanthodes (confirmed in the present work). Brazeau (2009) identifies this feature in Ptomacanthus and Pucapampella noting that "''the parachordal plate is divided posteriorly forming an open or partly open ventral floor to the notochordal tunnel"''. Similarly, the parachordal (basal and occipital) ossifications in Austroptyctodus are separated along the midline (Miles & Young 1977; Long 1997), and this might also be the condition in the phyllolepid Cowralepis (Ritchie 2005), although for the present this taxon is coded as uncertain.';
+	TEXT CHARACTER=102 TEXT='Brazeau (2009). Coding for Homalacanthus adopted from Brazeau (2009); see also Gagnier (1996). See discussions of characters 68 and 74.';
+	TEXT CHARACTER=103 TEXT='Schaeffer (1981); Maisey (2001); Brazeau (2009). Following Schaeffer (1981) and Maisey (2004), the hypotic lamina is regarded as a lateral extension of the parachordal plate beneath the otic capsule, encompassing the passage of the glossopharyngeal nerve within a canal or persistant embryonic fissure. Absent in Pucapampella, a hypotic lamina is otherwise widespread in early chondrichthyan neurocrania, including examples such as Cladodoides (Maisey 2005) and Tristychius (Dick 1978). Here, Hamiltonichthys (Maisey 1989) is coded, albeit optimistically, to match conditions in Egertonodus (Maisey 1983): character state "1". Holocephalan conditions are less certain, and the lamina is considered absent in living chimaeroids. However, in Chondrenchelys the otic region is broad and underlain by a laterally extensive floor of cartilage (NMS 2002.68.1), and for this reason we speculate that a hypotic lamina is present. In contrast, conditions in Debeerius (Grogan & Lund 2000) are unknown.';
+	TEXT CHARACTER=104 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=105 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=106 TEXT='Goujet & Young (2004); Brazeau (2009).';
+	TEXT CHARACTER=107 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=108 TEXT='Brazeau (2009). The Silurian osteichthyan Guiyu (Zhu et al. 2009) is coded as median dorsal plate present.';
+	TEXT CHARACTER=109 TEXT='(Brazeau 2009).';
+	TEXT CHARACTER=110 TEXT='Coates & Sequeira (2001); Zhu & Schultze (2001); Davis (2002); Brazeau (2009). Coded as present in the ptyctodontid Austroptyctodus after Miles & Young (1977).';
+	TEXT CHARACTER=111 TEXT='Hanke & Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=112 TEXT='Davis (2002); Brazeau (2009). Adapted from Davis (2002) in which a largely flat lateral face of the dorsal scapular process was recognized as the more general condition, and convex as derived.';
+	TEXT CHARACTER=113 TEXT='Davis (2002); Brazeau (2009). Adapted from Davis (2002); a trailing flange appears to characterize a subgroup of diplacanthid acanthodians.';
+	TEXT CHARACTER=114 TEXT='Coates & Sequeira (2001). ';
+	TEXT CHARACTER=115 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=116 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=117 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=118 TEXT='Davis (2002); Hanke & Wilson (2004): Brazeau (2009).';
+	TEXT CHARACTER=119 TEXT='Janvier (1996); Brazeau (2009).';
+	TEXT CHARACTER=120 TEXT='Rosen et al. (1981); Patterson (1982).';
+	TEXT CHARACTER=121 TEXT='Janvier (1996).';
+	TEXT CHARACTER=122 TEXT='Janvier (1996).';
+	TEXT CHARACTER=123 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=124 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=125 TEXT='Brazeau (2009).';
+	TEXT CHARACTER=126 TEXT='Zhu et al. (2001); Zhu & Yu (2002); Friedman (2007); Brazeau (2009).';
+	TEXT CHARACTER=127 TEXT='Maisey (1986); Davis (2002); Brazeau (2009). An anal fin spine remains a possible synapomorphy of acanthodians (or rump group thereof). ';
+	TEXT CHARACTER=128 TEXT='Coding here follows that of Davis (2002) and Brazeau (2009), in which this feature appears to be general to all early gnathostomes, i.e. the pectoral spines of acanthodians and spinal plates of placoderms are conjectured as homologous.';
+	TEXT CHARACTER=129 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009). Davis (2002) notes that spines with a shallow insertion appear to characterize a clade encompassing acanthodians traditionally grouped as climatiids. However, spines with shallow insertions are also known among early chondrichthyans, of which Antarctilamna (Young 1982) is a notable example. Alternatively, Hanke & Wilson (2010) suggest that Antarctilamna spines with shallow insertions are probably associated with the paired fins, as in Doliodus (Miller et al. 2003). Despite this apparently straightforward distinction between character states, some acanthodians, such as Obtusacanthus (Hanke & Wilson 2002), remain difficult to assign (and is coded as such). The median fin spine of Psarolepis remains, as far as we are aware, known only from disarticulated remains. However, surface morphology of the attributed spine indicates no more than a shallow insertion (Zhu & Schultze 1997, fig. 3).';
+	TEXT CHARACTER=130 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009). For present purposes, ptyctodontids are coded as uncertain. However, as noted by Miles & Young (1977), in both sexes of Rhamphodopsis a small, paired elongate plate is positioned transversely in front of each pelvic fin. Similar structures known in other ptyctodontids have often been identified as pre-pelvic claspers; these could be interpreted more straightforwardly as pre-pelvic or intermediate fin spines.';
+	TEXT CHARACTER=131 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009).';
+	TEXT CHARACTER=132 TEXT='Davis (2002); Brazeau (2009).';
+	TEXT CHARACTER=133 TEXT='Davis (2002); Hanke & Wilson (2004); Brazeau (2009). Undiscussed in previous analyses, this character appears in Hanke and Wilson"''s (2004) study as nodes rounded and elevated (state "''0"''), or flattened (state "''1"''). Here, and in Brazeau"''s (2009) study, the character is used to encompass the ornamentation of those fin spines in which arrangements of nodes (in the traditional sense of lumps or swellings) are born on the finspine surface, usually along the apex of ridges or aligned to form such ridges. We argue that this kind of ornament, exemplified clearly in taxa such as Lupopsyrus (e.g. UALVP 42208), is also present on the fin spines of many early chondrichthyans, such as ctenacanths (Maisey 1981) and Tamiobatis (Williams 1998, fig. 7). ';
+	TEXT CHARACTER=134 TEXT='Maisey (1989): characteristic of fin spines present in hybodontid chondrichthyans.';
+	TEXT CHARACTER=135 TEXT='Adjusted from Brazeau (2009).';
+	TEXT CHARACTER=136 TEXT=' Coates & Sequeira (2001); Brazeau (2009). Relative to codings used by Brazeau (2009), Bothriolepis, Pterichthyodes and Coccosteus are re-coded as "''0"''. Austroptyctodus and Rhamphodopsis recoded as "''1"'', after presence of anteriorly positioned basal plates, and comparable conditions in postcranial remains of Materpiscis (Long et al. 2008).';
+	TEXT CHARACTER=137 TEXT='Coates & Sequeira (2001); Brazeau (2009). Contra Grogan and Lund (2000), there is no anal fin in the holocephalan Debeerius (coded from specimen CM 35480).';
+	TEXT CHARACTER=138 TEXT='The hypothesized primitive condition is known in several species of Acanthodes, Homalacanthus, early chondrichthyans and at least one kind of ''placoderm'' (Ritchie 2005). In agreement with Friedman & Brazeau (2010), the derived condition appears to be a synapomorphy of crown-osteichthyans.';
+
+      [Attribute comments]
+            ENDBLOCK;
+            BEGIN ASSUMPTIONS;
+      TYPESET * UNTITLED = unord: 1 - 138;
+      ENDBLOCK;
+      
