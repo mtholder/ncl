@@ -1712,7 +1712,9 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 				}
 			}
         if (allowUnquotedSpaces)
-	        token.SetLabileFlagBit(NxsToken::spaceDoesNotBreakToken);
+            {
+            token.SetLabileFlagBit(NxsToken::spaceDoesNotBreakToken);
+            }
 
 		token.GetNextToken();
 		}
