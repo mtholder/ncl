@@ -256,9 +256,13 @@ void NxsTransposeCompressedMatrix(
 	destination.Initialize(ntaxa, npatterns);
     NxsCDiscreteStateSet ** matrix = destination.GetAlias();			/** taxa x characters matrix of indices of state sets */
     if (patternCounts)
+        {
         patternCounts->resize(npatterns);
+        }
     if (patternWeights)
+        {
         patternWeights->resize(npatterns);
+        }
 	for (unsigned p = 0; p < npatterns; ++p)
 		{
 		const NxsCharacterPattern & pattern = compressedTransposedMatrix[p];
