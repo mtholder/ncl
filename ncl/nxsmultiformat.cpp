@@ -467,38 +467,29 @@ void  MultiFormatReader::readPhylipData(
 				const char c = ftcb.current();
 				if (isgraph(c))
 					{
-					if (isdigit(c))// I don't know why PHYLIP allows digits in the midst of the sequence, but it seems to.
-						{
-						err << "Number encountered (and ignored) within sequence for taxon " << n;
-						NexusWarn(err, NxsReader::PROBABLY_INCORRECT_CONTENT_WARNING, ftcb.position(), ftcb.line(), ftcb.column());
-						err.clear();
-						}
-					else
-						{
-						const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
-						if (stateCode == NXS_INVALID_STATE_CODE)
-							{
-							if (c == '.')
-								{
-								if (currentTaxon == 0)
-									{
-									err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
-									throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
-									}
-								NxsDiscreteStateRow & firstRow = *(matList.begin());
-								row[j] = firstRow.at(j);
-								}
-							else
-								{
-								err << "Illegal state code \"" << c << "\" found when reading site " << j + 1 << " for taxon " << n;
-								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
-								}
-							}
-						else
-							row[j] = stateCode;
-						readChar = true;
-						}
-					}
+                    const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
+                    if (stateCode == NXS_INVALID_STATE_CODE)
+                        {
+                        if (c == '.')
+                            {
+                            if (currentTaxon == 0)
+                                {
+                                err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
+                                throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+                                }
+                            NxsDiscreteStateRow & firstRow = *(matList.begin());
+                            row[j] = firstRow.at(j);
+                            }
+                        else
+                            {
+                            err << "Illegal state code \"" << c << "\" found when reading site " << j + 1 << " for taxon " << n;
+                            throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+                            }
+                        }
+                    else
+                        row[j] = stateCode;
+                    readChar = true;
+                    }
 				if (!ftcb.advance())
 					goto funcExit;
 				if (readChar)
@@ -596,44 +587,32 @@ void  MultiFormatReader::readInterleavedPhylipData(
 							throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
 							}
 						}
-					if (isdigit(c))// I don't know why PHYLIP allows digits in the midst of the sequence, but it seems to.
-						{
-						std::list<std::string>::const_iterator nIt = taxaNames.begin();
-						for (unsigned q = 0; q < currentTaxon ; ++q)
-							++nIt;
-						err << "Number encountered (and ignored) within sequence for taxon " << *nIt;
-						NexusWarn(err, NxsReader::PROBABLY_INCORRECT_CONTENT_WARNING, ftcb.position(), ftcb.line(), ftcb.column());
-						err.clear();
-						}
-					else
-						{
-						const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
-						if (stateCode == NXS_INVALID_STATE_CODE)
-							{
-							if (c == '.')
-								{
-								if (currentTaxon == 0)
-									{
-									err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
-									throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
-									}
-								NxsDiscreteStateRow & firstRow = *(matList.begin());
-								row[j] = firstRow.at(j);
-								}
-							else
-								{
-								std::list<std::string>::const_iterator nIt = taxaNames.begin();
-								for (unsigned q = 0; q < currentTaxon ; ++q)
-									++nIt;
-								err << "Illegal state code \"" << c << "\" found when reading site " << j + 1 << " for taxon " << *nIt;
-								throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
-								}
-							}
-						else
-							row[j] = stateCode;
-						j++;
-						}
-					}
+                    const NxsDiscreteStateCell stateCode = dm.GetStateCodeStored(c);
+                    if (stateCode == NXS_INVALID_STATE_CODE)
+                        {
+                        if (c == '.')
+                            {
+                            if (currentTaxon == 0)
+                                {
+                                err << "Illegal match character state code  \".\" found in the first taxon for character " << j + 1 ;
+                                throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+                                }
+                            NxsDiscreteStateRow & firstRow = *(matList.begin());
+                            row[j] = firstRow.at(j);
+                            }
+                        else
+                            {
+                            std::list<std::string>::const_iterator nIt = taxaNames.begin();
+                            for (unsigned q = 0; q < currentTaxon ; ++q)
+                                ++nIt;
+                            err << "Illegal state code \"" << c << "\" found when reading site " << j + 1 << " for taxon " << *nIt;
+                            throw NxsException(err, ftcb.position(), ftcb.line(), ftcb.column());
+                            }
+                        }
+                    else
+                        row[j] = stateCode;
+                    j++;
+                    }
 				else if (c == '\r' || c == '\n')
 					{
 					if (currentTaxon == 0)
