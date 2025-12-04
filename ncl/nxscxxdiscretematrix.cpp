@@ -254,21 +254,21 @@ void NxsTransposeCompressedMatrix(
 	    }
 	const unsigned ntaxa = (unsigned const)compressedTransposedMatrix[0].stateCodes.size();
 	destination.Initialize(ntaxa, npatterns);
-    NxsCDiscreteStateSet ** matrix = destination.GetAlias();			/** taxa x characters matrix of indices of state sets */
-    if (patternCounts)
-        patternCounts->resize(npatterns);
-    if (patternWeights)
-        patternWeights->resize(npatterns);
+	NxsCDiscreteStateSet ** matrix = destination.GetAlias();			/** taxa x characters matrix of indices of state sets */
+	if (patternCounts)
+	    patternCounts->resize(npatterns);
+	if (patternWeights)
+	    patternWeights->resize(npatterns);
 	for (unsigned p = 0; p < npatterns; ++p)
 		{
 		const NxsCharacterPattern & pattern = compressedTransposedMatrix[p];
 		const std::vector<NxsCDiscreteState_t> & states = pattern.stateCodes;
 		for (unsigned t = 0; t < ntaxa; ++t)
 		    matrix[t][p] = states[t];
-        if (patternCounts)
-            (*patternCounts)[p] = pattern.count;
-        if (patternWeights)
-            (*patternWeights)[p] = pattern.sumOfPatternWeights;
+		if (patternCounts)
+		    (*patternCounts)[p] = pattern.count;
+		if (patternWeights)
+		    (*patternWeights)[p] = pattern.sumOfPatternWeights;
 		}
 }
 

@@ -1711,8 +1711,8 @@ void NxsTreesBlock::ProcessTokenStreamIntoTree(
 				prevToken = NXS_TREE_CLADE_NAME_TOKEN;
 				}
 			}
-        if (allowUnquotedSpaces)
-	        token.SetLabileFlagBit(NxsToken::spaceDoesNotBreakToken);
+		if (allowUnquotedSpaces)
+			token.SetLabileFlagBit(NxsToken::spaceDoesNotBreakToken);
 
 		token.GetNextToken();
 		}
