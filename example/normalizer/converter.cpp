@@ -850,22 +850,22 @@ void exportData(
   std::ostream * fp,
   TranslatingConventions & transConv)
 {
-    std::ostream * fpToUse = fp;
+        std::ostream * fpToUse = fp;
 	std::string fullName = prefix;
 	if (f == MultiFormatReader::NEXUS_FORMAT) {
 		// hack-alert: we don't need to pass in the interleaveLen because it is set as a global in the calling code
 		fullName.append(".nex");
 		std::ofstream nexOut;
 		if (fp == 0L)
-		    {
-		    nexOut.open(fullName.c_str());
-            if (!gQuietMode)
-                std::cerr << "Writing " << fullName << '\n';
-    		fpToUse = &nexOut;
+                {
+		        nexOut.open(fullName.c_str());
+                        if (!gQuietMode)
+                                std::cerr << "Writing " << fullName << '\n';
+                        fpToUse = &nexOut;
     		}
 		writeAsNexus(nexusReader, *fpToUse);
 		if (fp == 0L)
-    		nexOut.close();
+                        nexOut.close();
 	}
 	else if (f == MultiFormatReader::FASTA_DNA_FORMAT
 			 || f == MultiFormatReader::FASTA_AA_FORMAT
