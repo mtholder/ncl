@@ -1,0 +1,48 @@
+name: Build and test
+
+on:
+  push:
+    branches:
+      - "*"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        name: [ linux ]
+        include:
+          - name: linux
+            os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.image || '' }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install
+      run: |
+        sudo apt-get install -y ccache
+
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+         key: ${{ matrix.name }}
+         restore-keys: |
+           ${{ matrix.name }}
+
+    - name: Build and install
+      run: |
+        ./bootstrap.sh
+        cd ../
+        mkdir build
+        cd build
+        ../ncl/configure --prefix=$HOME/local
+        make -j4
+        make check
+        make install
+        make installcheck
