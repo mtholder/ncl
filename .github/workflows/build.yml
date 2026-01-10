@@ -46,7 +46,7 @@ jobs:
 
     - name: Install
       run: |
-        sudo apt-get install -y ccache
+        sudo apt-get install -y ccache meson cmake
 
     - name: ccache
       uses: hendrikmuhs/ccache-action@v1.2
@@ -55,17 +55,27 @@ jobs:
          restore-keys: |
            ${{ matrix.name }}
 
-    - name: Build and install
+    - name: Set variables
+      run: |
+        if [ "${{ matrix.compiler }}" = clang ] ; then
+            echo CC=clang >> $GITHUB_ENV
+            echo CXX=clang++ >> $GITHUB_ENV
+        fi
+        echo CXXFLAGS=-std=${{ matrix.std }} >> $GITHUB_ENV
+           
+    - name: Build and test with meson
+      run: |
+        meson setup mbuild
+        cd mbuild
+        ninja
+        ninja test
+
+    - name: Build and install and test with cmake
       run: |
         ./bootstrap.sh
         cd ../
         mkdir build
         cd build
-        if [ "${{ matrix.compiler }}" = clang ] ; then
-            export CC=clang
-            export CXX=clang++
-        fi
-        export CXXFLAGS=-std=${{ matrix.std }}
         ../ncl/configure --prefix=$HOME/local
         make -j4
         make check
