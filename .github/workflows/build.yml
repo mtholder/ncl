@@ -13,9 +13,29 @@ jobs:
   build:
     strategy:
       matrix:
-        name: [ linux ]
+        name: [ linux-gcc-c++17,
+                linux-gcc-c++20,
+                linux-clang-c++17,
+                linux-clang-c++20 ]
         include:
-          - name: linux
+          - name: linux-gcc-c++17
+            compiler: gcc
+            std: c++17
+            os: ubuntu-latest
+
+          - name: linux-gcc-c++20
+            compiler: gcc
+            std: c++20
+            os: ubuntu-latest
+            
+          - name: linux-clang-c++17
+            compiler: clang
+            std: c++17
+            os: ubuntu-latest
+
+          - name: linux-clang-c++20
+            compiler: clang
+            std: c++20
             os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
@@ -26,7 +46,7 @@ jobs:
 
     - name: Install
       run: |
-        sudo apt-get install -y ccache
+        sudo apt-get install -y ccache meson cmake
 
     - name: ccache
       uses: hendrikmuhs/ccache-action@v1.2
@@ -35,7 +55,22 @@ jobs:
          restore-keys: |
            ${{ matrix.name }}
 
-    - name: Build and install
+    - name: Set variables
+      run: |
+        if [ "${{ matrix.compiler }}" = clang ] ; then
+            echo CC=clang >> $GITHUB_ENV
+            echo CXX=clang++ >> $GITHUB_ENV
+        fi
+        echo CXXFLAGS=-std=${{ matrix.std }} >> $GITHUB_ENV
+           
+    - name: Build and test with meson
+      run: |
+        meson setup mbuild
+        cd mbuild
+        ninja
+        ninja test
+
+    - name: Build and install and test with cmake
       run: |
         ./bootstrap.sh
         cd ../
