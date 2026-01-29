@@ -24,6 +24,7 @@
 #include <cassert>
 #include "ncl/nxsdefs.h"
 #include "ncl/nxstreesblock.h"
+#include <cstdint>
 
 using namespace std;
 long gStrictLevel = 2;
@@ -554,10 +555,10 @@ void recordSupportedNodes(const map<const NxsSimpleNode *, set<long> > & refNdp2
 			assert(ancIt != refNdp2mrca.end());
 			const set<long> & anm = ancIt->second;
 			if (printDB) { //debugging
-				cerr << "DEBUGGING refTree node " << (long)nd << ": ";
+				cerr << "DEBUGGING refTree node " << (std::int64_t)nd << ": ";
 				writeSet(cerr, "", nm, " ");
 				cerr << "\n";
-				cerr << "refTree par " << (long)firstBranchingAnc << ": ";
+				cerr << "refTree par " << (std::int64_t)firstBranchingAnc << ": ";
 				writeSet(cerr, "", anm, " ");
 				cerr << "\n";
 			}
@@ -731,8 +732,8 @@ void markSuspectNode(const set<long> & designators) {
 
 void parseAndProcessMRCADesignatorsFile(string filepath) {
 	if (gRefTree == 0L || gTaxonTree != 0L) {
-		cerr << "gRefTree" << (long )gRefTree << "\n";
-		cerr << "gTaxonTree" << (long )gTaxonTree << "\n";
+		cerr << "gRefTree" << (std::int64_t )gRefTree << "\n";
+		cerr << "gTaxonTree" << (std::int64_t )gTaxonTree << "\n";
 		cerr << "\nDesignators file must come after the full tree estimate, but before the taxonomy in the argument length\n";
 		throw exception();
 	}
