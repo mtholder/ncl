@@ -16,7 +16,9 @@ jobs:
         name: [ linux-gcc-c++17,
                 linux-gcc-c++20,
                 linux-clang-c++17,
-                linux-clang-c++20 ]
+                linux-clang-c++20,
+                windows
+                ]
         include:
           - name: linux-gcc-c++17
             compiler: gcc
@@ -38,15 +40,28 @@ jobs:
             std: c++20
             os: ubuntu-latest
 
+          - name: windows
+            compiler: idk
+            std: c++20
+            os: ubuntu-latest
+            arch: win64
+
     runs-on: ${{ matrix.os }}
     container:
       image: ${{ matrix.image || '' }}
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install
+    - name: Install (Linux)
       run: |
         sudo apt-get install -y ccache meson cmake
+
+    - name: Install (Windows)
+      if: matrix.name == 'windows'
+      run: |
+        sudo apt-get install -y ccache meson cmake
+        sudo apt-get install -y git python3-setuptools python3-pip g++-mingw-w64 wine64
+        ${GITHUB_WORKSPACE}/scripts/make_winroot.sh -ccache true
 
     - name: ccache
       uses: hendrikmuhs/ccache-action@v1.2
@@ -65,12 +80,18 @@ jobs:
            
     - name: Build and test with meson
       run: |
-        meson setup mbuild
+        if [ "${{ matrix.name }}" = "windows" ] ; then
+          margs="--cross-file=win64-cross.txt"
+        fi
+        meson setup mbuild ${margs}
         cd mbuild
         ninja
-        ninja test
+        if [ "${{ matrix.name }}" != "windows" ] ; then
+          ninja test
+        fi
 
-    - name: Build and install and test with cmake
+    - name: Build and install and test with autoconf
+      if: matrix.name != 'windows'
       run: |
         ./bootstrap.sh
         cd ../
