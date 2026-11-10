@@ -1,0 +1,18 @@
+#NEXUS
+BEGIN TAXA;
+    TITLE Untitled_TAXA_Block_1;
+    DIMENSIONS NTax = 4;
+    TAXLABELS 'Taxon_A' 'Taxon_B' 'Taxon_C' 'Taxon_D';
+END;
+BEGIN CHARACTERS;
+    TITLE Untitled_DATA_Block_1;
+    LINK TAXA = Untitled_TAXA_Block_1;
+    DIMENSIONS NChar=24;
+    FORMAT Datatype=DNA  Gap=-;
+Matrix
+'Taxon_A'   ACGTACGTACGTACGTACGTACGT
+'Taxon_B'   ACGTACGAACGTACGTAC-TACGT
+'Taxon_C'   ACGTTCGTACGTACNTACGTACGT
+'Taxon_D'   ACGTACGTACCTACGTACGTAC??
+;
+END;

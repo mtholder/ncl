@@ -1,0 +1,3 @@
+# Keep the CR/CRLF line endings that the FASTA comment tests exercise.
+test/ExternalValidIn/dnafasta_comments_cr.fas -text
+test/ExternalValidIn/dnafasta_comments_crlf.fas -text

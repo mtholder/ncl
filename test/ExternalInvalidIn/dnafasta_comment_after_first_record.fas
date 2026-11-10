@@ -1,0 +1,5 @@
+>Taxon_A
+ACGTACGTACGTACGTACGTACGT
+;A comment after the first record is not skipped
+>Taxon_B
+ACGTACGAACGTACGTAC-TACGT
